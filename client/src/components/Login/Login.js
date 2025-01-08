@@ -33,7 +33,10 @@ export const Login = () => {
 
                     setLoginData(result.token)
                     toast.success("Login successful")
-                    navigate('/'); 
+                    navigate('/');
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 200)
                 }
                 else
                     toast.error(result.error)
