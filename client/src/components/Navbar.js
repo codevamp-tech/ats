@@ -79,10 +79,10 @@ export const Navbar = () => {
             .then((res) => res.json())
             .then((result) => {
                 if (result.success) {
-                    setLoginData(null); 
+                    setLoginData(null);
                     localStorage.removeItem("usertoken");
                     localStorage.removeItem("user");
-                    window.location.href = "/"; 
+                    window.location.href = "/";
                 }
             });
     };

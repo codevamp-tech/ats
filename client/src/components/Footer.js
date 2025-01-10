@@ -3,7 +3,7 @@ import logoURL from '../assets/img/logo.jpeg'
 
 export const Footer = () => {
 
-    const footerNav = ["Jobs","Login","Signup","Post Job"]
+    const footerNav = ["Jobs", "Login", "Signup", "Post Job"]
 
     return (
         <footer class="bg-white rounded-lg shadow m-4">
@@ -14,9 +14,9 @@ export const Footer = () => {
                         <span class="self-center text-2xl font-semibold whitespace-nowrap ">HumGrow™</span>
                     </a>
                     <ul class="flex flex-wrap justify-center items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0">
-                        
+
                         {
-                            footerNav.map( (menu, key)=> {
+                            footerNav.map((menu, key) => {
                                 return (
                                     <li key={key}>
                                         <a href="#" class="hover:underline me-4 md:me-6">{menu}</a>

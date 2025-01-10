@@ -25,12 +25,12 @@ const JobSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    applicationForm:{ 
-        question: [{ type: String}], 
-        answer: [{ type: String}] 
+    applicationForm: {
+        question: [{ type: String }],
+        answer: [{ type: String }]
     },
     applicants: [{
-        applicant : {
+        applicant: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
             required: true
