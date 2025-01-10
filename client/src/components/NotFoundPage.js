@@ -1,23 +1,3 @@
-// import React from "react";
-// import { Link } from "react-router-dom";
-
-// const NotFoundPage = () => {
-//   return (
-//     <div className="flex flex-col items-center justify-center min-h-screen text-[#087658]">
-//       <h1 className="text-6xl font-bold text-[#087658] mb-4">404</h1>
-//       <h2 className="text-2xl font-semibold mb-2">Page Not Found</h2>
-//       <p className="mb-6 text-center">
-//         Sorry, the page you are looking for does not exist or has been moved.
-//       </p>
-
-//     </div>
-//   );
-// };
-
-// export default NotFoundPage;
-
-
-
 import React from "react";
 
 const NotFoundPage = () => {
