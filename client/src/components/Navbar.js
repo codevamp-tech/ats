@@ -3,6 +3,13 @@ import { Outlet, NavLink, Link } from "react-router-dom";
 import "boxicons";
 import logoURL from "../assets/img/logo.jpeg";
 
+const adminNavItems = [
+  { label: "Dashboard", path: "/dashboard" },
+  { label: "Users", path: "/all-users" },
+  { label: "Application Types", path: "/application-types" },
+  { label: "Interview Rounds", path: "/interview-rounds" },
+];
+
 const employerNavItems = [
   { label: "Home", path: "/" },
   { label: "Post Job", path: "/post-job" },
@@ -46,11 +53,24 @@ export const Navbar = () => {
       setLoginData(user); // Set login data when token exists
     }
   }, []); // Empty dependency array ensures this runs on initial mount
+  // Check localStorage for token and update loginData
+  useEffect(() => {
+    const token = localStorage.getItem("user");
+    if (token) {
+      const user = JSON.parse(token);
+      setLoginData(user); // Set login data when token exists
+    }
+  }, []); // Empty dependency array ensures this runs on initial mount
+
+  console.log("loginData>>", loginData?.role);
 
   // Update navItems based on loginData
   useEffect(() => {
     if (loginData) {
       switch (loginData.role) {
+        case "admin":
+          setNavItems(adminNavItems);
+          break;
         case "employer":
           setNavItems(employerNavItems);
           break;
@@ -105,7 +125,9 @@ export const Navbar = () => {
               alt="Flowbite Logo"
             />
           </a>
-          <span className="font-extrabold text-xl md:text-3xl">A T S</span>
+          <span className="font-extrabold text-xl md:text-3xl">
+            humgrow.com
+          </span>
         </NavLink>
 
         {/* MAIN MENU - Lg device */}

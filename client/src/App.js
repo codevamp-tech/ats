@@ -22,7 +22,7 @@ import { useContext, useEffect } from "react";
 import { LoginContext } from "./components/ContextProvider/Context";
 import { UpdateJob } from "./Pages/Employer/UpdateJob";
 import { MyJobs } from "./Pages/Candidate/MyJobs";
-import NotFound from "./components/Page/NotFount";
+import UserListing from "./Pages/User/UserListing";
 
 function App() {
   const { loginData, setLoginData } = useContext(LoginContext);
@@ -33,11 +33,32 @@ function App() {
         {/* <h1 className='text-5xl text-green-600 '>Hello</h1> */}
         <Route path="/" element={<Navbar />}>
           <Route path="/" element={<Home />} />
-          {/* <Route path="*" element={<Home />} /> */}
+          <Route path="*" element={<Home />} />
           <Route path="/post-job" element={<PostJob />} />
           <Route path="/all-jobs" element={<AllJobs />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Register />} />
+          <Route path="/dashboard" element={<div>hello dashboard</div>} />
+          <Route path="/all-users" element={<UserListing />} />
+          <Route
+            path="/application-types"
+            element={<div>hello application status</div>}
+          />
+          <Route
+            path="/interview-rounds"
+            element={<div>hello interview rounds</div>}
+          />
+
+          {/* <Route path='/job-detail' element={<JobDetails />}/> */}
+          <Route path="/current-job/:id" element={<JobDetails />} />
+          <Route path="/application-form/:id" element={<ApplicationForm />} />
+          <Route path="/candidate/:id" element={<CandidateProfile />} />
+          <Route path="/shortlist" element={<ShortlistedCandidates />} />
+          <Route
+            path="/shortlist/details/:candidate_id/:job_id"
+            element={<ShortlistedDetails />}
+          />
+          <Route path="/assign-recruiter/:id" element={<AssignRecruiter />} />
 
           {/* <Route path='/job-detail' element={<JobDetails />}/> */}
           <Route path="/current-job/:id" element={<JobDetails />} />
@@ -61,8 +82,6 @@ function App() {
           <Route path="/update-job/:id" element={<UpdateJob />} />
           <Route path="/my-jobs/" element={<MyJobs />} />
         </Route>
-        {/* Catch-all route */}
-        <Route path="*" element={<NotFound />} />
       </Routes>
 
       <Footer />
