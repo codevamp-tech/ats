@@ -17,50 +17,53 @@ import { ShortlistedDetails } from './components/ShortlistedDetails';
 import { ApplicationForm } from './Pages/Candidate/ApplicationForm';
 import { AssignRecruiter } from './Pages/Coordinator/AssignRecruiter';
 import { Footer } from './components/Footer';
-import {AllPostedJobs} from './components/AllPostedJobs'
+import { AllPostedJobs } from './components/AllPostedJobs'
 import { Dashboard } from './Pages/Dashboard';
 import { useContext, useEffect } from 'react';
 import { LoginContext } from './components/ContextProvider/Context';
 import { UpdateJob } from './Pages/Employer/UpdateJob';
 import { MyJobs } from './Pages/Candidate/MyJobs';
+import UserListing from './Pages/User/UserListing';
 
 function App() {
 
-  const {loginData, setLoginData} = useContext(LoginContext)
-
-  
+  const { loginData, setLoginData } = useContext(LoginContext)
 
   return (
     <div className="App">
       <Routes>
-          {/* <h1 className='text-5xl text-green-600 '>Hello</h1> */}
-          <Route path='/' element={<Navbar />}> 
-            <Route path='/' element={<Home />}/>
-            <Route path='*' element={<Home />}/>
-            <Route path='/post-job' element={<PostJob />}/>
-            <Route path='/all-jobs' element={<AllJobs />}/>
-            <Route path='/login' element={<Login />}/>
-            <Route path='/signup' element={<Register />}/>
+        {/* <h1 className='text-5xl text-green-600 '>Hello</h1> */}
+        <Route path='/' element={<Navbar />}>
+          <Route path='/' element={<Home />} />
+          <Route path='*' element={<Home />} />
+          <Route path='/post-job' element={<PostJob />} />
+          <Route path='/all-jobs' element={<AllJobs />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/signup' element={<Register />} />
+          <Route path='/dashboard' element={<div>hello dashboard</div>} />
+          <Route path='/all-users' element={<UserListing />} />
+          <Route path='/application-types' element={<div>hello application status</div>} />
+          <Route path='/interview-rounds' element={<div>hello interview rounds</div>} />
 
 
-            {/* <Route path='/job-detail' element={<JobDetails />}/> */}
-            <Route path='/current-job/:id' element={<JobDetails />}/>
-            <Route path='/application-form/:id' element={<ApplicationForm />}/>
-            <Route path='/candidate/:id' element={<CandidateProfile />}/>
-            <Route path='/shortlist' element={<ShortlistedCandidates />}/>
-            <Route path='/shortlist/details/:candidate_id/:job_id' element={<ShortlistedDetails />}/>
-            <Route path='/assign-recruiter/:id' element={<AssignRecruiter />}/>
+          {/* <Route path='/job-detail' element={<JobDetails />}/> */}
+          <Route path='/current-job/:id' element={<JobDetails />} />
+          <Route path='/application-form/:id' element={<ApplicationForm />} />
+          <Route path='/candidate/:id' element={<CandidateProfile />} />
+          <Route path='/shortlist' element={<ShortlistedCandidates />} />
+          <Route path='/shortlist/details/:candidate_id/:job_id' element={<ShortlistedDetails />} />
+          <Route path='/assign-recruiter/:id' element={<AssignRecruiter />} />
 
-            <Route path='/recruiter/review' element={<RecruiterDashboard />}/>
-            {/* <Route path='/recruiter/review' element={<RecruiterDashboard />}/> */}
-            <Route path='/coordinator/review' element={<CoordinatorDashboard />}/>
-            <Route path='/dash' element={<Dashboard />}/>
-            <Route path='/all-posted-jobs' element={<AllPostedJobs />}/>
-            <Route path='/update-job/:id' element={<UpdateJob />}/>
-            <Route path='/my-jobs/' element={<MyJobs />}/>
-              
-          </Route>
-          
+          <Route path='/recruiter/review' element={<RecruiterDashboard />} />
+          {/* <Route path='/recruiter/review' element={<RecruiterDashboard />}/> */}
+          <Route path='/coordinator/review' element={<CoordinatorDashboard />} />
+          <Route path='/dash' element={<Dashboard />} />
+          <Route path='/all-posted-jobs' element={<AllPostedJobs />} />
+          <Route path='/update-job/:id' element={<UpdateJob />} />
+          <Route path='/my-jobs/' element={<MyJobs />} />
+
+        </Route>
+
       </Routes>
 
       <Footer />
