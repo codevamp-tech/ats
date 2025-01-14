@@ -53,14 +53,6 @@ export const Navbar = () => {
       setLoginData(user); // Set login data when token exists
     }
   }, []); // Empty dependency array ensures this runs on initial mount
-  // Check localStorage for token and update loginData
-  useEffect(() => {
-    const token = localStorage.getItem("user");
-    if (token) {
-      const user = JSON.parse(token);
-      setLoginData(user); // Set login data when token exists
-    }
-  }, []); // Empty dependency array ensures this runs on initial mount
 
   console.log("loginData>>", loginData?.role);
 

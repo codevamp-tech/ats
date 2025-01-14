@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export const Register = () => {
   const {
@@ -21,6 +22,7 @@ export const Register = () => {
   });
 
   const [redirect, setRedirect] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     if (redirect) {
@@ -66,16 +68,27 @@ export const Register = () => {
   };
 
   return (
-    <div className="max-w-screen-2xl w-full md:w-4/6 lg:w-1/2 container mt-2 mx-auto xl:px-24 px-4">
-      <div className="bg-[#e7e7e7] mx-auto py-6 px-6 md:px-16 rounded-lg">
+    <div className="bg-[#e7e7e7] dark:bg-gray-900 w-[60vw] ml-[13.5vw] h-[80vh] rounded-lg shadow-[rgba(0,0,0,0.25)_0px_14px_28px,rgba(0,0,0,0.22)_0px_10px_10px] ">
+      <img
+        src="/tree-1.png"
+        alt="Left Tree"
+        className="absolute bottom-[-2rem] left-20 w-60 md:w-84 lg:w-80 "
+      />
+      <img
+        src="/tree-2.png"
+        alt="Right Tree"
+        className="absolute bottom-[-2rem] right-20 w-48 md:w-64 lg:w-70 "
+      />
+      {/* <div className="bg-[#e7e7e7] mx-auto py-6 px-6 md:px-16 rounded-lg"> */}
+      <div className="flex flex-col items-center justify-center mx-auto px-6 py-6">
         {/* FORM */}
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex flex-col lg:flex-row gap-8">
+          <div className="flex flex-col lg:flex-row gap-8 mt-8">
             {/* REGISTRATION DETAILS */}
             <div className="w-full">
-              <div>
+              {/* <div>
                 <h1 className="text-xl my-1 font-bold text-center">Register</h1>
-              </div>
+              </div> */}
               <div>
                 <label className="block mt-1 m-1 text-sm">Full Name</label>
                 <input
@@ -83,7 +96,7 @@ export const Register = () => {
                   required
                   {...register("userName")}
                   placeholder="Ex: Abhishek Sharma"
-                  className="create-job-input placeholder:text-xs md:placeholder:text-sm"
+                  className="w-96 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-600"
                 />
               </div>
               <div>
@@ -93,38 +106,32 @@ export const Register = () => {
                   required
                   {...register("email")}
                   placeholder="Ex: abhisheksharma@gmail.com"
-                  className="create-job-input placeholder:text-xs md:placeholder:text-sm"
+                  className="w-96 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-600"
                 />
               </div>
               <div>
-                <label className="block mt-2 m-1 text-sm">Password</label>
-                <input
-                  type="password"
-                  required
-                  {...register("password")}
-                  placeholder="Create strong password"
-                  className="create-job-input placeholder:text-xs md:placeholder:text-sm"
-                />
-              </div>
-              <div className="grid grid-cols-3 items-center pt-2 md:my-0">
-                <label className="block mt-2 m-1 text-sm">Gender</label>
-                <div className="flex">
+                <label className="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white">
+                  Password
+                </label>
+                <div className="relative">
                   <input
-                    {...register("gender", { required: true })}
-                    type="radio"
-                    value="Male"
-                    className="mx-2"
+                    type={showPassword ? "text" : "password"}
+                    required
+                    {...register("password")}
+                    placeholder="Create strong password"
+                    className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 pr-10 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                   />
-                  <p>Male</p>
-                </div>
-                <div className="flex">
-                  <input
-                    {...register("gender", { required: true })}
-                    type="radio"
-                    value="Female"
-                    className="mx-2"
-                  />
-                  <p>Female</p>
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 dark:text-gray-300"
+                  >
+                    {showPassword ? (
+                      <FaEyeSlash className="w-5 h-5" />
+                    ) : (
+                      <FaEye className="w-5 h-5" />
+                    )}
+                  </button>
                 </div>
               </div>
               <div>
@@ -134,8 +141,24 @@ export const Register = () => {
                   required
                   {...register("address")}
                   placeholder="Ex: A70, Down-Town Street, Mumbai"
-                  className="create-job-input placeholder:text-xs md:placeholder:text-sm"
+                  className="w-96 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-600"
                 />
+              </div>
+              <div className="mb-4">
+                <label className="block mt-2 m-1 text-sm" htmlFor="gender">
+                  Gender
+                </label>
+                <select
+                  {...register("gender", { required: true })}
+                  id="gender"
+                  className="w-96 px-4 py-2 border border-gray-300 rounded bg-white focus:outline-none focus:ring-2 focus:ring-green-600"
+                >
+                  <option value="" disabled selected>
+                    Select Gender
+                  </option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
               </div>
               {/* <div>
                                 <label className="block mt-2 m-1 text-sm">User Type</label>

@@ -79,7 +79,7 @@ export const Login = () => {
                 <input
                   type="email"
                   required
-                  {...register("userEmail")}
+                  {...register("email")}
                   placeholder="Ex: john @gmail.com"
                   className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                 ></input>
@@ -93,7 +93,7 @@ export const Login = () => {
                   <input
                     type={showPassword ? "text" : "password"}
                     required
-                    {...register("userPassword")}
+                    {...register("password")}
                     placeholder="Create strong password"
                     className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 pr-10 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                   />
