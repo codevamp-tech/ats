@@ -24,12 +24,11 @@ import { LoginContext } from './components/ContextProvider/Context';
 import { UpdateJob } from './Pages/Employer/UpdateJob';
 import { MyJobs } from './Pages/Candidate/MyJobs';
 import NotFoundPage from './components/NotFoundPage';
+import UserListing from './Pages/User/UserListing';
 
 function App() {
 
   const { loginData, setLoginData } = useContext(LoginContext)
-
-
 
   return (
     <div className="App">
@@ -41,6 +40,10 @@ function App() {
           <Route path='/all-jobs' element={<AllJobs />} />
           <Route path='/login' element={<Login />} />
           <Route path='/signup' element={<Register />} />
+          <Route path='/dashboard' element={<div>hello dashboard</div>} />
+          <Route path='/all-users' element={<UserListing />} />
+          <Route path='/application-types' element={<div>hello application status</div>} />
+          <Route path='/interview-rounds' element={<div>hello interview rounds</div>} />
 
 
           {/* <Route path='/job-detail' element={<JobDetails />}/> */}

@@ -3,6 +3,13 @@ import { Outlet, NavLink, Link } from 'react-router-dom';
 import 'boxicons';
 import logoURL from '../assets/img/logo.jpeg';
 
+const adminNavItems = [
+    { label: 'Dashboard', path: '/dashboard' },
+    { label: 'Users', path: '/all-users' },
+    { label: 'Application Types', path: '/application-types' },
+    { label: 'Interview Rounds', path: '/interview-rounds' },
+];
+
 const employerNavItems = [
     { label: 'Home', path: '/' },
     { label: 'Post Job', path: '/post-job' },
@@ -47,10 +54,15 @@ export const Navbar = () => {
         }
     }, []); // Empty dependency array ensures this runs on initial mount
 
+    console.log("loginData>>", loginData?.role);
+
     // Update navItems based on loginData
     useEffect(() => {
         if (loginData) {
             switch (loginData.role) {
+                case 'admin':
+                    setNavItems(adminNavItems);
+                    break;
                 case 'employer':
                     setNavItems(employerNavItems);
                     break;
