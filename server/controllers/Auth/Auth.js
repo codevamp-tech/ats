@@ -6,24 +6,23 @@ const register = async (req, res) => {
     try {
         const {
             userName,
-            userEmail,
-            userPassword,
+            email,
+            password,
             gender,
             address,
             role,
-            isAssigned,
-            applications
+            head
         } = req.body;
 
-        const existingUser = await User.findOne({ userEmail });
+        const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ error: 'User already exists with this email' });
         }
 
-        const hashPassword = await bcrypt.hashSync(userPassword,10)
+        const hashPassword = await bcrypt.hashSync(password, 10)
 
-        const newUser = new User({ userName, userEmail, userPassword: hashPassword, gender, address, role, isAssigned, applications });
-        
+        const newUser = new User({ userName, email, password: hashPassword, gender, address, role, head });
+
         await newUser.save();
 
         res.status(201).json({ message: 'User created successfully' });
@@ -36,24 +35,24 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
     try {
-        const { userEmail, userPassword } = req.body;
+        const { email, password } = req.body;
 
-        const user = await User.findOne({ userEmail });
+        const user = await User.findOne({ email });
         if (!user) {
             return res.status(400).json({ error: 'User not found' });
         }
 
-        const isPasswordValid = await bcrypt.compare(userPassword, user.userPassword);
+        const isPasswordValid = await bcrypt.compare(password, user.password);
 
         if (!isPasswordValid) {
             return res.status(400).json({ error: 'Invalid password' });
         }
 
         // const token = generateToken(user);
-        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' }); 
+        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
         res.cookie('token', token, { maxAge: 3600000, httpOnly: true });
         res.status(200).json({ success: true, message: "Login successful", user, token });
-        
+
     }
     catch (error) {
         console.error('Error registering user:', error);

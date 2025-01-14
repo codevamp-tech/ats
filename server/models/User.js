@@ -1,16 +1,16 @@
 import mongoose from 'mongoose';
 
 const UserSchema = new mongoose.Schema({
-    
-    userName:{
+
+    userName: {
         type: String,
         required: true
     },
-    userEmail: {
+    email: {
         type: String,
-        required: true
+        required: true,
     },
-    userPassword: {
+    password: {
         type: String,
         required: true
     },
@@ -25,24 +25,13 @@ const UserSchema = new mongoose.Schema({
     role: {
         type: String,
         required: true,
-        enum: ["employer", "coordinator", "recruiter", "candidate"],
+        enum: ["admin", "recruiter_manager", "hiring_manager", "interviewer", "candidate"],
         default: "candidate"
     },
-    isAssigned: {
-        type: Boolean
-    },
-    applications: [{
-        jobId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Job',
-            required: true
-        },
-        status: {
-            type: String,
-            enum: ['active', 'inactive', 'shortlist', 'rejected'],
-            default: 'active'
-        }
-    }]
+    head: {
+        type: Boolean,
+        default: false
+    }
 });
 
 const User = mongoose.model('User', UserSchema);
