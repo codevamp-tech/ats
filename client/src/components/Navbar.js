@@ -22,8 +22,8 @@ const coordinatorNavItems = [
     { label: 'Candidates', path: '/shortlist' }
 ];
 const recruiterNavItems = [
-    { label: 'Home', path: '/' },
-    { label: 'Dashboard', path: '/recruiter/review' }
+    { label: 'Home', path: '/recruiter-dashboard' },
+    { label: 'Jobs', path: '/all-jobs' }
 ];
 const candidateNavItems = [
     { label: 'Home', path: '/' },
@@ -69,7 +69,7 @@ export const Navbar = () => {
                 case 'coordinator':
                     setNavItems(coordinatorNavItems);
                     break;
-                case 'recruiter':
+                case 'recruiter_manager':
                     setNavItems(recruiterNavItems);
                     break;
                 case 'candidate':
