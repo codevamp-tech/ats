@@ -1,24 +1,30 @@
-import User from '../../models/User.js'
-import uniqid from 'uniqid';
+import User from '../../models/User.js';
 
 const addUser = async (req, res) => {
     try {
-        const {userName, userEmail, userPassword, gender, address, userType } = req.body;
-        
+        const { userName, email, password, gender, address, role } = req.body;
+
+        // Check if email already exists
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(409).json({ message: "Email already registered." });
+        }
+
+        // Validate role field against allowed enum values
+        const allowedRoles = ["admin", "recruiter_manager", "hiring_manager", "interviewer", "candidate"];
+        if (role && !allowedRoles.includes(role)) {
+            return res.status(400).json({ message: "Invalid role specified." });
+        }
+
+        // Create new user
         const newUser = new User({
             userName,
-            userEmail,
-            userPassword,
+            email,
+            password,
             gender,
             address,
-            userType
+            role: role || "candidate", 
         });
-        newUser.userName = userName;
-        newUser.userEmail = userEmail;
-        newUser.userPassword = userPassword;
-        newUser.gender = gender;
-        newUser.address = address;
-        newUser.userType = userType;
 
         await newUser.save();
 
@@ -28,4 +34,4 @@ const addUser = async (req, res) => {
     }
 };
 
-export {addUser};
+export { addUser };
