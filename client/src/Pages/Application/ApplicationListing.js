@@ -1,43 +1,42 @@
-// src/pages/User/UserListing.js
+// src/pages/Application/ApplicationListing.js
 import React, { useState } from "react";
-import { useUsers, useAddUser, useUpdateUser } from "../../hooks/useUser";
-import UserDialog from "../../components/UserDialog";
+import {
+  useApplicationTypes,
+  useAddApplication,
+  useUpdateApplicationType,
+} from "../../hooks/useApplication";
+import ApplicationDialog from "../../components/ApplicationDilog";
 
-const UserListing = () => {
+const ApplicationListing = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
 
   // Dialog, form, etc.
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogMode, setDialogMode] = useState("add");
-  const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedApplication, setSelectedApplication] = useState(null);
   const [formData, setFormData] = useState({
-    userName: "",
-    email: "",
-    password: "",
-    gender: "",
-    address: "",
-    role: "",
-    head: false,
+    applicationStep: "",
+    applicationStatus: "",
   });
 
   // --- React Query Hooks ---
   const {
-    data: usersData,
+    data: applicationTypesData,
     isLoading,
     isError,
     error,
-  } = useUsers({
+  } = useApplicationTypes({
     page: currentPage,
     limit: 5,
     search,
   });
 
-  const { mutate: addUser } = useAddUser();
-  const { mutate: updateUser } = useUpdateUser();
+  const { mutate: addApplicationType } = useAddApplication();
+  const { mutate: updateApplicationType } = useUpdateApplicationType();
 
-  const users = usersData?.users || [];
-  const totalPages = usersData?.totalPages || 1;
+  const applicationTypes = applicationTypesData?.applicationTypes || [];
+  const totalPages = applicationTypesData?.totalPages || 1;
 
   // Handlers
   const handleSearchChange = (e) => {
@@ -48,35 +47,25 @@ const UserListing = () => {
   const handleOpenAddDialog = () => {
     setDialogMode("add");
     setFormData({
-      userName: "",
-      email: "",
-      password: "",
-      gender: "",
-      address: "",
-      role: "",
-      head: false,
+      applicationStep: "",
+      applicationStatus: "",
     });
     setIsDialogOpen(true);
   };
 
-  const handleOpenEditDialog = (user) => {
+  const handleOpenEditDialog = (applicationType) => {
     setDialogMode("edit");
-    setSelectedUser(user);
+    setSelectedApplication(applicationType);
     setFormData({
-      userName: user.userName || "",
-      email: user.email || "",
-      password: "",
-      gender: user.gender || "",
-      address: user.address || "",
-      role: user.role || "",
-      head: user.head || false,
+      applicationStep: applicationTypesData.applicationStep || "",
+      applicationStatus: applicationTypesData.applicationStatus || "",
     });
     setIsDialogOpen(true);
   };
 
   const handleCloseDialog = () => {
     setIsDialogOpen(false);
-    setSelectedUser(null);
+    setSelectedApplication(null);
   };
 
   const handleFormChange = (e) => {
@@ -89,26 +78,26 @@ const UserListing = () => {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     if (dialogMode === "add") {
-      addUser(formData, {
+      addApplicationType(formData, {
         onSuccess: () => {
-          alert("User added successfully");
+          alert("Application added successfully");
           handleCloseDialog();
         },
         onError: () => {
-          alert("Failed to add user");
+          alert("Failed to add application");
         },
       });
     } else {
-      if (!selectedUser) return;
-      updateUser(
-        { userId: selectedUser._id, formData },
+      if (!selectedApplication) return;
+      updateApplicationType(
+        { applicationId: selectedApplication._id, formData },
         {
           onSuccess: () => {
-            alert("User updated successfully");
+            alert("Application updated successfully");
             handleCloseDialog();
           },
           onError: () => {
-            alert("Failed to update user");
+            alert("Failed to update application");
           },
         }
       );
@@ -124,47 +113,49 @@ const UserListing = () => {
   };
 
   // Loading & Error UI
-  if (isLoading) return <p>Loading users...</p>;
+  if (isLoading) return <p>Loading applications...</p>;
   if (isError) return <p>Error: {error.message}</p>;
 
   return (
     <div style={{ padding: "20px" }}>
-      <h1>User Listing</h1>
+      <h1>Application Listing</h1>
 
       {/* Search Field */}
       <div style={{ marginBottom: "1rem" }}>
         <input
           type="text"
-          placeholder="Search by name or email"
+          placeholder="Search"
           value={search}
           onChange={handleSearchChange}
         />
       </div>
 
-      {/* Add User Button */}
-      <button onClick={handleOpenAddDialog}>Add User</button>
+      {/* Add Application Button */}
+      <button onClick={handleOpenAddDialog}>Add Application</button>
 
-      {/* User List */}
+      {/* Application List */}
       <div style={{ marginTop: "1rem" }}>
-        {users.map((user) => (
+        {applicationTypes.map((application) => (
           <div
-            key={user._id}
+            key={application._id}
             style={{
               border: "1px solid #ccc",
               padding: "10px",
               marginBottom: "10px",
             }}
           >
+            {/* applicationStep: "", applicationStatus: "", */}
             <p>
-              <strong>Name:</strong> {user.userName}
+              <strong>Application Step:</strong> {application.applicationStep}
             </p>
             <p>
-              <strong>Email:</strong> {user.email}
+              <strong>Application Status:</strong>{" "}
+              {application.applicationStatus}
             </p>
-            <p>
-              <strong>Role:</strong> {user.role}
-            </p>
-            <button onClick={() => handleOpenEditDialog(user)}>Edit</button>
+
+            <button onClick={() => handleOpenEditDialog(application)}>
+              Edit
+            </button>
           </div>
         ))}
       </div>
@@ -184,7 +175,7 @@ const UserListing = () => {
 
       {/* Dialog */}
       {isDialogOpen && (
-        <UserDialog
+        <ApplicationDialog
           isDialogOpen={isDialogOpen}
           dialogMode={dialogMode}
           formData={formData}
@@ -197,4 +188,4 @@ const UserListing = () => {
   );
 };
 
-export default UserListing;
+export default ApplicationListing;
