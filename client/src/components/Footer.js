@@ -2,7 +2,7 @@ import React from "react";
 import logoURL from "../assets/img/logo.jpeg";
 
 export const Footer = () => {
-  const footerNav = ["Jobs", "Login", "Signup", "Post Job"];
+  const footerNav = [ "Jobs", "Login", "Signup", "Post Job" ];
 
   return (
     <footer class="text-white bg-deepBlack shadow ">
@@ -13,7 +13,7 @@ export const Footer = () => {
             class="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse"
           >
             <img
-              src={logoURL}
+              src={ logoURL }
               className="rounded-full h-16"
               alt="Flowbite Logo"
             />
@@ -22,20 +22,20 @@ export const Footer = () => {
             </span>
           </a>
           <ul class="flex flex-wrap justify-center items-center mb-6 text-sm font-medium sm:mb-0 text-clearWhite">
-            {footerNav.map((menu, key) => {
+            { footerNav.map( ( menu, key ) => {
               return (
-                <li key={key}>
+                <li key={ key }>
                   <a href="#" class="hover:underline me-4 md:me-6">
-                    {menu}
+                    { menu }
                   </a>
                 </li>
               );
-            })}
+            } ) }
           </ul>
         </div>
         <hr class="my-6 border-clearWhite sm:mx-auto lg:my-8" />
         <span class="block text-sm text-clearWhite sm:text-center ">
-          © 2024{" "}
+          © 2024{ " " }
           <a href="/" class="hover:underline">
             ATS
           </a>

@@ -22,8 +22,8 @@ const coordinatorNavItems = [
   { label: "Candidates", path: "/shortlist" },
 ];
 const recruiterNavItems = [
-  { label: "Home", path: "/" },
-  { label: "Dashboard", path: "/recruiter/review" },
+  { label: 'Home', path: '/recruiter-dashboard' },
+  { label: 'Jobs', path: '/all-jobs' }
 ];
 const candidateNavItems = [
   { label: "Home", path: "/" },
@@ -36,73 +36,73 @@ const normalNavItem = [
 ];
 
 export const Navbar = () => {
-  const [loginData, setLoginData] = useState(null);
-  const [navItems, setNavItems] = useState(normalNavItem); // Default navItems if not logged in
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [ loginData, setLoginData ] = useState( null );
+  const [ navItems, setNavItems ] = useState( normalNavItem ); // Default navItems if not logged in
+  const [ isMenuOpen, setIsMenuOpen ] = useState( false );
 
   // Toggle hamburger menu
-  const handlerIsMenuOpen = () => setIsMenuOpen(!isMenuOpen);
+  const handlerIsMenuOpen = () => setIsMenuOpen( !isMenuOpen );
 
-  console.log("navItems>>>", navItems);
+  console.log( "navItems>>>", navItems );
 
   // Check localStorage for token and update loginData
-  useEffect(() => {
-    const token = localStorage.getItem("user");
-    if (token) {
-      const user = JSON.parse(token);
-      setLoginData(user); // Set login data when token exists
+  useEffect( () => {
+    const token = localStorage.getItem( "user" );
+    if ( token ) {
+      const user = JSON.parse( token );
+      setLoginData( user ); // Set login data when token exists
     }
-  }, []); // Empty dependency array ensures this runs on initial mount
+  }, [] ); // Empty dependency array ensures this runs on initial mount
 
-  console.log("loginData>>", loginData?.role);
+  console.log( "loginData>>", loginData?.role );
 
   // Update navItems based on loginData
-  useEffect(() => {
-    if (loginData) {
-      switch (loginData.role) {
+  useEffect( () => {
+    if ( loginData ) {
+      switch ( loginData.role ) {
         case "admin":
-          setNavItems(adminNavItems);
+          setNavItems( adminNavItems );
           break;
         case "employer":
-          setNavItems(employerNavItems);
+          setNavItems( employerNavItems );
           break;
         case "coordinator":
-          setNavItems(coordinatorNavItems);
+          setNavItems( coordinatorNavItems );
           break;
         case "recruiter":
-          setNavItems(recruiterNavItems);
+          setNavItems( recruiterNavItems );
           break;
         case "candidate":
-          setNavItems(candidateNavItems);
+          setNavItems( candidateNavItems );
           break;
         default:
-          setNavItems(normalNavItem);
+          setNavItems( normalNavItem );
       }
     } else {
-      setNavItems(normalNavItem); // Set to normal items when not logged in
+      setNavItems( normalNavItem ); // Set to normal items when not logged in
     }
-  }, [loginData]); // This will re-run when loginData changes
+  }, [ loginData ] ); // This will re-run when loginData changes
 
   // Logout handler
   const logoutHandler = async () => {
-    await fetch("http://localhost:8080/auth/logout", {
+    await fetch( "http://localhost:8080/auth/logout", {
       method: "POST",
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        if (result.success) {
-          setLoginData(null);
-          localStorage.removeItem("usertoken");
-          localStorage.removeItem("user");
+    } )
+      .then( ( res ) => res.json() )
+      .then( ( result ) => {
+        if ( result.success ) {
+          setLoginData( null );
+          localStorage.removeItem( "usertoken" );
+          localStorage.removeItem( "user" );
           window.location.href = "/";
         }
-      });
+      } );
   };
 
   return (
     <div className="w-full ">
       <nav className="flex justify-between items-center py-6 px-4 text-clearWhite bg-deepBlack">
-        {/* BRAND */}
+        {/* BRAND */ }
         <NavLink
           to="/"
           className="flex items-center gap-2 text-2xl text-[#e1e5df]"
@@ -112,7 +112,7 @@ export const Navbar = () => {
             className="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse"
           >
             <img
-              src={logoURL}
+              src={ logoURL }
               className="rounded-full h-12 md:h-16"
               alt="Flowbite Logo"
             />
@@ -122,33 +122,33 @@ export const Navbar = () => {
           </span>
         </NavLink>
 
-        {/* MAIN MENU - Lg device */}
+        {/* MAIN MENU - Lg device */ }
         <ul className="hidden md:flex gap-12 font-bold">
-          {navItems.map(({ label, path }) => (
+          { navItems.map( ( { label, path } ) => (
             <li
-              key={path}
+              key={ path }
               className="text-lg text-clearWhite transition-transform duration-100 hover:scale-105"
             >
               <NavLink
-                to={path}
-                className={({ isActive }) =>
+                to={ path }
+                className={ ( { isActive } ) =>
                   isActive ? "text-mediumGray" : ""
                 }
               >
-                <span>{label}</span>
+                <span>{ label }</span>
               </NavLink>
             </li>
-          ))}
+          ) ) }
         </ul>
 
-        {/* User info or Login/Signup */}
+        {/* User info or Login/Signup */ }
         <div>
-          {loginData ? (
+          { loginData ? (
             <div className="hidden md:block">
               <div className="grid grid-cols-2 items-center gap-4">
-                Hello, {loginData.userName}
+                Hello, { loginData.userName }
                 <div
-                  onClick={logoutHandler}
+                  onClick={ logoutHandler }
                   className="py-2 px-5 bg-mediumGray text-center cursor-pointer rounded hover:border-2 text-clearWhite hover:border-clearWhite transition-all duration-100"
                 >
                   Logout
@@ -170,56 +170,55 @@ export const Navbar = () => {
                 Sign Up
               </Link>
             </div>
-          )}
+          ) }
         </div>
 
-        {/* HAMBURGER MENU */}
+        {/* HAMBURGER MENU */ }
         <div className="text-primary md:hidden flex justify-end items-center gap-2">
           <box-icon
-            name={isMenuOpen ? "x" : "menu"}
+            name={ isMenuOpen ? "x" : "menu" }
             size="md"
             color="text-primary"
-            onClick={handlerIsMenuOpen}
+            onClick={ handlerIsMenuOpen }
           ></box-icon>
         </div>
       </nav>
 
-      {/* MAIN MENU sm device */}
+      {/* MAIN MENU sm device */ }
       <div
-        className={` ${
-          isMenuOpen ? "" : "hidden"
-        } font-bold px-4 bg-gray-200 py-5 rounded`}
+        className={ ` ${ isMenuOpen ? "" : "hidden"
+          } font-bold px-4 bg-gray-200 py-5 rounded` }
       >
         <ul className="md:hidden sm:flex flex-col">
-          {isMenuOpen &&
-            navItems.map(({ label, path }) => (
+          { isMenuOpen &&
+            navItems.map( ( { label, path } ) => (
               <li
-                key={path}
+                key={ path }
                 className="text-base text-primary first:text-black py-1"
               >
                 <NavLink
-                  to={path}
-                  className={({ isActive }) => (isActive ? "active" : "")}
+                  to={ path }
+                  className={ ( { isActive } ) => ( isActive ? "active" : "" ) }
                 >
-                  <span onClick={() => setIsMenuOpen(!isMenuOpen)}>
-                    {label}
+                  <span onClick={ () => setIsMenuOpen( !isMenuOpen ) }>
+                    { label }
                   </span>
                 </NavLink>
               </li>
-            ))}
-          {/* Login/signup sm-device */}
+            ) ) }
+          {/* Login/signup sm-device */ }
           <div>
-            {loginData ? (
-              <div onClick={logoutHandler} className="py-2 px-5 border rounded">
+            { loginData ? (
+              <div onClick={ logoutHandler } className="py-2 px-5 border rounded">
                 Logout
               </div>
             ) : (
-              <li onClick={() => setIsMenuOpen(!isMenuOpen)}>
+              <li onClick={ () => setIsMenuOpen( !isMenuOpen ) }>
                 <Link to="/login" className="py-1 text-primary">
                   Login
                 </Link>
               </li>
-            )}
+            ) }
           </div>
         </ul>
       </div>

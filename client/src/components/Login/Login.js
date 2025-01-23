@@ -8,8 +8,8 @@ import Particles from "../Login/Particles";
 import { Link } from "react-router-dom";
 
 export const Login = () => {
-  const { setLoginData } = useContext(LoginContext);
-  const [showPassword, setShowPassword] = useState(false);
+  const { setLoginData } = useContext( LoginContext );
+  const [ showPassword, setShowPassword ] = useState( false );
 
   const navigate = useNavigate();
   const {
@@ -18,48 +18,48 @@ export const Login = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = async (data) => {
-    console.log(data);
+  const onSubmit = async ( data ) => {
+    console.log( data );
     // Send data to backend API
-    fetch("http://localhost:8080/auth/login", {
+    fetch( "http://localhost:8080/auth/login", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify(data),
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        console.log(result);
-        if (result.success) {
-          localStorage.setItem("usertoken", result.token);
-          localStorage.setItem("user", JSON.stringify(result.user));
+      body: JSON.stringify( data ),
+    } )
+      .then( ( res ) => res.json() )
+      .then( ( result ) => {
+        console.log( result );
+        if ( result.success ) {
+          localStorage.setItem( "usertoken", result.token );
+          localStorage.setItem( "user", JSON.stringify( result.user ) );
 
-          setLoginData(result.token);
-          toast.success("Login successful");
-          navigate("/");
-          setTimeout(() => {
+          setLoginData( result.token );
+          toast.success( "Login successful" );
+          navigate( "/" );
+          setTimeout( () => {
             window.location.reload();
-          }, 200);
-        } else toast.error(result.error);
-      })
-      .catch((err) => {
-        toast.error("An error occurred");
-        console.log(err);
-      });
+          }, 200 );
+        } else toast.error( result.error );
+      } )
+      .catch( ( err ) => {
+        toast.error( "An error occurred" );
+        console.log( err );
+      } );
   };
 
   return (
     <div className="relative h-auto w-screen flex items-center justify-center">
-      {/* Add ParticlesComponent as the background */}
+      {/* Add ParticlesComponent as the background */ }
       <div className="absolute top-0 left-0 w-full h-full -z-10">
         <Particles />
       </div>
 
       <div className="max-w-screen-2xl w-full md:w-4/6 lg:w-1/2 container mt-28 mx-auto md:h-[66vh] xl:px-24 px-4">
         <div className="bg-deepBlack mx-auto py-6 px-6 md:px-16 rounded-lg">
-          {/* FORM */}
-          <form onSubmit={handleSubmit(onSubmit)}>
+          {/* FORM */ }
+          <form onSubmit={ handleSubmit( onSubmit ) }>
             <div className="flex flex-col lg:flex-row gap-8">
-              {/* JOB POSTING DETAILS */}
+              {/* JOB POSTING DETAILS */ }
               <div className="w-full">
                 {/* <div>
                   <h1 className="text-[2rem] my-1 font-bold text-center text-vividOrange">
@@ -74,7 +74,7 @@ export const Login = () => {
                   <input
                     type="email"
                     required
-                    {...register("email")}
+                    { ...register( "email" ) }
                     placeholder="Ex: abhisheksharma@gmail.com"
                     className="create-job-input placeholder:text-xs md:placeholder:text-sm rounded-lg"
                   />
@@ -85,29 +85,29 @@ export const Login = () => {
                   </label>
                   <div className="relative">
                     <input
-                      type={showPassword ? "text" : "password"}
+                      type={ showPassword ? "text" : "password" }
                       required
-                      {...register("password")}
+                      { ...register( "password" ) }
                       placeholder="Enter your password"
                       className="create-job-input placeholder:text-xs md:placeholder:text-sm pr-10 rounded-lg"
                     />
                     <button
                       type="button"
-                      onClick={() => setShowPassword(!showPassword)}
+                      onClick={ () => setShowPassword( !showPassword ) }
                       className="absolute inset-y-0 right-0 flex items-center px-3"
                     >
-                      {showPassword ? (
+                      { showPassword ? (
                         <FaEyeSlash className="text-gray-500" />
                       ) : (
                         <FaEye className="text-gray-500" />
-                      )}
+                      ) }
                     </button>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Submit button */}
+            {/* Submit button */ }
             <div className="flex justify-center my-6">
               <button className="block bg-mediumGray text-clearWhite text-md py-2 px-16 rounded-md hover:border-2 hover:border-clearWhite transition-all duration-100">
                 Login

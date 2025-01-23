@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const UserDialog = ({
+const UserDialog = ( {
     dialogMode,
     formData,
     handleFormChange,
     handleFormSubmit,
     handleCloseDialog,
-}) => {
+} ) => {
     return (
         <div
-            style={{
+            style={ {
                 position: 'fixed',
                 top: 0,
                 left: 0,
@@ -18,10 +18,10 @@ const UserDialog = ({
                 height: '100vh',
                 backgroundColor: 'rgba(0,0,0,0.6)',
                 zIndex: 1000,
-            }}
+            } }
         >
             <div
-                style={{
+                style={ {
                     position: 'relative',
                     width: '400px',
                     margin: '100px auto',
@@ -29,17 +29,17 @@ const UserDialog = ({
                     padding: '20px',
                     borderRadius: '8px',
                     boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
-                }}
+                } }
             >
-                <h2>{dialogMode === 'add' ? 'Add User' : 'Edit User'}</h2>
-                <form onSubmit={handleFormSubmit}>
+                <h2>{ dialogMode === 'add' ? 'Add User' : 'Edit User' }</h2>
+                <form onSubmit={ handleFormSubmit }>
                     <div>
                         <label>User Name:</label>
                         <input
                             type="text"
                             name="userName"
-                            value={formData.userName}
-                            onChange={handleFormChange}
+                            value={ formData.userName }
+                            onChange={ handleFormChange }
                             required
                         />
                     </div>
@@ -48,8 +48,8 @@ const UserDialog = ({
                         <input
                             type="email"
                             name="email"
-                            value={formData.email}
-                            onChange={handleFormChange}
+                            value={ formData.email }
+                            onChange={ handleFormChange }
                             required
                         />
                     </div>
@@ -58,17 +58,17 @@ const UserDialog = ({
                         <input
                             type="password"
                             name="password"
-                            value={formData.password || ''}
-                            onChange={handleFormChange}
-                            required={dialogMode === 'add'}
+                            value={ formData.password || '' }
+                            onChange={ handleFormChange }
+                            required={ dialogMode === 'add' }
                         />
                     </div>
                     <div>
                         <label>Gender:</label>
                         <select
                             name="gender"
-                            value={formData.gender}
-                            onChange={handleFormChange}
+                            value={ formData.gender }
+                            onChange={ handleFormChange }
                         >
                             <option value="">Select Gender</option>
                             <option value="male">Male</option>
@@ -81,16 +81,16 @@ const UserDialog = ({
                         <input
                             type="text"
                             name="address"
-                            value={formData.address || ''}
-                            onChange={handleFormChange}
+                            value={ formData.address || '' }
+                            onChange={ handleFormChange }
                         />
                     </div>
                     <div>
                         <label>Role:</label>
                         <select
                             name="role"
-                            value={formData.role || ''}
-                            onChange={handleFormChange}
+                            value={ formData.role || '' }
+                            onChange={ handleFormChange }
                         >
                             <option value="">Select Role</option>
                             <option value="admin">Admin</option>
@@ -104,18 +104,18 @@ const UserDialog = ({
                         <input
                             type="checkbox"
                             className="mr-2"
-                            value={formData.head}
-                            onChange={handleFormChange}
+                            value={ formData.head }
+                            onChange={ handleFormChange }
                         />
                         <label className="text-sm">
                             Are you a head?
                         </label>
                     </div>
-                    <div style={{ marginTop: '1rem' }}>
+                    <div style={ { marginTop: '1rem' } }>
                         <button type="submit">
-                            {dialogMode === 'add' ? 'Add User' : 'Update User'}
+                            { dialogMode === 'add' ? 'Add User' : 'Update User' }
                         </button>
-                        <button type="button" onClick={handleCloseDialog} style={{ marginLeft: '1rem' }}>
+                        <button type="button" onClick={ handleCloseDialog } style={ { marginLeft: '1rem' } }>
                             Cancel
                         </button>
                     </div>
@@ -126,15 +126,16 @@ const UserDialog = ({
 };
 
 UserDialog.propTypes = {
-    dialogMode: PropTypes.oneOf(['add', 'edit']).isRequired,
-    formData: PropTypes.shape({
+    dialogMode: PropTypes.oneOf( [ 'add', 'edit' ] ).isRequired,
+    formData: PropTypes.shape( {
         userName: PropTypes.string,
         email: PropTypes.string,
         password: PropTypes.string,
         gender: PropTypes.string,
         address: PropTypes.string,
         role: PropTypes.string,
-    }).isRequired,
+        head: PropTypes.bool,
+    } ).isRequired,
     handleFormChange: PropTypes.func.isRequired,
     handleFormSubmit: PropTypes.func.isRequired,
     handleCloseDialog: PropTypes.func.isRequired,

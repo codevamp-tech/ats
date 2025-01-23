@@ -26,59 +26,59 @@ import UserListing from "./Pages/User/UserListing";
 import ApplicationListing from "./Pages/Application/ApplicationListing";
 
 function App() {
-  const { loginData, setLoginData } = useContext(LoginContext);
+  const { loginData, setLoginData } = useContext( LoginContext );
 
   return (
     <div className="App">
       <Routes>
-        {/* <h1 className='text-5xl text-green-600 '>Hello</h1> */}
-        <Route path="/" element={<Navbar />}>
-          <Route path="/" element={<Home />} />
-          <Route path="*" element={<Home />} />
-          <Route path="/post-job" element={<PostJob />} />
-          <Route path="/all-jobs" element={<AllJobs />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Register />} />
-          <Route path="/dashboard" element={<div>hello dashboard</div>} />
-          <Route path="/all-users" element={<UserListing />} />
-          <Route path="/application-types" element={<ApplicationListing />} />
+        {/* <h1 className='text-5xl text-green-600 '>Hello</h1> */ }
+        <Route path="/" element={ <Navbar /> }>
+          <Route path="/" element={ <Home /> } />
+          <Route path="*" element={ <Home /> } />
+          <Route path="/post-job" element={ <PostJob /> } />
+          <Route path="/all-jobs" element={ <AllJobs /> } />
+          <Route path="/login" element={ <Login /> } />
+          <Route path="/signup" element={ <Register /> } />
+          <Route path="/dashboard" element={ <div>hello dashboard</div> } />
+          <Route path="/all-users" element={ <UserListing /> } />
+          <Route path="/application-types" element={ <ApplicationListing /> } />
           <Route
             path="/interview-rounds"
-            element={<div>hello interview rounds</div>}
+            element={ <div>hello interview rounds</div> }
           />
 
-          {/* <Route path='/job-detail' element={<JobDetails />}/> */}
-          <Route path="/current-job/:id" element={<JobDetails />} />
-          <Route path="/application-form/:id" element={<ApplicationForm />} />
-          <Route path="/candidate/:id" element={<CandidateProfile />} />
-          <Route path="/shortlist" element={<ShortlistedCandidates />} />
+          {/* <Route path='/job-detail' element={<JobDetails />}/> */ }
+          <Route path="/current-job/:id" element={ <JobDetails /> } />
+          <Route path="/application-form/:id" element={ <ApplicationForm /> } />
+          <Route path="/candidate/:id" element={ <CandidateProfile /> } />
+          <Route path="/shortlist" element={ <ShortlistedCandidates /> } />
           <Route
             path="/shortlist/details/:candidate_id/:job_id"
-            element={<ShortlistedDetails />}
+            element={ <ShortlistedDetails /> }
           />
-          <Route path="/assign-recruiter/:id" element={<AssignRecruiter />} />
+          <Route path="/assign-recruiter/:id" element={ <AssignRecruiter /> } />
 
-          {/* <Route path='/job-detail' element={<JobDetails />}/> */}
-          <Route path="/current-job/:id" element={<JobDetails />} />
-          <Route path="/application-form/:id" element={<ApplicationForm />} />
-          <Route path="/candidate/:id" element={<CandidateProfile />} />
-          <Route path="/shortlist" element={<ShortlistedCandidates />} />
+          {/* <Route path='/job-detail' element={<JobDetails />}/> */ }
+          <Route path="/current-job/:id" element={ <JobDetails /> } />
+          <Route path="/application-form/:id" element={ <ApplicationForm /> } />
+          <Route path="/candidate/:id" element={ <CandidateProfile /> } />
+          <Route path="/shortlist" element={ <ShortlistedCandidates /> } />
           <Route
             path="/shortlist/details/:candidate_id/:job_id"
-            element={<ShortlistedDetails />}
+            element={ <ShortlistedDetails /> }
           />
-          <Route path="/assign-recruiter/:id" element={<AssignRecruiter />} />
+          <Route path="/assign-recruiter/:id" element={ <AssignRecruiter /> } />
 
-          <Route path="/recruiter/review" element={<RecruiterDashboard />} />
-          {/* <Route path='/recruiter/review' element={<RecruiterDashboard />}/> */}
+          <Route path="/recruiter/review" element={ <RecruiterDashboard /> } />
+          {/* <Route path='/recruiter/review' element={<RecruiterDashboard />}/> */ }
           <Route
             path="/coordinator/review"
-            element={<CoordinatorDashboard />}
+            element={ <CoordinatorDashboard /> }
           />
-          <Route path="/dash" element={<Dashboard />} />
-          <Route path="/all-posted-jobs" element={<AllPostedJobs />} />
-          <Route path="/update-job/:id" element={<UpdateJob />} />
-          <Route path="/my-jobs/" element={<MyJobs />} />
+          <Route path="/dash" element={ <Dashboard /> } />
+          <Route path="/all-posted-jobs" element={ <AllPostedJobs /> } />
+          <Route path="/update-job/:id" element={ <UpdateJob /> } />
+          <Route path="/my-jobs/" element={ <MyJobs /> } />
         </Route>
       </Routes>
 
