@@ -1,5 +1,5 @@
 
-import { Routes, Route, Outlet } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import './App.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { Home } from './Pages/Employer/Home';
@@ -18,16 +18,16 @@ import { ApplicationForm } from './Pages/Candidate/ApplicationForm';
 import { AssignRecruiter } from './Pages/Coordinator/AssignRecruiter';
 import { Footer } from './components/Footer';
 import { AllPostedJobs } from './components/AllPostedJobs'
-import { Dashboard } from './Pages/Dashboard';
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { LoginContext } from './components/ContextProvider/Context';
 import { UpdateJob } from './Pages/Employer/UpdateJob';
 import { MyJobs } from './Pages/Candidate/MyJobs';
 import UserListing from './Pages/User/UserListing';
+import Dashboard from './Pages/Dashboard';
 
 function App() {
 
-  const { loginData, setLoginData } = useContext(LoginContext)
+  const { } = useContext(LoginContext)
 
   return (
     <div className="App">
@@ -40,7 +40,7 @@ function App() {
           <Route path='/all-jobs' element={<AllJobs />} />
           <Route path='/login' element={<Login />} />
           <Route path='/signup' element={<Register />} />
-          <Route path='/dashboard' element={<div>hello dashboard</div>} />
+          <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/all-users' element={<UserListing />} />
           <Route path='/application-types' element={<div>hello application status</div>} />
           <Route path='/interview-rounds' element={<div>hello interview rounds</div>} />
@@ -57,7 +57,7 @@ function App() {
           <Route path='/recruiter/review' element={<RecruiterDashboard />} />
           {/* <Route path='/recruiter/review' element={<RecruiterDashboard />}/> */}
           <Route path='/coordinator/review' element={<CoordinatorDashboard />} />
-          <Route path='/dash' element={<Dashboard />} />
+          {/* <Route path='/dash' element={<Dashboard />} /> */}
           <Route path='/all-posted-jobs' element={<AllPostedJobs />} />
           <Route path='/update-job/:id' element={<UpdateJob />} />
           <Route path='/my-jobs/' element={<MyJobs />} />
