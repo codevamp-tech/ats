@@ -24,6 +24,7 @@ import { LoginContext } from './components/ContextProvider/Context';
 import { UpdateJob } from './Pages/Employer/UpdateJob';
 import { MyJobs } from './Pages/Candidate/MyJobs';
 import UserListing from './Pages/User/UserListing';
+import InterviewListing from './Pages/InterviewRounds/InterviewListing';
 
 function App() {
 
@@ -43,7 +44,7 @@ function App() {
           <Route path='/dashboard' element={<div>hello dashboard</div>} />
           <Route path='/all-users' element={<UserListing />} />
           <Route path='/application-types' element={<div>hello application status</div>} />
-          <Route path='/interview-rounds' element={<div>hello interview rounds</div>} />
+          <Route path='/interview-rounds' element={<InterviewListing />} />
 
 
           {/* <Route path='/job-detail' element={<JobDetails />}/> */}
