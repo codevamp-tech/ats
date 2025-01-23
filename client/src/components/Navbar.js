@@ -100,12 +100,12 @@ export const Navbar = () => {
   };
 
   return (
-    <div className="max-w-screen container mx-auto xl:px-24 px-4">
-      <nav className="flex justify-between items-center py-6">
+    <div className="w-full ">
+      <nav className="flex justify-between items-center py-6 px-4 text-clearWhite bg-deepBlack">
         {/* BRAND */}
         <NavLink
           to="/"
-          className="flex items-center gap-2 text-2xl text-[#087658]"
+          className="flex items-center gap-2 text-2xl text-[#e1e5df]"
         >
           <a
             href="/"
@@ -117,18 +117,23 @@ export const Navbar = () => {
               alt="Flowbite Logo"
             />
           </a>
-          <span className="font-extrabold text-xl md:text-3xl">
-            humgrow.com
+          <span className="text-vividOrange font-extrabold text-xl md:text-3xl transition-transform duration-200 hover:scale-105">
+            A T S
           </span>
         </NavLink>
 
         {/* MAIN MENU - Lg device */}
         <ul className="hidden md:flex gap-12 font-bold">
           {navItems.map(({ label, path }) => (
-            <li key={path} className="text-base text-primary">
+            <li
+              key={path}
+              className="text-base text-clearWhite transition-transform duration-100 hover:scale-105"
+            >
               <NavLink
                 to={path}
-                className={({ isActive }) => (isActive ? "active" : "")}
+                className={({ isActive }) =>
+                  isActive ? "text-vividOrange" : ""
+                }
               >
                 <span>{label}</span>
               </NavLink>
@@ -144,7 +149,7 @@ export const Navbar = () => {
                 Hello, {loginData.userName}
                 <div
                   onClick={logoutHandler}
-                  className="py-2 px-5 text-center border-2 bg-gray-200 cursor-pointer rounded"
+                  className="py-2 px-5 bg-vividOrange text-center cursor-pointer rounded hover:border-2 text-clearWhite hover:border-clearWhite transition-all duration-100"
                 >
                   Logout
                 </div>
@@ -154,13 +159,13 @@ export const Navbar = () => {
             <div className="text-base text-primary font-medium space-x-5 hidden md:block">
               <Link
                 to="/login"
-                className="py-2 px-5 border rounded bg-gray-100"
+                className="py-2 px-5 rounded bg-vividOrange text-clearWhite hover:border-2 hover:border-clearWhite transition-all duration-100"
               >
                 Login
               </Link>
               <Link
                 to="/signup"
-                className="bg-secondary text-white py-2 px-5 border rounded"
+                className="py-2 px-5 rounded bg-vividOrange text-clearWhite hover:border-2 hover:border-clearWhite transition-all duration-100"
               >
                 Sign Up
               </Link>

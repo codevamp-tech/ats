@@ -1,5 +1,4 @@
-import React from 'react'
-
+import React from "react";
 
 export const OurCompanies = () => {
   const companyLogos = [
@@ -27,19 +26,17 @@ export const OurCompanies = () => {
       id: 6,
       logo: "https://companieslogo.com/img/orig/CTSH-82a8444b.png?t=1652276339",
     },
-  ]
+  ];
 
   return (
-    <div className="mt-56">
-      <h1 className='text-center text-xl md:text-2xl font-bold text-primary mt-12 md:mt-6 my-6 md:my-12'>Our Trusted Partners</h1>
-            
+    <div className="mt-56" style={{ marginTop: "65vh" }}>
+      <h1 className="text-center text-xl md:text-2xl font-bold text-deepBlack mt-12 md:mt-6 my-6 md:m">
+        Our Trusted Partners
+      </h1>
 
       <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 justify-items-center items-center gap-4">
         {companyLogos.map((obj) => (
-          <li
-            className=""
-            key={obj.id}
-          >
+          <li className="" key={obj.id}>
             <div className="flex flex-col items-center justify-center">
               <img
                 src={obj.logo}
@@ -54,7 +51,6 @@ export const OurCompanies = () => {
           </li>
         ))}
       </ul>
-      
     </div>
   );
 };
