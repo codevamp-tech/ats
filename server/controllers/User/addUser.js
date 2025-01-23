@@ -23,7 +23,7 @@ const addUser = async (req, res) => {
             password,
             gender,
             address,
-            role: role || "candidate", 
+            role: role || "candidate",
         });
 
         await newUser.save();

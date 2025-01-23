@@ -18,16 +18,18 @@ app.use(cookieParser());
 
 // Import routes
 import jobRoutes from "./routes/jobRoutes.js";
-import userRoutes from "./routes/userRoutes.js";
-import applicationRoutes from "./routes/applicationRoutes.js";
-import recruiterRoutes from "./routes/recruiterRoutes.js";
-import fileUploadRoute from "./routes/fileUploadRoute.js";
-import Auth from "./routes/Auth.js";
+import userRoutes from "./routes/userRoutes.js"
+import interviewRoutes from "./routes/interviewRoutes.js"
+import applicationRoutes from "./routes/applicationRoutes.js"
+import recruiterRoutes from "./routes/recruiterRoutes.js"
+import fileUploadRoute from './routes/fileUploadRoute.js'
+import Auth from './routes/Auth.js'
 import applicationTypesRoutes from "./routes/applicationTypeRoutes.js";
 
 // Use routes
 app.use("/jobs", jobRoutes);
 app.use("/users", userRoutes);
+app.use("/interviews", interviewRoutes);
 app.use("/application", applicationRoutes);
 app.use("/recruiter", recruiterRoutes);
 app.use("/auth", Auth);
