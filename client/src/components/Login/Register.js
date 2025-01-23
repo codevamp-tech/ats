@@ -69,35 +69,25 @@ export const Register = () => {
   };
 
   return (
-    <div className="relative h-[90vh] w-screen">
+    <div className="relative h-[87vh] w-screen">
       {/* Add ParticlesComponent as the background */}
       <div className="absolute top-0 left-0 w-full h-full -z-10">
         <Particles />
       </div>
       <div className="max-w-scren-2xl w-full md:w-4/6 lg:w-1/2 container mt-2 mx-auto md:h-[60vh] xl:px-24 px-4 ">
-        <img
-          src="/tree-1.png"
-          alt="Left Tree"
-          className="absolute bottom-[-4vh] left-20 w-60 md:w-84 lg:w-80"
-        />
-        <img
-          src="/tree-2.png"
-          alt="Right Tree"
-          className="absolute bottom-[-4vh] right-20 w-48 md:w-64 lg:w-70"
-        />
-        <div className=" bg-[#e7e7e7] mx-auto py-6 px-6 md:px-16 rounded-lg h-[88vh] hover:border-2 hover:border-vividOrange transition-all duration-100">
+        <div className=" bg-deepBlack mx-auto py-6 px-6 md:px-16 rounded-lg h-[86vh]">
           {/* FORM */}
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col lg:flex-row gap-8">
               {/* JOB POSTING DETAILS */}
               <div className="w-full">
-                <div>
+                {/* <div>
                   <h1 className="text-[2rem] font-bold text-center text-vividOrange">
                     Register
                   </h1>
-                </div>
+                </div> */}
                 <div>
-                  <label className="block mt-1 m-1 text-vividOrange ">
+                  <label className="block mt-1 m-1 text-clearWhite ">
                     Full Name
                   </label>
                   <input
@@ -105,11 +95,11 @@ export const Register = () => {
                     required
                     {...register("userName")}
                     placeholder="Ex: Abhishek Sharma"
-                    className="create-job-input placeholder:text-xs md:placeholder:text-sm"
+                    className="create-job-input placeholder:text-xs md:placeholder:text-sm rounded-lg"
                   ></input>
                 </div>
                 <div>
-                  <label className="block mt-2 m-1 text-vividOrange">
+                  <label className="block mt-2 m-1 text-clearWhite">
                     Email
                   </label>
                   <input
@@ -117,11 +107,11 @@ export const Register = () => {
                     required
                     {...register("email")}
                     placeholder="Ex: abhisheksharma@gmail.com"
-                    className="create-job-input placeholder:text-xs md:placeholder:text-sm"
+                    className="create-job-input placeholder:text-xs md:placeholder:text-sm rounded-lg"
                   ></input>
                 </div>
                 <div>
-                  <label className="block mt-2 m-1 text-vividOrange">
+                  <label className="block mt-2 m-1 text-clearWhite">
                     Password
                   </label>
                   <div className="relative">
@@ -130,7 +120,7 @@ export const Register = () => {
                       required
                       {...register("password")}
                       placeholder="Enter your password"
-                      className="create-job-input placeholder:text-xs md:placeholder:text-sm pr-10"
+                      className="create-job-input placeholder:text-xs md:placeholder:text-sm pr-10 rounded-lg"
                     />
                     <button
                       type="button"
@@ -147,7 +137,7 @@ export const Register = () => {
                 </div>
 
                 <div>
-                  <label className="block mt-2 m-1 text-vividOrange">
+                  <label className="block mt-2 m-1 text-clearWhite">
                     Address
                   </label>
                   <input
@@ -155,12 +145,12 @@ export const Register = () => {
                     required
                     {...register("address")}
                     placeholder="Ex: A70, Down-Town Street, Mumbai"
-                    className="create-job-input placeholder:text-xs md:placeholder:text-sm"
+                    className="create-job-input placeholder:text-xs md:placeholder:text-sm rounded-lg"
                   ></input>
                 </div>
                 <div className="mb-2">
                   <label
-                    className="block mt-2 m-1 text-vividOrange"
+                    className="block mt-2 m-1 text-clearWhite"
                     htmlFor="gender"
                   >
                     Gender
@@ -168,7 +158,7 @@ export const Register = () => {
                   <select
                     {...register("gender", { required: true })}
                     id="gender"
-                    className="create-job-input placeholder:text-xs md:placeholder:text-sm h-10 p-1"
+                    className="create-job-input placeholder:text-xs md:placeholder:text-sm h-10 p-1 rounded-lg"
                   >
                     <option value="" disabled selected>
                       Select Gender
@@ -178,12 +168,12 @@ export const Register = () => {
                   </select>
                 </div>
                 <div>
-                  <label className="block mt-2 m-1 text-vividOrange">
+                  <label className="block mt-2 m-1 text-clearWhite">
                     User Type
                   </label>
                   <select
                     {...register("role", { required: true })}
-                    className="create-job-input h-10 p-1"
+                    className="create-job-input h-10 p-1 rounded-lg"
                   >
                     <option value="candidate">Candidate</option>
                     <option value="recruiter">Recruiter</option>
@@ -196,13 +186,13 @@ export const Register = () => {
 
             {/* Submit button */}
             <div className="flex justify-center my-3">
-              <button className="block bg-vividOrange text-clearWhite text-md py-2 px-16 rounded-md">
+              <button className="block bg-mediumGray text-clearWhite text-md py-2 px-16 rounded-md hover:border-2 hover:border-clearWhite transition-all duration-100">
                 Register
               </button>
             </div>
             <div className="text-center">
               <Link to="/login">
-                <p className="hover:underline text-vividOrange">
+                <p className="hover:underline text-clearWhite">
                   Already registered? Login here!
                 </p>
               </Link>
