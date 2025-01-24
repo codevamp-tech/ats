@@ -5,19 +5,43 @@ const JobSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    jobTitle: {
+    title: {
         type: String,
         required: true
     },
-    employmentType: {
+    locationType: {
         type: String,
         required: true
     },
-    location: {
+    type: {
         type: String,
         required: true
     },
-    salary: {
+    scheduleType: {
+        type: String,
+        required: true
+    },
+    shiftStart: {
+        type: String,
+        required: true
+    },
+    shiftEnd: {
+        type: String,
+        required: true
+    },
+    hireType: {
+        type: String,
+        required: true
+    },
+    country: {
+        type: String,
+        required: true
+    },
+    state: {
+        type: String,
+        required: true
+    },
+    city: {
         type: String,
         required: true
     },
@@ -25,12 +49,41 @@ const JobSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    applicationForm:{ 
-        question: [{ type: String}], 
-        answer: [{ type: String}] 
+    compensation: {
+        type: String,
+        required: true
+    },
+    experienceRequired: {
+        type: String,
+        required: true
+    },
+    requiredResources: {
+        type: Number,
+        required: true
+    },
+    status: {
+        type: String,
+        enum: ['Approve', 'Cancel', 'Filled', 'Pending'],
+        required: true
+    },
+    recruiterName: {
+        type: String,
+        required: true
+    },
+    hiringManagerEmail: {
+        type: String,
+        required: true
+    },
+    hiringManagerName: {
+        type: String,
+        required: true
+    },
+    applicationForm: {
+        question: [{ type: String }],
+        answer: [{ type: String }]
     },
     applicants: [{
-        applicant : {
+        applicant: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
             required: true
