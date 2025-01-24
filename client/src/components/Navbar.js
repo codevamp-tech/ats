@@ -69,7 +69,7 @@ export const Navbar = () => {
         case "coordinator":
           setNavItems(coordinatorNavItems);
           break;
-        case "recruiter":
+        case "recruiter_manager":
           setNavItems(recruiterNavItems);
           break;
         case "candidate":
