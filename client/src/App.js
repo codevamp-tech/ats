@@ -3,7 +3,7 @@ import './App.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { Home } from './Pages/Employer/Home';
 import { Navbar } from './components/Navbar';
-import { PostJob } from './Pages/Employer/PostJob';
+import { PostJob } from './components/PostJob/PostJob';
 import { AllJobs } from './Pages/Employer/AllJobs';
 import { Login } from './components/Login/Login';
 import { Register } from './components/Login/Register';
@@ -19,7 +19,6 @@ import { Footer } from './components/Footer';
 import { AllPostedJobs } from './components/AllPostedJobs'
 import { useContext } from 'react';
 import { LoginContext } from './components/ContextProvider/Context';
-import { UpdateJob } from './Pages/Employer/UpdateJob';
 import { MyJobs } from './Pages/Candidate/MyJobs';
 import UserListing from './Pages/User/UserListing';
 import InterviewListing from './Pages/InterviewRounds/InterviewListing';
@@ -42,6 +41,7 @@ function App() {
           <Route path='/signup' element={<Register />} />
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/all-users' element={<UserListing />} />
+          <Route path='/recruiter-dashboard' element={<div>hello recruiter dashboard</div>} />
           <Route path="/application-types" element={<ApplicationListing />} />
           <Route path='/interview-rounds' element={<InterviewListing />} />
 
@@ -69,7 +69,6 @@ function App() {
           <Route path='/coordinator/review' element={<CoordinatorDashboard />} />
           {/* <Route path='/dash' element={<Dashboard />} /> */}
           <Route path='/all-posted-jobs' element={<AllPostedJobs />} />
-          <Route path='/update-job/:id' element={<UpdateJob />} />
           <Route path='/my-jobs/' element={<MyJobs />} />
 
           <Route path="/recruiter/review" element={<RecruiterDashboard />} />

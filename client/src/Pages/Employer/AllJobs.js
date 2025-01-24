@@ -1,114 +1,94 @@
-import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom';
-// import '../../public/featuredJobs.json'
-import { toast } from 'react-toastify'
+import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useJobs } from '../../hooks/useJob';
 
 export const AllJobs = () => {
+    const { data: jobs = [], isLoading } = useJobs();
+    const navigate = useNavigate();
 
-    const tableHeaderCss = "px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
-    
-    const [jobs, setJobs] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+    if (isLoading) {
+        return (
+            <div className="flex justify-center items-center min-h-screen">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+            </div>
+        );
+    }
 
-    useEffect( ()=>{
-        try {
-            fetch("http://localhost:8080/jobs/all-jobs")
-                .then(res => res.json())
-                .then(data => {
-                    const newData = data.slice(0, 6);
-                    setJobs(newData);
-                });
-        } catch (error) {
-            console.error("Error fetching jobs:", error);
-        }
+    console.log("jobs>>>", jobs);
 
-    }, [jobs] )
     return (
-        <div className='max-w-screen-2xl container mx-auto xl:px-24 px-4'>
+        <div className="max-w-screen-2xl mx-auto px-4 xl:px-24 py-8">
+            <div className="bg-white rounded-lg shadow-xl overflow-hidden">
+                {/* Header Section */}
+                <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4">
+                    <div className="flex justify-between items-center">
+                        <h3 className="text-xl font-bold text-white">All Posted Jobs</h3>
+                        <Link
+                            to="/post-job"
+                            className="inline-flex items-center px-4 py-2 bg-white text-blue-600 rounded-lg font-medium hover:bg-blue-50 transition-colors duration-200"
+                        >
+                            <span className="mr-2">+</span>
+                            Add Job
+                        </Link>
+                    </div>
+                </div>
 
-            <div className='py-1'>
-                <div className='w-full '>
-
-                    {/* MAIN TABLE */}
-                    <section className="py-1 bg-blueGray-50">
-                        <div className="w-full xl:w-8/12 mb-12 xl:mb-0 px-4 mx-auto mt-24">
-                            <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded ">
-                                <div className="rounded-t mb-0 px-4 py-3 border-0 bg-secondary text-white ">
-                                    <div className="flex flex-wrap items-center">
-                                        <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-center">
-                                            <h3 className="font-bold text-base text-blueGray-700">All Posted Jobs</h3>
+                {/* Table Section */}
+                <div className="overflow-x-auto">
+                    <table className="w-full">
+                        <thead>
+                            <tr className="bg-gray-50">
+                                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Job Title</th>
+                                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Salary</th>
+                                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Location</th>
+                                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-200">
+                            {jobs.map((job) => (
+                                <tr
+                                    key={job._id}
+                                    className="hover:bg-gray-50 transition-colors duration-200"
+                                >
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        <div className="text-sm font-medium text-gray-900">{job.title}</div>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        <div className="text-sm text-gray-600">₹{job.compensation}</div>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        <div className="text-sm text-gray-600">{job.city},{job.state},{job.country}</div>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                                        <div className="flex gap-3">
+                                            <button
+                                                onClick={() => navigate(`/post-job`, { state: { job } })}
+                                                className="text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200"
+                                            >
+                                                Edit
+                                            </button>
+                                            <button
+                                                className="text-red-600 hover:text-red-800 font-medium transition-colors duration-200"
+                                            >
+                                                Delete
+                                            </button>
                                         </div>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
 
-                                    </div>
-                                </div>
-
-                                <div className="block w-full overflow-x-hidden">
-                                    <table className="items-center bg-transparent w-full border-collapse ">
-                                        <thead>
-                                            <tr>
-                                                <th className={tableHeaderCss}>Job Title</th>
-                                                <th className={`${tableHeaderCss} hidden md:table-cell`}>Salary</th>
-                                                <th className={`${tableHeaderCss} hidden md:table-cell`}>Location</th>
-                                                <th className={tableHeaderCss}></th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody>
-                                            {jobs.map((job, key) => <RenderTableRows key={key} job={job} />)}
-                                        </tbody>
-
-                                    </table>
-                                </div>
-                            </div>
+                    {/* Empty State */}
+                    {jobs.length === 0 && (
+                        <div className="text-center py-12">
+                            <p className="text-gray-500 text-lg">No jobs posted yet</p>
                         </div>
-
-                    </section>
+                    )}
                 </div>
             </div>
         </div>
-    )
-}
-function HandlerDeleteJob(id){
-    try {
-        fetch(`http://localhost:8080/jobs/delete-job/${id}`, {
-            method: 'DELETE'
-        })
-        .then(res => res.json())
-        .then(data => {
-            // Handle the response data here
-            toast.success("Deleted successfully")
-        });
-    } catch (error) {
-        console.error("Error deleting job:", error);
-        toast.error("Unable to delete")
-    }
-}
+    );
+};
 
-
-function RenderTableRows({job}){
-    const tableDataCss = "border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-    return (
-
-        <tr>
-            <th className= {`${tableDataCss} text-left text-blueGray-700 px-3 md:px-6`}>
-                {job.jobTitle}
-            </th>
-            <td className={`${tableDataCss} hidden md:table-cell`}>
-                {job.location}
-            </td>
-            <td className={`${tableDataCss} hidden md:table-cell`}>
-                {job.salary}
-            </td>
-            <td className={`flex justify-between ${tableDataCss}`}>
-                <button>
-
-                    <box-icon name='edit'/>
-                </button>
-                <button>
-                    
-                    <box-icon name='trash' onClick={() => HandlerDeleteJob(job._id)} />
-                </button>
-            </td>
-        </tr>
-    )
-}
+export default AllJobs;

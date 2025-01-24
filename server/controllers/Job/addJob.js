@@ -1,24 +1,58 @@
-import Job from '../../models/Job.js'
+import Job from '../../models/Job.js';
 import uniqid from 'uniqid';
 
 const addJob = async (req, res) => {
-    const { jobTitle, employmentType, location, salary, description, applicationForm, applicants } = req.body;
+    const {
+        // Directly mapping to the Job schema fields
+        title,
+        locationType,
+        type,
+        scheduleType,
+        shiftStart,
+        shiftEnd,
+        hireType,
+        country,
+        state,
+        city,
+        description,
+        compensation,
+        experienceRequired,
+        requiredResources,
+        status,
+        recruiterName,
+        hiringManagerEmail,
+        hiringManagerName,
+        applicationForm,
+        applicants
+    } = req.body;
 
-    console.log("Data on backend");
-    console.log(req.body);
+    console.log("Data on backend", req.body);
 
     const job = new Job({
         jobID: uniqid(),
-        jobTitle,
-        employmentType,
-        location,
-        salary,
+        title,
+        locationType,
+        type,
+        scheduleType,
+        shiftStart,
+        shiftEnd,
+        hireType,
+        country,
+        state,
+        city,
         description,
+        compensation,
+        experienceRequired,
+        requiredResources,
+        status,
+        recruiterName,
+        hiringManagerEmail,
+        hiringManagerName,
         applicationForm,
         applicants
     });
 
-    try {   
+    try {
         await job.save();
         res.status(201).json(job);
     } catch (error) {
@@ -26,4 +60,4 @@ const addJob = async (req, res) => {
     }
 };
 
-export {addJob};
+export { addJob };
