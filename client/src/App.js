@@ -1,4 +1,3 @@
-
 import { Routes, Route, Outlet } from 'react-router-dom';
 import './App.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -18,15 +17,16 @@ import { ApplicationForm } from './Pages/Candidate/ApplicationForm';
 import { AssignRecruiter } from './Pages/Coordinator/AssignRecruiter';
 import { Footer } from './components/Footer';
 import { AllPostedJobs } from './components/AllPostedJobs'
-import { Dashboard } from './Pages/Dashboard';
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { LoginContext } from './components/ContextProvider/Context';
 import { MyJobs } from './Pages/Candidate/MyJobs';
 import UserListing from './Pages/User/UserListing';
+import InterviewListing from './Pages/InterviewRounds/InterviewListing';
+import ApplicationListing from "./Pages/Application/ApplicationListing";
+import Dashboard from './Pages/Dashboard';
 
 function App() {
-
-  const { loginData, setLoginData } = useContext(LoginContext)
+  const { loginData, setLoginData } = useContext(LoginContext);
 
   return (
     <div className="App">
@@ -39,12 +39,22 @@ function App() {
           <Route path='/all-jobs' element={<AllJobs />} />
           <Route path='/login' element={<Login />} />
           <Route path='/signup' element={<Register />} />
-          <Route path='/dashboard' element={<div>hello dashboard</div>} />
+          <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/all-users' element={<UserListing />} />
-          <Route path='/application-types' element={<div>hello application status</div>} />
-          <Route path='/interview-rounds' element={<div>hello interview rounds</div>} />
           <Route path='/recruiter-dashboard' element={<div>hello recruiter dashboard</div>} />
+          <Route path="/application-types" element={<ApplicationListing />} />
+          <Route path='/interview-rounds' element={<InterviewListing />} />
 
+          {/* <Route path='/job-detail' element={<JobDetails />}/> */}
+          <Route path="/current-job/:id" element={<JobDetails />} />
+          <Route path="/application-form/:id" element={<ApplicationForm />} />
+          <Route path="/candidate/:id" element={<CandidateProfile />} />
+          <Route path="/shortlist" element={<ShortlistedCandidates />} />
+          <Route
+            path="/shortlist/details/:candidate_id/:job_id"
+            element={<ShortlistedDetails />}
+          />
+          <Route path="/assign-recruiter/:id" element={<AssignRecruiter />} />
 
           {/* <Route path='/job-detail' element={<JobDetails />}/> */}
           <Route path='/current-job/:id' element={<JobDetails />} />
@@ -57,16 +67,25 @@ function App() {
           <Route path='/recruiter/review' element={<RecruiterDashboard />} />
           {/* <Route path='/recruiter/review' element={<RecruiterDashboard />}/> */}
           <Route path='/coordinator/review' element={<CoordinatorDashboard />} />
-          <Route path='/dash' element={<Dashboard />} />
+          {/* <Route path='/dash' element={<Dashboard />} /> */}
           <Route path='/all-posted-jobs' element={<AllPostedJobs />} />
           <Route path='/my-jobs/' element={<MyJobs />} />
 
-        </Route>
-
-      </Routes>
+          <Route path="/recruiter/review" element={<RecruiterDashboard />} />
+          {/* <Route path='/recruiter/review' element={<RecruiterDashboard />}/> */}
+          <Route
+            path="/coordinator/review"
+            element={<CoordinatorDashboard />}
+          />
+          <Route path="/dash" element={<Dashboard />} />
+          <Route path="/all-posted-jobs" element={<AllPostedJobs />} />
+          <Route path="/update-job/:id" element={<UpdateJob />} />
+          <Route path="/my-jobs/" element={<MyJobs />} />
+        </Route >
+      </Routes >
 
       <Footer />
-    </div>
+    </div >
   );
 }
 
