@@ -19,7 +19,7 @@ import { Footer } from './components/Footer';
 import { AllPostedJobs } from './components/AllPostedJobs'
 import { useContext } from 'react';
 import { LoginContext } from './components/ContextProvider/Context';
-import { MyJobs } from './Pages/Candidate/MyJobs';
+import MyJobs from './Pages/Candidate/MyJobs';
 import UserListing from './Pages/User/UserListing';
 import InterviewListing from './Pages/InterviewRounds/InterviewListing';
 import ApplicationListing from "./Pages/Application/ApplicationListing";

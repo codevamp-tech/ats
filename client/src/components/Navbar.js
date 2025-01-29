@@ -28,7 +28,7 @@ const recruiterNavItems = [
 const candidateNavItems = [
   { label: "Home", path: "/" },
   { label: "All Jobs", path: "/all-posted-jobs" },
-  { label: "Dashboard", path: `/my-jobs` },
+  { label: "Applied Jobs", path: `/my-jobs` },
 ];
 const normalNavItem = [
   { label: "Home", path: "/" },

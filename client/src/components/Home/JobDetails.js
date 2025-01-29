@@ -1,202 +1,99 @@
-import React, { useState, useEffect } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import LogoURL from '../../assets/img/logo.jpeg'
-import { useForm } from 'react-hook-form'
-import { SimilarJobs } from '../SimilarJobs'
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import ReactQuill from "react-quill";
+import { ApplicationForm } from "../ApplicationForm/ApplicationForm"; // <-- Import the new form component
+import "react-quill/dist/quill.snow.css";
+import { useApplicationTypes } from "../../hooks/useApplication";
 
 export const JobDetails = () => {
+  const { id } = useParams();
+  const [job, setJob] = useState(null);
+  const [loginData, setLoginData] = useState(null);
 
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm({
-        defaultValues: {
-            candidateID: "",
-            jobID: "",
-            applicationStatus: "active",
-            resume: null,
-            applicationForm: [{
-                question: "",
-                answer: ""
-            }],
-            candidateFeedback: [{
-                question: "",
-                answer: ""
-            }]
-        }
-    })
-
-    const randomNum = Math.floor(Math.random() * (200 - 20 + 1) + 20)
-    const { id } = useParams();
-    const [job, setJob] = useState();
-    const [applicants, setApplicants] = useState();
-    const [file, setFile] = useState();
-
-    const [loginData, setLoginData] = useState();
-    
-    useEffect(() => {
-        let token = localStorage.getItem("user");
-        const user = JSON.parse(token);
-        setLoginData(user)
-        console.log(user);
-    }, [])
-
-    useEffect(() => {
-        fetch(`http://localhost:8080/jobs/current-job/${id}`).then(res => res.json()).then(
-            data => { setJob(data); console.log(data); }
-        )
+  // 1. Fetch the logged-in user (if any)
+  useEffect(() => {
+    const token = localStorage.getItem("user");
+    if (token) {
+      const user = JSON.parse(token);
+      setLoginData(user);
     }
-        , []);
+  }, []);
 
-    useEffect(() => {
-        if (job && job.applicants && job.applicants.length > 0) {
-            const fetchApplicantsData = async () => {
-                try {
-                    const response = await fetch(`http://localhost:8080/users/all-users`);
-                    if (!response.ok) {
-                        throw new Error('Failed to fetch applicants data');
-                    }
-                    const data = await response.json();
+  // 2. Fetch the job details
+  useEffect(() => {
+    fetch(`http://localhost:8080/jobs/current-job/${id}`)
+      .then((res) => res.json())
+      .then((data) => setJob(data))
+      .catch((err) => console.error("Error fetching job data:", err));
+  }, [id]);
 
-                    const filteredApplicants = data.filter(app => {
-                        return job.applicants.some(jobApplicant => jobApplicant.applicant === app._id);
-                    });
+  // 3. We also fetch the application types (and can pass them to the form)
+  const {
+    data: applicationTypesData,
+    isLoading,
+    isError,
+    error,
+  } = useApplicationTypes({});
 
-                    setApplicants(filteredApplicants);
-                    console.log(filteredApplicants);
-                    // console.log(jobs.applicants);
-                } catch (error) {
-                    console.error('Error fetching applicants data:', error);
-                }
-            };
+  if (!job) {
+    return <p className="p-6">Loading job details...</p>;
+  }
 
-            fetchApplicantsData();
-        }
-    }, [job]);
-
-    const handleFileUpload = (e) => {
-        const file = e.target.files[0];
-        setFile(file.name);
-        const formData = new FormData();
-        formData.append("resume", file);
-        fetch(`http://localhost:8080/upload/resume/${applicants._id}`, {
-            method: "POST",
-            body: formData,
-        })
-            .then((res) => res.json())
-            .then((result) => {
-                console.log(result);
-            });
-    }
-
-    const onSubmit = (data) => {
-        console.log(data);
-        // fetch(`http://localhost:8080/upload/resume/${applicants._id}`, {
-        //     method: "POST",
-        //     headers: { "content-type": "application/json" },
-        //     body: JSON.stringify(data),
-        // })
-        //     .then((res) => res.json())
-        //     .then((result) => {
-        //         console.log(result);
-        //     });
-    }
-
-    return (
-        <div className='max-w-scren-2xl  w-full md:w-5/6 lg:w-6/8 container mt-2 mx-auto xl:px-24 px-4 '>
-
-            <div className=' bg-[#efefef] mx-auto py-12 md:px-14 px-8 rounded-lg'>
-
-                <div className='flex flex-col lg:flex-row  gap-8'>
-
-                    {/* JOB DETAILS */}
-                    {
-                        job &&
-                        <div className='w-full'>
-
-                            {/* BASIC DETAILS */}
-                            <div className='flex items-center flex-wrap justify-center md:justify-normal'>
-                                <img src={LogoURL} alt="Logo" className="rounded-full w-20 md:w-24 h-auto" />
-                                <div className='mx-4 my-3 text-center md:text-left md:my-0'>
-                                    <h1 className='text-xl md:text-2xl font-bold'>{job.jobTitle}</h1>
-                                    <p className='text-secondary'>Humgrow.com</p>
-                                    <p className='text-sm text-gray-700'>Posted - 19/06/2024</p>
-                                </div>
-                            </div>
-
-                            {/* ADDITIONALS */}
-                            <div className='my-4 gap-2 grid grid-cols-2 sm:grid-cols-4'>
-                                <div className='bg-blue-300 rounded-lg py-4 md:py-5 text-center'>
-                                    <h2 className='text-xs md:text-md font-semibold text-gray-700'>Job Type</h2><p className='text-sm md:text-lg font-bold'>{job.employmentType}</p>
-                                </div>
-                                <div className='bg-green-300 rounded-lg py-4 md:py-5 text-center'>
-                                    <h2 className='text-xs md:text-md font-semibold text-gray-700'>Salary</h2><p className='text-sm md:text-lg font-bold'>{job.salary}</p>
-                                </div>
-                                <div className='bg-blue-300 rounded-lg py-4 md:py-5 text-center'>
-                                    <h2 className='text-xs md:text-md font-semibold text-gray-700'>Location</h2><p className='text-sm md:text-lg font-bold'>{job.location}</p>
-                                </div>
-                                <div className='bg-green-300 rounded-lg py-4 md:py-5 text-center'>
-                                    <h2 className='text-xs md:text-md font-semibold text-gray-700'>Applicants</h2><p className='text-sm md:text-lg font-bold'>{randomNum}</p>
-                                </div>
-                            </div>
-
-                            {/* JOB DESCRIPTION */}
-                            <div className='px-1'>
-                                <h2 className='my-2 font-bold'>Job Description</h2>
-                                <p className='text-sm md:text-base text-justify '>
-                                    {job.description}
-                                </p>
-                            </div>
-                        </div>
-                    }
-                </div>
-
-                {/* Submit button */}
-                <form className='mt-8' onSubmit={handleSubmit(onSubmit)}>
-                    <h2 className=' font-bold my-4'>Upload Resume to Apply<span className=' text-red-600'>*</span></h2>
-                    <div className='px-2 grid grid-cols-1 md:grid-cols-2 items-center justify-items-center gap-4'>
-
-                        <div className='w-full md:w-5/6'>
-                            <label class="sr-only">Choose file</label>
-                            <input type="file" onChange={handleFileUpload} {...register("resume")} id="file-input" class="block w-full cursor-pointer border border-primary shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none file:bg-primary file:text-white file:border-0 file:me-4 file:py-2 file:px-3" />
-                        </div>
-
-                        {
-                            job && applicants &&
-                                job.applicants.some(jobApplicant => {
-                                    applicants.some(app => {
-
-                                        return jobApplicant.applicant === app._id
-                                    })
-                                }) ?
-                                <Link to={`/application-form/${job._id}`}>
-                                    <div className='flex justify-center'>
-                                        <button className='block bg-primary text-white text-md py-2 px-12 md:px-16 rounded-md'>Apply Now</button>
-                                    </div>
-                                </Link>
-                                :
-                                // <Link to={`/application-form/${job._id}`}>
-                                <div className='flex justify-center'>
-                                    <button className='block bg-primary text-white text-md py-2 px-12 md:px-16 rounded-md'>Apply Now</button>
-                                </div>
-                            // </Link>
-                            // <p>You already applied here</p>
-                        }
-                    </div>
-                </form>
-                {job && job.applicants && job.applicants.length > 0 && (
-                    <div className="mt-4">
-                        <h2 className="font-bold">Uploaded Resume:</h2>
-                        <p>{file}</p>
-                    </div>
-                )}
-                <div className='text-center'>
-                    <p className='hover:underline text-xs md:text-sm mt-8'>By applying to above job, you agree to our terms and conditions.</p>
-                </div>
+  return (
+    <div className="w-full">
+      <div className="grid grid-cols-12 gap-6">
+        {/* -- Left: Job Details Section -- */}
+        <div className="col-span-8 bg-white shadow-lg p-8">
+          <div className="mb-6">
+            <h1 className="text-3xl font-bold text-gray-800 mb-2">
+              {job.title}
+            </h1>
+            <div className="flex items-center space-x-4 text-gray-600">
+              <span>{job.locationType}</span>
+              <span>•</span>
+              <span>
+                {job.city}, {job.state}, {job.country}
+              </span>
             </div>
-            
-            <SimilarJobs />
+          </div>
+
+          <div className="grid grid-cols-3 gap-4 mb-6 bg-gray-50 p-4 rounded-lg">
+            <div>
+              <p className="text-sm text-gray-500">Compensation</p>
+              <p className="font-semibold">₹{job.compensation}</p>
+            </div>
+            <div>
+              <p className="text-sm text-gray-500">Experience</p>
+              <p className="font-semibold">{job.experienceRequired} years</p>
+            </div>
+            <div>
+              <p className="text-sm text-gray-500">Shift</p>
+              <p className="font-semibold">{job.scheduleType}</p>
+            </div>
+          </div>
+
+          <div className="mb-6">
+            <h2 className="text-xl font-semibold mb-3 border-b pb-2">
+              Job Description
+            </h2>
+            <ReactQuill
+              value={job.description}
+              readOnly
+              theme="bubble"
+              className="text-gray-700"
+            />
+          </div>
         </div>
-    )
-}
+
+        {/* -- Right: Application Form Section -- */}
+        <div className="col-span-4 bg-gray-50 p-8 rounded-lg shadow-md">
+          <ApplicationForm
+            job={job}
+            loginData={loginData}
+            applicationTypesData={applicationTypesData}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};

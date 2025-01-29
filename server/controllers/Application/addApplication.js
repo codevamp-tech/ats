@@ -1,36 +1,43 @@
-import Application from '../../models/Application.js'
-import uniqid from 'uniqid';
+import Application from "../../models/Application.js";
+import upload, { uploadToS3 } from "../../middleware/upload.js";
 
 const addApplication = async (req, res) => {
-    const { _id, jobID, candidateID, applicationStatus, applicationForm, candidateFeedback } = req.body;
+  const { jobID, candidateID, applicationStatus, contactInfo, experience, questions, answers } = req.body;
 
-    try {
-        const existingApplication = await Application.findById(_id);
-        if (!existingApplication) {
-            return res.status(404).json({ message: "Application not found" });
-        }
-        
-        if (jobID) {
-            existingApplication.jobID = jobID;
-        }
-        if (candidateID) {
-            existingApplication.candidateID = candidateID;
-        }
-        if (applicationStatus) {
-            existingApplication.applicationStatus = applicationStatus;
-        }
-        if (applicationForm) {
-            existingApplication.applicationForm = applicationForm;
-        }
-        if (candidateFeedback) {
-            existingApplication.candidateFeedback = candidateFeedback;
-        }
-
-        await existingApplication.save();
-        res.status(200).json(existingApplication);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
+  try {
+    if (!jobID || !candidateID || !applicationStatus || !contactInfo || !experience) {
+      return res.status(400).json({ message: "All required fields must be provided." });
     }
+
+    // Check if resume file exists
+    let resumeUrl = null;
+    if (req.file) {
+      console.log("Received file:", req.file.originalname);
+      resumeUrl = await uploadToS3(req.file);
+    } else {
+      return res.status(400).json({ message: "Resume file is required." });
+    }
+
+    // Create a new application entry
+    const newApplication = new Application({
+      jobID,
+      candidateID,
+      applicationStatus,
+      resume: resumeUrl, // Store S3 file URL
+      contactInfo,
+      experience,
+      questions: questions || [],
+      answers: answers || [],
+    });
+
+    await newApplication.save();
+
+    res.status(201).json({ message: "Application submitted successfully!", application: newApplication });
+  } catch (error) {
+    console.error("Error in addApplication:", error);
+    res.status(500).json({ message: error.message });
+  }
 };
 
-export {addApplication};
+// Exporting multer middleware & controller
+export { upload, addApplication };
