@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { Outlet, NavLink, Link } from "react-router-dom";
-import "boxicons";
-import atslogo1URL from "../assets/img/atslogo1.jpg";
+import React, { useState, useEffect, useRef } from "react";
+import { Outlet, NavLink, Link } from "react-router-dom"; 
 
+// Navigation Arrays
 const adminNavItems = [
   { label: "Dashboard", path: "/dashboard" },
   { label: "Users", path: "/all-users" },
@@ -16,20 +15,24 @@ const employerNavItems = [
   { label: "Dashboard", path: "/all-jobs" },
   { label: "Candidates", path: "/shortlist" },
 ];
-const coordinatorNavItems = [
+
+const interviewerNavItems = [
   { label: "Home", path: "/" },
-  { label: "Dashboard", path: "/coordinator/review" },
-  { label: "Candidates", path: "/shortlist" },
+  // { label: "Dashboard", path: "/interviewer/review" },
+  // {label:""}
+  { label: "Applications", path: "/shortlist" },
 ];
+
 const recruiterNavItems = [
-  { label: 'Home', path: '/recruiter-dashboard' },
-  { label: 'Jobs', path: '/all-jobs' }
+  { label: "Home", path: "/recruiter-dashboard" },
+  { label: "Jobs", path: "/all-jobs" },
 ];
+
 const candidateNavItems = [
-  { label: "Home", path: "/" },
   { label: "All Jobs", path: "/all-posted-jobs" },
   { label: "Applied Jobs", path: `/my-jobs` },
 ];
+
 const normalNavItem = [
   { label: "Home", path: "/" },
   { label: "All Jobs", path: "/all-posted-jobs" },
@@ -37,26 +40,39 @@ const normalNavItem = [
 
 export const Navbar = () => {
   const [loginData, setLoginData] = useState(null);
-  const [navItems, setNavItems] = useState(normalNavItem); // Default navItems if not logged in
+  const [navItems, setNavItems] = useState(normalNavItem);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); 
 
-  // Toggle hamburger menu
+  const dropdownRef = useRef(null); 
+
   const handlerIsMenuOpen = () => setIsMenuOpen(!isMenuOpen);
 
-  console.log("navItems>>>", navItems);
+  const toggleDropdown = () => {
+    setIsDropdownOpen((prev) => !prev);
+  };
 
-  // Check localStorage for token and update loginData
+  const closeDropdown = (e) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+      setIsDropdownOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", closeDropdown);
+    return () => {
+      document.removeEventListener("click", closeDropdown);
+    };
+  }, []);
+
   useEffect(() => {
     const token = localStorage.getItem("user");
     if (token) {
       const user = JSON.parse(token);
-      setLoginData(user); // Set login data when token exists
+      setLoginData(user);
     }
-  }, []); // Empty dependency array ensures this runs on initial mount
+  }, []);
 
-  console.log("loginData>>", loginData?.role);
-
-  // Update navItems based on loginData
   useEffect(() => {
     if (loginData) {
       switch (loginData.role) {
@@ -66,8 +82,8 @@ export const Navbar = () => {
         case "employer":
           setNavItems(employerNavItems);
           break;
-        case "coordinator":
-          setNavItems(coordinatorNavItems);
+        case "interviewer":
+          setNavItems(interviewerNavItems);
           break;
         case "recruiter_manager":
           setNavItems(recruiterNavItems);
@@ -79,11 +95,10 @@ export const Navbar = () => {
           setNavItems(normalNavItem);
       }
     } else {
-      setNavItems(normalNavItem); // Set to normal items when not logged in
+      setNavItems(normalNavItem); 
     }
-  }, [loginData]); // This will re-run when loginData changes
+  }, [loginData]);
 
-  // Logout handler
   const logoutHandler = async () => {
     await fetch("http://localhost:8080/auth/logout", {
       method: "POST",
@@ -98,7 +113,6 @@ export const Navbar = () => {
         }
       });
   };
-
   return (
     <div className="w-full ">
       <nav className="flex justify-between items-center py-6 px-4 text-clearWhite bg-deepBlack">
@@ -107,23 +121,23 @@ export const Navbar = () => {
           to="/"
           className="flex items-center gap-2 text-2xl text-[#e1e5df]"
         >
-          <a
+          {/* <a
             href="/"
             className="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse"
-          >
+        >
             <img
-              src={atslogo1URL}
-              className="rounded-full h-12 md:h-16"
-              alt="Flowbite Logo"
+                src={atslogo1URL}
+                className="rounded-full h-12 md:h-16"
+                alt="Flowbite Logo"
             />
-          </a>
-          <span className="text-clearWhite font-extrabold text-xl md:text-3xl transition-transform duration-200 hover:scale-105">
+        </a> */}
+          <span className="text-clearWhite ml-8 font-extrabold text-xl md:text-3xl transition-transform duration-200 hover:scale-105">
             A T S
           </span>
         </NavLink>
 
-        {/* MAIN MENU - Lg device */}
-        <ul className="hidden md:flex gap-12 font-bold">
+        {/* MAIN MENU - Centered for large screens */}
+        <div className="hidden md:flex justify-center flex-grow gap-12 font-bold">
           {navItems.map(({ label, path }) => (
             <li
               key={path}
@@ -139,21 +153,34 @@ export const Navbar = () => {
               </NavLink>
             </li>
           ))}
-        </ul>
+        </div>
 
         {/* User info or Login/Signup */}
         <div>
           {loginData ? (
-            <div className="hidden md:block">
-              <div className="grid grid-cols-2 items-center gap-4">
-                Hello, {loginData.userName}
-                <div
-                  onClick={logoutHandler}
-                  className="py-2 px-5 bg-mediumGray text-center cursor-pointer rounded hover:border-2 text-clearWhite hover:border-clearWhite transition-all duration-100"
-                >
-                  Logout
+            <div className="hidden md:block relative" ref={dropdownRef}>
+              <button
+                onClick={toggleDropdown}
+                className="py-2 px-5 bg-mediumGray text-clearWhite rounded hover:bg-white hover:text-black hover:border-clearWhite transition-all duration-100"
+              >
+                {loginData?.userName}
+              </button>
+              {isDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-40 bg-lightGray text-white border rounded shadow-lg z-10">
+                  {/* <Link
+                   to="/profile"
+                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                 >
+                   Profile
+                 </Link> */}
+                  <button
+                    onClick={logoutHandler}
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    Logout
+                  </button>
                 </div>
-              </div>
+              )}
             </div>
           ) : (
             <div className="text-base text-primary font-medium space-x-5 hidden md:block">
@@ -183,6 +210,7 @@ export const Navbar = () => {
           ></box-icon>
         </div>
       </nav>
+
 
       {/* MAIN MENU sm device */}
       <div

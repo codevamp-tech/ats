@@ -1,264 +1,224 @@
-import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import React from "react";
+import { Line } from "react-chartjs-2";
+import {
+    UserPlus,
+    CheckCircle,
+    Briefcase,
+    XCircle,
+    Users,
+    TrendingUp,
+    Calendar,
+    ClipboardList,
+    Activity,
+} from "lucide-react";
 
-export const RecruiterDashboard = () => {
+// Chart.js Configuration
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend,
+} from "chart.js";
 
-    const tableHeaderCss = "px-4 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold "
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend
+);
 
-    // const [isLoading, setIsLoading] = useState(true);
-    const id = "6676b5f64e5a14c58a720ebb";
+const RecruiterDashboard = () => {
+    const chartData = {
+        labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
+        datasets: [
+            {
+                label: "Applications",
+                data: [64, 85, 95, 100],
+                borderColor: "#6C5DD3",
+                backgroundColor: "rgba(108, 93, 211, 0.2)",
+                tension: 0.4,
+            },
+            {
+                label: "Shortlisted",
+                data: [50, 70, 80, 90],
+                borderColor: "#34D399",
+                backgroundColor: "rgba(52, 211, 153, 0.2)",
+                tension: 0.4,
+            },
+        ],
+    };
 
-    const [loginData, setLoginData] = useState();
-    
-    useEffect(() => {
-        let token = localStorage.getItem("user");
-        const user = JSON.parse(token);
-        setLoginData(user[0])
-        console.log(user);
-    }, [])
-    
-    const [jobs, setJobs] = useState([]);
-    const [recruiter, setRecruiter] = useState();
+    const chartOptions = {
+        responsive: true,
+        plugins: {
+            legend: { position: "top" },
+            tooltip: { enabled: true },
+        },
+    };
 
-    // useEffect(() => {
-    //     try {
+    const stats = [
+        { title: "Applications", value: "12.2K", trend: "+5%", bg: "bg-gradient-to-r from-purple-500 to-indigo-500", icon: <Users className="w-6 h-6" /> },
+        { title: "Shortlisted", value: "11.1K", trend: "+14%", bg: "bg-gradient-to-r from-green-500 to-teal-500", icon: <CheckCircle className="w-6 h-6" /> },
+        { title: "Hired", value: "2.3K", trend: "+8%", bg: "bg-gradient-to-r from-blue-500 to-cyan-500", icon: <Briefcase className="w-6 h-6" /> },
+        { title: "Rejected", value: "5.6K", trend: "-3%", bg: "bg-gradient-to-r from-red-500 to-pink-500", icon: <XCircle className="w-6 h-6" /> },
+    ];
 
-    //         fetch(`http://localhost:8080/recruiter/all-recruiter`)
-    //             .then((res) => res.json())
-    //             .then((data) => {
-    //                 let recruiterData = data.filter((recruiter) => recruiter.recruiterID === id);
-    //                 setRecruiter(recruiterData);
-    //                 console.log(recruiterData);
-    //             })
-    //             .then( async () => {
-    //                 try {
-    //                     console.log(recruiter);
-    //                     // const response = await fetch(`http://localhost:8080/jobs/all-jobs/${recruiter.jobID}`)
-    //                     // const data = await response.json();
-    //                     // setJobs(data);
-    //                     // console.log(data);
+    const applicants = [
+        { name: "Douglas Ray", job: "iOS Developer", status: "Shortlisted" },
+        { name: "Elizabeth Martin", job: "Full Stack Developer", status: "Interview Scheduled" },
+        { name: "Emma Wade", job: "Product Designer", status: "Applied" },
+        { name: "Teresa Reyes", job: "Design Lead", status: "Hired" },
+        { name: "Crystal Austin", job: "Marketing Manager", status: "Rejected" },
+    ];
 
-    //                 } catch (error) {
-    //                     console.log(error);
-    //                 }
-    //             })
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }, []);
+    const interviews = [
+        { candidate: "Douglas Ray", position: "iOS Developer", date: "2025-01-30", time: "10:00 AM" },
+        { candidate: "Emma Wade", position: "Product Designer", date: "2025-02-02", time: "2:00 PM" },
+    ];
 
-    // useEffect(() => {
-    //     async function fetchData(){
-    //         try {
-    //             const reponse = await fetch(`http://localhost:8080/recruiter/all-recruiter`)
-    //             const data = await reponse.json();
-
-    //             let recruiterData = data.filter((recruiter) => recruiter.recruiterID === id);
-    //             setRecruiter(recruiterData);
-    //             console.log(recruiterData);
-
-    //         } catch (error) {
-    //             console.log(error);
-    //         }
-    //     };
-    //     fetchData();
-    //     async function fetchData2(){
-    //         try {
-    //             const response = await fetch(`http://localhost:8080/jobs/all-jobs/${recruiter.jobID}`)
-    //             const data = await response.json();
-    //             setJobs(data);
-    //             console.log(data);
-
-    //         } catch (error) {
-    //             console.log(error);
-    //         }
-    //     };
-    //     fetchData2();
-    // }, []);
-
-    useEffect(() => {
-        const fetchRecruiterData = async () => {
-            try {
-                const response = await fetch(`http://localhost:8080/recruiter/all-recruiter`);
-                if (!response.ok) {
-                    throw new Error('Failed to fetch recruiter data');
-                }
-                const data = await response.json();
-
-                // Filter the recruiter data based on the provided id
-                const recruiterData = data.find(recruiter => recruiter.recruiterID === id);
-                if (recruiterData) {
-                    // console.log(recruiterData);
-                    setRecruiter(recruiterData);
-                } else {
-                    throw new Error(`Recruiter with ID ${id} not found`);
-                }
-            } catch (error) {
-                console.error('Error fetching recruiter data:', error);
-            }
-        };
-
-        fetchRecruiterData();
-    }, [id]);
-
-    // Effect to fetch jobs data based on recruiter's jobID
-    useEffect(() => {
-        if (recruiter && recruiter.jobID) {
-
-            const fetchJobsData = async () => {
-                try {
-                    //       const response = await fetch(`http://localhost:8080/jobs/current-jobs/${recruiter.jobID}`);
-                    //       const data = await response.json();
-                    //       setJobs(data);
-
-                    fetch(`http://localhost:8080/jobs/all-jobs`)
-                        .then(response => response.json())
-                        .then(data => {
-                            const filteredJobs = data.filter(job => job._id === recruiter.jobID)
-                            setJobs(filteredJobs[0]);
-                            console.log(filteredJobs[0]);
-                        }
-                        );
-                } catch (error) {
-                    console.error('Error fetching jobs data:', error);
-                }
-            };
-
-            fetchJobsData();
-        }
-    }, [recruiter]);
-    const [applicants, setApplicants] = useState([]);
-
-    useEffect(() => {
-        if (jobs && jobs.applicants) {
-            const fetchApplicantsData = async () => {
-                try {
-                    const response = await fetch(`http://localhost:8080/users/all-users`);
-                    if (!response.ok) {
-                        throw new Error('Failed to fetch applicants data');
-                    }
-                    const data = await response.json();
-
-                    // Filter the applicants data based on the applicant ids in jobs
-                    // const filteredApplicants = data.filter(app => jobs.applicants.applicant.includes(app._id));
-                    const filteredApplicants = data.filter(app => {
-                        // Check if any element in jobs.applicants array has _id equal to app._id
-                        return jobs.applicants.some(jobApplicant => jobApplicant.applicant === app._id);
-                      });
-                    
-                      setApplicants(filteredApplicants);
-                      console.log("below applicant");
-                    console.log(filteredApplicants);
-                    // console.log(jobs.applicants);
-                } catch (error) {
-                    console.error('Error fetching applicants data:', error);
-                }
-            };
-
-            fetchApplicantsData();
-        }
-    }, [jobs]);
-
-    const apps = [
-        {
-            "_id": "6676d1519d5f4ea7521cf13f",
-            "jobID": "6676cb664e5a14c58a721384",
-            "candidateID": "667656750d96db510a5facbf",
-            "userName": "Puneet",
-            "applicationStatus": "active",
-            "applicationForm": [
-              {
-                "question": "",
-                "answer": "",
-                "_id": "6675433b6fc8b5c030039b45"
-              }
-            ],
-            "candidateFeedback": [
-              {
-                "question": "Willing to relocate?",
-                "answer": "Yes",
-                "_id": "6675433b6fc8b5c030039b46"
-              },
-              {
-                "_id": "6676d5754e5a14c58a721744",
-                "question": "Expertise in python?",
-                "answer": "Yes"
-              }
-            ],
-            "__v": 0
-          },
-          
-    ]
+    const jobs = [
+        { title: "Frontend Developer", active: true, applications: 120 },
+        { title: "Backend Engineer", active: false, applications: 80 },
+        { title: "UI/UX Designer", active: true, applications: 95 },
+    ];
 
     return (
-        <div className='max-w-screen-2xl container mx-auto xl:px-24 px-4'>
+        <>
+            <div className="flex flex-col min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+                {/* Header */}
+                <header className="bg-gradient-to-r from-purple-600 to-blue-500 text-white py-4 px-8 shadow-2xl">
+                    <div className="flex justify-between items-center">
+                        <h1 className="text-4xl font-bold flex items-center space-x-3">
+                            <TrendingUp className="text-yellow-300 w-8 h-8 animate-bounce" />
+                            <span>Recruiter Dashboard</span>
+                        </h1>
+                    </div>
+                </header>
 
-            <div className='py-1'>
-                <div className='w-full '>
-
-                    {/* MAIN TABLE */}
-                    <section className="py-1 bg-blueGray-50">
-                        <div className="w-full xl:w-8/12 mb-12 xl:mb-0 px-4 mx-auto mt-24">
-                            <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded ">
-                                <div className="rounded-t mb-0 px-4 py-3 border-0 bg-secondary text-white ">
-                                    <div className="flex flex-wrap items-center">
-                                        <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-center">
-                                            <h3 className="font-bold text-base text-blueGray-700">Review Candidate</h3>
-                                        </div>
-
+                {/* Main Content */}
+                <main className="flex-1 p-8">
+                    {/* Stats Section */}
+                    <section className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        {stats.map((stat, index) => (
+                            <div
+                                key={index}
+                                className={`${stat.bg} text-white backdrop-blur-lg bg-opacity-20 shadow-2xl p-6 rounded-2xl hover:scale-105 transform transition duration-300 ease-in-out hover:shadow-3xl`}
+                            >
+                                <div className="flex items-center space-x-4">
+                                    <div className="text-white p-3 bg-white/20 rounded-full hover:rotate-12 transition-transform">
+                                        {stat.icon}
                                     </div>
+                                    <h3 className="text-xl font-semibold">{stat.title}</h3>
                                 </div>
-
-                                <div className="block w-full overflow-x-hidden">
-                                    <table className="items-center bg-transparent w-full border-collapse ">
-                                        <thead>
-                                            <tr>
-                                                <th className={tableHeaderCss}>Candidate</th>
-                                                <th className={tableHeaderCss}>Application</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {apps.map((applicant, key) => (
-                                                <RenderTableRows key={key} applicant={applicant} />
-                                            ))}
-
-                                            {/* {jobs && jobs.applicants.applicant.map((applicant, key) => <RenderTableRows key={key} applicant={applicant} />)} */}
-                                        </tbody>
-
-                                    </table>
-                                </div>
+                                <p className="text-4xl font-bold my-3">{stat.value}</p>
+                                <span
+                                    className={`py-1 px-3 rounded-full text-sm font-medium ${stat.trend.includes("+") ? "bg-green-700" : "bg-red-700"
+                                        }`}
+                                >
+                                    {stat.trend}
+                                </span>
                             </div>
+                        ))}
+                    </section>
+
+                    {/* Application Trends */}
+                    <section className="grid grid-cols-1 lg:grid-cols-4 gap-6 mt-8">
+                        <div className="lg:col-span-2 bg-white backdrop-blur-lg bg-opacity-20 shadow-2xl p-6 rounded-2xl">
+                            <h2 className="text-xl font-bold text-gray-700 mb-6 flex items-center">
+                                <Activity className="mr-3 text-purple-600 w-6 h-6 animate-pulse" /> Application Trends
+                            </h2>
+                            <Line data={chartData} options={chartOptions} />
                         </div>
 
+                        {/* Hiring Pipeline */}
+                        <div className="lg:col-span-1 bg-white backdrop-blur-lg bg-opacity-20 shadow-2xl p-6 rounded-2xl">
+                            <h2 className="text-xl font-bold text-green-700 mb-6 flex items-center">
+                                <ClipboardList className="mr-3 text-green-600 w-6 h-6 animate-pulse" /> Hiring Pipeline
+                            </h2>
+                            <ul className="space-y-4">
+                                <li className="flex items-center justify-between py-2">
+                                    <span>Applied</span>
+                                    <span className="font-bold text-blue-500">64%</span>
+                                </li>
+                                <li className="flex items-center justify-between py-2">
+                                    <span>Shortlisted</span>
+                                    <span className="font-bold text-green-500">24%</span>
+                                </li>
+                                <li className="flex items-center justify-between py-2">
+                                    <span>Hired</span>
+                                    <span className="font-bold text-purple-500">12%</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        {/* New Applicants */}
+                        <div className="lg:col-span-1 bg-white backdrop-blur-lg bg-opacity-20 shadow-2xl p-6 rounded-2xl">
+                            <h2 className="text-xl font-bold text-gray-700 mb-6 flex items-center">
+                                <UserPlus className="mr-3 text-blue-600 w-6 h-6 animate-pulse" /> New Applicants
+                            </h2>
+                            <ul className="space-y-4">
+                                {applicants.map((applicant, index) => (
+                                    <li key={index} className="border-b border-gray-200 pb-3">
+                                        <p className="font-semibold text-gray-700">{applicant.name}</p>
+                                        <p className="text-sm text-gray-500">{applicant.job}</p>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                     </section>
-                </div>
+
+                    {/* Upcoming Interviews and Job Postings */}
+                    <section className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
+                        <div className="lg:col-span-2 bg-white backdrop-blur-lg bg-opacity-20 shadow-2xl p-6 rounded-2xl">
+                            <h2 className="text-xl font-bold text-gray-700 mb-6 flex items-center">
+                                <Calendar className="mr-3 text-orange-600 w-6 h-6 animate-pulse" /> Upcoming Interviews
+                            </h2>
+                            <ul className="space-y-4">
+                                {interviews.map((interview, index) => (
+                                    <li
+                                        key={index}
+                                        className="flex justify-between items-center border-b border-gray-200 pb-3"
+                                    >
+                                        <div>
+                                            <p className="font-semibold text-gray-700">{interview.candidate}</p>
+                                            <p className="text-sm text-gray-500">{interview.position}</p>
+                                        </div>
+                                        <p className="text-sm text-gray-500">
+                                            {interview.date} - {interview.time}
+                                        </p>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                        <div className="bg-white backdrop-blur-lg bg-opacity-20 shadow-2xl p-6 rounded-2xl">
+                            <h2 className="text-xl font-bold text-gray-700 mb-6 flex items-center">
+                                <Briefcase className="mr-3 text-blue-500 w-6 h-6 animate-pulse" /> Job Postings
+                            </h2>
+                            <ul className="space-y-4">
+                                {jobs.map((job, index) => (
+                                    <li key={index} className="border-b border-gray-200 pb-3">
+                                        <p className="font-semibold text-gray-700">{job.title}</p>
+                                        <p className="text-sm text-gray-500">
+                                            {job.active ? "Active" : "Closed"} - {job.applications} Applications
+                                        </p>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </section>
+                </main>
             </div>
-        </div>
-    )
-}
+        </>
+    );
+};
 
-function HandlerDeleteJob(id) {
-    console.log("delete job");
-}
-function HandlerUpdateJob(id) {
-    console.log("delete job");
-}
+export default RecruiterDashboard;
 
-function RenderTableRows({ applicant }) {
-    // console.log("called");
-    // console.log(applicant._id);
-    const tableDataCss = "border-t-0 px-4 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
-    return (
 
-        <tr>
-            <th className={`${tableDataCss} text-left text-blueGray-700 px-3 md:px-6`}>
-                {applicant.userName}
-            </th>
-            <td className={`${tableDataCss}`}>
-                <Link to={`/candidate/${applicant._id}`} >
-                    <button className='block bg-primary text-white mx-auto text-md py-2  px-5 md:px-6 rounded-md'> Review</button>
-                </Link>
-            </td>
-        </tr>
-    )
-}
