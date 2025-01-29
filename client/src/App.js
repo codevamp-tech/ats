@@ -24,6 +24,7 @@ import UserListing from './Pages/User/UserListing';
 import InterviewListing from './Pages/InterviewRounds/InterviewListing';
 import ApplicationListing from "./Pages/Application/ApplicationListing";
 import Dashboard from './Pages/Dashboard';
+import Profile from  './Pages/Profile/Profile';
 
 function App() {
   const { loginData, setLoginData } = useContext(LoginContext);
@@ -44,6 +45,7 @@ function App() {
           <Route path='/recruiter-dashboard' element={<RecruiterDashboard />} />
           <Route path="/application-types" element={<ApplicationListing />} />
           <Route path='/interview-rounds' element={<InterviewListing />} />
+          <Route path='/profile' element={<Profile/>}/>
 
           {/* <Route path='/job-detail' element={<JobDetails />}/> */}
           <Route path="/current-job/:id" element={<JobDetails />} />
