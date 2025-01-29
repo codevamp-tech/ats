@@ -1,264 +1,136 @@
-import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react';
 
 export const RecruiterDashboard = () => {
+  const recentApplications = [
+    { id: 1, name: 'John Smith', role: 'Frontend Developer', status: 'Screening', date: '2025-01-25' },
+    { id: 2, name: 'Emily Brown', role: 'Product Manager', status: 'Interview', date: '2025-01-24' },
+    { id: 3, name: 'Michael Lee', role: 'UX Designer', status: 'Offer', date: '2025-01-23' },
+    { id: 4, name: 'Sarah Wilson', role: 'Backend Developer', status: 'Rejected', date: '2025-01-22' }
+  ];
 
-    const tableHeaderCss = "px-4 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold "
+  const [searchTerm, setSearchTerm] = useState('');
 
-    // const [isLoading, setIsLoading] = useState(true);
-    const id = "6676b5f64e5a14c58a720ebb";
-
-    const [loginData, setLoginData] = useState();
-    
-    useEffect(() => {
-        let token = localStorage.getItem("user");
-        const user = JSON.parse(token);
-        setLoginData(user[0])
-        console.log(user);
-    }, [])
-    
-    const [jobs, setJobs] = useState([]);
-    const [recruiter, setRecruiter] = useState();
-
-    // useEffect(() => {
-    //     try {
-
-    //         fetch(`http://localhost:8080/recruiter/all-recruiter`)
-    //             .then((res) => res.json())
-    //             .then((data) => {
-    //                 let recruiterData = data.filter((recruiter) => recruiter.recruiterID === id);
-    //                 setRecruiter(recruiterData);
-    //                 console.log(recruiterData);
-    //             })
-    //             .then( async () => {
-    //                 try {
-    //                     console.log(recruiter);
-    //                     // const response = await fetch(`http://localhost:8080/jobs/all-jobs/${recruiter.jobID}`)
-    //                     // const data = await response.json();
-    //                     // setJobs(data);
-    //                     // console.log(data);
-
-    //                 } catch (error) {
-    //                     console.log(error);
-    //                 }
-    //             })
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }, []);
-
-    // useEffect(() => {
-    //     async function fetchData(){
-    //         try {
-    //             const reponse = await fetch(`http://localhost:8080/recruiter/all-recruiter`)
-    //             const data = await reponse.json();
-
-    //             let recruiterData = data.filter((recruiter) => recruiter.recruiterID === id);
-    //             setRecruiter(recruiterData);
-    //             console.log(recruiterData);
-
-    //         } catch (error) {
-    //             console.log(error);
-    //         }
-    //     };
-    //     fetchData();
-    //     async function fetchData2(){
-    //         try {
-    //             const response = await fetch(`http://localhost:8080/jobs/all-jobs/${recruiter.jobID}`)
-    //             const data = await response.json();
-    //             setJobs(data);
-    //             console.log(data);
-
-    //         } catch (error) {
-    //             console.log(error);
-    //         }
-    //     };
-    //     fetchData2();
-    // }, []);
-
-    useEffect(() => {
-        const fetchRecruiterData = async () => {
-            try {
-                const response = await fetch(`http://localhost:8080/recruiter/all-recruiter`);
-                if (!response.ok) {
-                    throw new Error('Failed to fetch recruiter data');
-                }
-                const data = await response.json();
-
-                // Filter the recruiter data based on the provided id
-                const recruiterData = data.find(recruiter => recruiter.recruiterID === id);
-                if (recruiterData) {
-                    // console.log(recruiterData);
-                    setRecruiter(recruiterData);
-                } else {
-                    throw new Error(`Recruiter with ID ${id} not found`);
-                }
-            } catch (error) {
-                console.error('Error fetching recruiter data:', error);
-            }
-        };
-
-        fetchRecruiterData();
-    }, [id]);
-
-    // Effect to fetch jobs data based on recruiter's jobID
-    useEffect(() => {
-        if (recruiter && recruiter.jobID) {
-
-            const fetchJobsData = async () => {
-                try {
-                    //       const response = await fetch(`http://localhost:8080/jobs/current-jobs/${recruiter.jobID}`);
-                    //       const data = await response.json();
-                    //       setJobs(data);
-
-                    fetch(`http://localhost:8080/jobs/all-jobs`)
-                        .then(response => response.json())
-                        .then(data => {
-                            const filteredJobs = data.filter(job => job._id === recruiter.jobID)
-                            setJobs(filteredJobs[0]);
-                            console.log(filteredJobs[0]);
-                        }
-                        );
-                } catch (error) {
-                    console.error('Error fetching jobs data:', error);
-                }
-            };
-
-            fetchJobsData();
-        }
-    }, [recruiter]);
-    const [applicants, setApplicants] = useState([]);
-
-    useEffect(() => {
-        if (jobs && jobs.applicants) {
-            const fetchApplicantsData = async () => {
-                try {
-                    const response = await fetch(`http://localhost:8080/users/all-users`);
-                    if (!response.ok) {
-                        throw new Error('Failed to fetch applicants data');
-                    }
-                    const data = await response.json();
-
-                    // Filter the applicants data based on the applicant ids in jobs
-                    // const filteredApplicants = data.filter(app => jobs.applicants.applicant.includes(app._id));
-                    const filteredApplicants = data.filter(app => {
-                        // Check if any element in jobs.applicants array has _id equal to app._id
-                        return jobs.applicants.some(jobApplicant => jobApplicant.applicant === app._id);
-                      });
-                    
-                      setApplicants(filteredApplicants);
-                      console.log("below applicant");
-                    console.log(filteredApplicants);
-                    // console.log(jobs.applicants);
-                } catch (error) {
-                    console.error('Error fetching applicants data:', error);
-                }
-            };
-
-            fetchApplicantsData();
-        }
-    }, [jobs]);
-
-    const apps = [
-        {
-            "_id": "6676d1519d5f4ea7521cf13f",
-            "jobID": "6676cb664e5a14c58a721384",
-            "candidateID": "667656750d96db510a5facbf",
-            "userName": "Puneet",
-            "applicationStatus": "active",
-            "applicationForm": [
-              {
-                "question": "",
-                "answer": "",
-                "_id": "6675433b6fc8b5c030039b45"
-              }
-            ],
-            "candidateFeedback": [
-              {
-                "question": "Willing to relocate?",
-                "answer": "Yes",
-                "_id": "6675433b6fc8b5c030039b46"
-              },
-              {
-                "_id": "6676d5754e5a14c58a721744",
-                "question": "Expertise in python?",
-                "answer": "Yes"
-              }
-            ],
-            "__v": 0
-          },
-          
-    ]
-
-    return (
-        <div className='max-w-screen-2xl container mx-auto xl:px-24 px-4'>
-
-            <div className='py-1'>
-                <div className='w-full '>
-
-                    {/* MAIN TABLE */}
-                    <section className="py-1 bg-blueGray-50">
-                        <div className="w-full xl:w-8/12 mb-12 xl:mb-0 px-4 mx-auto mt-24">
-                            <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded ">
-                                <div className="rounded-t mb-0 px-4 py-3 border-0 bg-secondary text-white ">
-                                    <div className="flex flex-wrap items-center">
-                                        <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-center">
-                                            <h3 className="font-bold text-base text-blueGray-700">Review Candidate</h3>
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                                <div className="block w-full overflow-x-hidden">
-                                    <table className="items-center bg-transparent w-full border-collapse ">
-                                        <thead>
-                                            <tr>
-                                                <th className={tableHeaderCss}>Candidate</th>
-                                                <th className={tableHeaderCss}>Application</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {apps.map((applicant, key) => (
-                                                <RenderTableRows key={key} applicant={applicant} />
-                                            ))}
-
-                                            {/* {jobs && jobs.applicants.applicant.map((applicant, key) => <RenderTableRows key={key} applicant={applicant} />)} */}
-                                        </tbody>
-
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-
-                    </section>
-                </div>
-            </div>
+  return (
+    <div className="p-6 max-w-7xl mx-auto">
+      {/* Header */}
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-2xl font-bold">Recruiter Dashboard</h1>
+        <div className="flex gap-4">
+          <button className="px-4 py-2 bg-blue-600 text-white rounded-lg">
+            Schedule Interview
+          </button>
+          <button className="px-4 py-2 bg-green-600 text-white rounded-lg">
+            Post New Job
+          </button>
         </div>
-    )
-}
+      </div>
 
-function HandlerDeleteJob(id) {
-    console.log("delete job");
-}
-function HandlerUpdateJob(id) {
-    console.log("delete job");
-}
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="bg-white p-6 rounded-lg shadow">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-gray-500">Total Applications</p>
+              <h3 className="text-2xl font-bold">1,234</h3>
+            </div>
+          </div>
+          <p className="text-green-500 text-sm mt-2">↑ 12% from last month</p>
+        </div>
 
-function RenderTableRows({ applicant }) {
-    // console.log("called");
-    // console.log(applicant._id);
-    const tableDataCss = "border-t-0 px-4 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
-    return (
+        <div className="bg-white p-6 rounded-lg shadow">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-gray-500">Active Jobs</p>
+              <h3 className="text-2xl font-bold">45</h3>
+            </div>
+          </div>
+          <p className="text-green-500 text-sm mt-2">↑ 5% from last month</p>
+        </div>
 
-        <tr>
-            <th className={`${tableDataCss} text-left text-blueGray-700 px-3 md:px-6`}>
-                {applicant.userName}
-            </th>
-            <td className={`${tableDataCss}`}>
-                <Link to={`/candidate/${applicant._id}`} >
-                    <button className='block bg-primary text-white mx-auto text-md py-2  px-5 md:px-6 rounded-md'> Review</button>
-                </Link>
-            </td>
-        </tr>
-    )
-}
+        <div className="bg-white p-6 rounded-lg shadow">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-gray-500">Interviews Scheduled</p>
+              <h3 className="text-2xl font-bold">28</h3>
+            </div>
+          </div>
+          <p className="text-purple-500 text-sm mt-2">Next: Today at 2 PM</p>
+        </div>
+
+        <div className="bg-white p-6 rounded-lg shadow">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-gray-500">Time to Hire (Avg)</p>
+              <h3 className="text-2xl font-bold">18 days</h3>
+            </div>
+          </div>
+          <p className="text-orange-500 text-sm mt-2">↓ 3 days from last month</p>
+        </div>
+      </div>
+
+      {/* Recent Applications */}
+      <div className="bg-white p-6 rounded-lg shadow mb-8">
+        <div className="flex justify-between items-center mb-6">
+          <h3 className="text-lg font-semibold">Recent Applications</h3>
+          <div className="flex gap-4">
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search applications..."
+                className="pl-4 pr-4 py-2 border rounded-lg"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+            <button className="px-4 py-2 border rounded-lg">
+              Filter
+            </button>
+          </div>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b">
+                <th className="text-left py-4 px-4">Candidate</th>
+                <th className="text-left py-4 px-4">Role</th>
+                <th className="text-left py-4 px-4">Status</th>
+                <th className="text-left py-4 px-4">Date</th>
+                <th className="text-left py-4 px-4">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {recentApplications
+                .filter(app => 
+                  app.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                  app.role.toLowerCase().includes(searchTerm.toLowerCase())
+                )
+                .map((application) => (
+                <tr key={application.id} className="border-b hover:bg-gray-50">
+                  <td className="py-4 px-4">{application.name}</td>
+                  <td className="py-4 px-4">{application.role}</td>
+                  <td className="py-4 px-4">
+                    <span className={`px-3 py-1 rounded-full text-sm ${
+                      application.status === 'Screening' ? 'bg-blue-100 text-blue-800' :
+                      application.status === 'Interview' ? 'bg-yellow-100 text-yellow-800' :
+                      application.status === 'Offer' ? 'bg-green-100 text-green-800' :
+                      'bg-red-100 text-red-800'
+                    }`}>
+                      {application.status}
+                    </span>
+                  </td>
+                  <td className="py-4 px-4">{application.date}</td>
+                  <td className="py-4 px-4">
+                    <button className="text-blue-600 hover:text-blue-800">
+                      View Details
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+};
