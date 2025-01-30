@@ -173,7 +173,7 @@ export const Register = () => {
             </select>
           </div>
 
-          <div>
+          {false && <div>
             <label className="block text-sm font-medium text-gray-200 mb-1">
               User Type
             </label>
@@ -189,7 +189,7 @@ export const Register = () => {
               <option value="coordinator">Coordinator</option>
               <option value="employer">Employer</option>
             </select>
-          </div>
+          </div>}
 
           <button
             type="submit"
