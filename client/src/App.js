@@ -11,7 +11,7 @@ import RecruiterDashboard from './Pages/Recruiter/RecruiterDashboard';
 import { CoordinatorDashboard } from './Pages/Coordinator/CoordinatorDashboard';
 import { JobDetails } from './components/Home/JobDetails';
 import { CandidateProfile } from './Pages/Recruiter/CandidateProfile';
-import { ShortlistedCandidates } from './components/ShortlistedCandidates';
+import { Applications } from './components/Applications';
 import { ShortlistedDetails } from './components/ShortlistedDetails';
 import { ApplicationForm } from './Pages/Candidate/ApplicationForm';
 import { AssignRecruiter } from './Pages/Coordinator/AssignRecruiter';
@@ -24,7 +24,8 @@ import UserListing from './Pages/User/UserListing';
 import InterviewListing from './Pages/InterviewRounds/InterviewListing';
 import ApplicationListing from "./Pages/Application/ApplicationListing";
 import Dashboard from './Pages/Dashboard';
-import Profile from './Pages/Profile/Profile';
+import Profile from  './Pages/Profile/Profile';
+import ScheduledInterview  from './Pages/ScheduledInterview/ScheduledInterview'
 import HiringManagerDashboard from './components/HiringManager/HiringManagerDashboard';
 import ManagerApplicationList from './components/HiringManager/ManagerApplicationList'
 import AssignedInterviews from './components/HiringManager/AssignedInterviews';
@@ -57,7 +58,9 @@ function App() {
           <Route path="/current-job/:id" element={<JobDetails />} />
           <Route path="/application-form/:id" element={<ApplicationForm />} />
           <Route path="/candidate/:id" element={<CandidateProfile />} />
-          <Route path="/shortlist" element={<ShortlistedCandidates />} />
+          <Route path="/shortlist" element={<Applications />} />
+          <Route path='/scheduled-interview' element={<ScheduledInterview />} />
+
           <Route
             path="/shortlist/details/:candidate_id/:job_id"
             element={ <ShortlistedDetails /> }
@@ -68,7 +71,7 @@ function App() {
           <Route path='/current-job/:id' element={<JobDetails />} />
           <Route path='/application-form/:id' element={<ApplicationForm />} />
           <Route path='/candidate/:id' element={<CandidateProfile />} />
-          <Route path='/shortlist' element={<ShortlistedCandidates />} />
+          <Route path='/shortlist' element={<Applications />} />
           <Route path='/shortlist/details/:candidate_id/:job_id' element={<ShortlistedDetails />} />
           <Route path='/assign-recruiter/:id' element={<AssignRecruiter />} />
           <Route path='/coordinator/review' element={<CoordinatorDashboard />} />
