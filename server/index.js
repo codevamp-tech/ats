@@ -38,7 +38,7 @@ app.use("/", fileUploadRoute);
 
 // Routes
 app.get("/", (req, res) => {
-  res.send("Hello, wowo");
+  res.json({ message: "Hello, wowo" });
 });
 
 app.get("*", (req, res) => {

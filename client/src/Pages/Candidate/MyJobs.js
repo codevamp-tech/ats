@@ -22,7 +22,7 @@ const MyJobs = () => {
                     `http://localhost:8080/application/candidate/${loginData._id}`
                 );
                 const data = await res.json();
-                setApplications(data);
+                setApplications(data.applications);
             } catch (error) {
                 console.error(error);
             }
