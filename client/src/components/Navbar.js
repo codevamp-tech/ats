@@ -9,11 +9,11 @@ const adminNavItems = [
   { label: "Interview Rounds", path: "/interview-rounds" },
 ];
 
-const employerNavItems = [
-  { label: "Home", path: "/" },
-  { label: "Post Job", path: "/post-job" },
-  { label: "Dashboard", path: "/all-jobs" },
-  { label: "Candidates", path: "/shortlist" },
+const hiringManagerNavItems = [
+  { label: "Dashboard", path: "/hiring_manager" },
+  { label: "Application List", path: "/application-list" },
+  { label: "Assigned Interviews", path: "/assigned-interviews" },
+  // { label: "Candidates", path: "/shortlist" },
 ];
 
 const interviewerNavItems = [
@@ -80,8 +80,8 @@ export const Navbar = () => {
         case "admin":
           setNavItems(adminNavItems);
           break;
-        case "employer":
-          setNavItems(employerNavItems);
+        case "hiring_manager":
+          setNavItems(hiringManagerNavItems);
           break;
         case "interviewer":
           setNavItems(interviewerNavItems);
