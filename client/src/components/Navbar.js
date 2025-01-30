@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Outlet, NavLink, Link } from "react-router-dom"; 
+import { Outlet, NavLink, Link } from "react-router-dom";
 
 // Navigation Arrays
 const adminNavItems = [
@@ -19,7 +19,7 @@ const employerNavItems = [
 const interviewerNavItems = [
   { label: "Home", path: "/" },
   // { label: "Dashboard", path: "/interviewer/review" },
-  // {label:""}
+  { label: " Scheduled Interviews", path: "/scheduled-interview" },
   { label: "Applications", path: "/shortlist" },
 ];
 
@@ -42,9 +42,9 @@ export const Navbar = () => {
   const [loginData, setLoginData] = useState(null);
   const [navItems, setNavItems] = useState(normalNavItem);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false); 
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const dropdownRef = useRef(null); 
+  const dropdownRef = useRef(null);
 
   const handlerIsMenuOpen = () => setIsMenuOpen(!isMenuOpen);
 
@@ -95,7 +95,7 @@ export const Navbar = () => {
           setNavItems(normalNavItem);
       }
     } else {
-      setNavItems(normalNavItem); 
+      setNavItems(normalNavItem);
     }
   }, [loginData]);
 

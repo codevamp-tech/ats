@@ -17,7 +17,7 @@ export const AllJobs = () => {
     console.log("jobs>>>", jobs);
 
     return (
-        <div className="max-w-screen-2xl mx-auto px-4 xl:px-24 py-8">
+        <div className="max-w-screen-2xl mx-auto px-4 xl:px-24 py-8 min-h-screen">
             <div className="bg-white rounded-lg shadow-xl overflow-hidden">
                 {/* Header Section */}
                 <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4">
