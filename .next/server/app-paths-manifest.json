@@ -1,4 +1,0 @@
-{
-  "/[locale]/(marketing)/page": "app/[locale]/(marketing)/page.js",
-  "/[locale]/(auth)/(center)/sign-in/[[...sign-in]]/page": "app/[locale]/(auth)/(center)/sign-in/[[...sign-in]]/page.js"
-}
