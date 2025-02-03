@@ -19,7 +19,7 @@ const ApplicationList = ( { assignedInterviews, setAssignedInterviews } ) => {
     useEffect( () => {
         const fetchApplications = async () => {
             try {
-                const response = await fetch( `http://localhost:8080/api/interviews?page=${ page }&limit=10&search=${ search }` );
+                const response = await fetch( `http://localhost:5050/api/interviews?page=${ page }&limit=10&search=${ search }` );
                 if ( !response.ok ) throw new Error( "API not available" );
 
                 const data = await response.json();

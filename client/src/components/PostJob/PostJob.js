@@ -28,6 +28,13 @@ export const PostJob = () => {
     const [shiftStart, setShiftStart] = useState(jobToEdit?.shiftStart || '09:00');
     const [shiftEnd, setShiftEnd] = useState(jobToEdit?.shiftEnd || '17:00');
 
+    // Fetch the recruiter role from localStorage
+    const user = JSON.parse( localStorage.getItem( 'user' ) ); // Parse user object from localStorage
+    const recruiterRole = user?.head || '';
+    // const recruiterName = user?.userName || '';
+
+    
+
     const {
         register,
         handleSubmit,
@@ -48,7 +55,7 @@ export const PostJob = () => {
             experienceRequired: '',
             requiredResources: '',
             status: '',
-            recruiterName: '',
+            recruiterName: recruiterRole ? '' : user._id,
             hiringManagerEmail: '',
             hiringManagerName: '',
             description: '',
@@ -157,6 +164,8 @@ export const PostJob = () => {
             setSelectedState={setSelectedState}
             selectedCity={selectedCity}
             setSelectedCity={setSelectedCity}
+            recruiterRole={ recruiterRole }
+            // recruiterName={ recruiterName }
         />
     );
 };
