@@ -31,6 +31,7 @@ import AssignedInterviews from './components/HiringManager/AssignedInterviews';
 import CandidateApplication from './Pages/Application/CandidateApplication';
 import ApplicationJobDetail from './Pages/Application/ApplicationJobDetail';
 import CandidateDetailsPage from './Pages/Recruiter/CandidateDetailsPage';
+import ShortlistedApplications from './Pages/Application/ShortlistedApplication/ShortlistedApplications';
 
 function App() {
   const { loginData, setLoginData } = useContext(LoginContext);
@@ -53,6 +54,7 @@ function App() {
           <Route path='/interview-rounds' element={<InterviewListing />} />
           <Route path='/profile' element={<Profile />} />
           <Route path='/all-applications' element={<CandidateApplication />} />
+          <Route path='/shortlisted-applications' element={<ShortlistedApplications />} />
 
           <Route path='/job-detail/:id' element={<ApplicationJobDetail />} />
           <Route path="/current-job/:id" element={<JobDetails />} />

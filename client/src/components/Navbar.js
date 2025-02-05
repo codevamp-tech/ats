@@ -13,6 +13,7 @@ const hiringManagerNavItems = [
   { label: "Dashboard", path: "/hiring_manager" },
   { label: "Application List", path: "/application-list" },
   { label: "Assigned Interviews", path: "/assigned-interviews" },
+  
   // { label: "Candidates", path: "/shortlist" },
 ];
 
