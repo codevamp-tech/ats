@@ -10,7 +10,6 @@ import { Register } from './components/Login/Register';
 import RecruiterDashboard from './Pages/Recruiter/RecruiterDashboard';
 import { CoordinatorDashboard } from './Pages/Coordinator/CoordinatorDashboard';
 import { JobDetails } from './components/Home/JobDetails';
-import { CandidateProfile } from './Pages/Recruiter/CandidateProfile';
 import { Applications } from './components/Applications';
 import { ShortlistedDetails } from './components/ShortlistedDetails';
 import { ApplicationForm } from './Pages/Candidate/ApplicationForm';
@@ -24,17 +23,18 @@ import UserListing from './Pages/User/UserListing';
 import InterviewListing from './Pages/InterviewRounds/InterviewListing';
 import ApplicationListing from "./Pages/Application/ApplicationListing";
 import Dashboard from './Pages/Dashboard';
-import Profile from  './Pages/Profile/Profile';
-import ScheduledInterview  from './Pages/ScheduledInterview/ScheduledInterview'
+import Profile from './Pages/Profile/Profile';
+import ScheduledInterview from './Pages/ScheduledInterview/ScheduledInterview'
 import HiringManagerDashboard from './components/HiringManager/HiringManagerDashboard';
 import ManagerApplicationList from './components/HiringManager/ManagerApplicationList'
 import AssignedInterviews from './components/HiringManager/AssignedInterviews';
 import CandidateApplication from './Pages/Application/CandidateApplication';
 import ApplicationJobDetail from './Pages/Application/ApplicationJobDetail';
+import CandidateDetailsPage from './Pages/Recruiter/CandidateDetailsPage';
 import ShortlistedApplications from './Pages/Application/ShortlistedApplication/ShortlistedApplications';
 
 function App() {
-  const { loginData, setLoginData } = useContext( LoginContext );
+  const { loginData, setLoginData } = useContext(LoginContext);
 
   return (
     <div className="App">
@@ -59,20 +59,19 @@ function App() {
           <Route path='/job-detail/:id' element={<ApplicationJobDetail />} />
           <Route path="/current-job/:id" element={<JobDetails />} />
           <Route path="/application-form/:id" element={<ApplicationForm />} />
-          <Route path="/candidate/:id" element={<CandidateProfile />} />
           <Route path="/shortlist" element={<Applications />} />
           <Route path='/scheduled-interview' element={<ScheduledInterview />} />
+          <Route path="/candidate-details/:candidateId/:jobId" element={<CandidateDetailsPage />} />
 
           <Route
             path="/shortlist/details/:candidate_id/:job_id"
-            element={ <ShortlistedDetails /> }
+            element={<ShortlistedDetails />}
           />
-          <Route path="/assign-recruiter/:id" element={ <AssignRecruiter /> } />
+          <Route path="/assign-recruiter/:id" element={<AssignRecruiter />} />
 
           {/* <Route path='/job-detail' element={<JobDetails />}/> */}
           <Route path='/current-job/:id' element={<JobDetails />} />
           <Route path='/application-form/:id' element={<ApplicationForm />} />
-          <Route path='/candidate/:id' element={<CandidateProfile />} />
           <Route path='/shortlist' element={<Applications />} />
           <Route path='/shortlist/details/:candidate_id/:job_id' element={<ShortlistedDetails />} />
           <Route path='/assign-recruiter/:id' element={<AssignRecruiter />} />
@@ -80,19 +79,19 @@ function App() {
           {/* <Route path='/dash' element={<Dashboard />} /> */}
           <Route path='/all-posted-jobs' element={<AllPostedJobs />} />
           <Route path='/my-jobs/' element={<MyJobs />} />
-          <Route path='/hiring_manager' element={ <HiringManagerDashboard /> } />
-          <Route path='/assigned-interviews' element={ <AssignedInterviews /> } />
-          <Route path='/application-list' element={ <ManagerApplicationList /> } />
+          <Route path='/hiring_manager' element={<HiringManagerDashboard />} />
+          <Route path='/assigned-interviews' element={<AssignedInterviews />} />
+          <Route path='/application-list' element={<ManagerApplicationList />} />
 
 
           <Route
             path="/coordinator/review"
-            element={ <CoordinatorDashboard /> }
+            element={<CoordinatorDashboard />}
           />
-          <Route path="/dash" element={ <Dashboard /> } />
-          <Route path="/all-posted-jobs" element={ <AllPostedJobs /> } />
-          {/* <Route path="/update-job/:id" element={<UpdateJob />} /> */ }
-          <Route path="/my-jobs/" element={ <MyJobs /> } />
+          <Route path="/dash" element={<Dashboard />} />
+          <Route path="/all-posted-jobs" element={<AllPostedJobs />} />
+          {/* <Route path="/update-job/:id" element={<UpdateJob />} /> */}
+          <Route path="/my-jobs/" element={<MyJobs />} />
         </Route >
       </Routes >
       <Footer />
