@@ -9,6 +9,7 @@ import { getApplications } from '../controllers/Application/getApplications.js';
 import { getApplication } from '../controllers/Application/getApplication.js';
 import { getAllApplicationsGroupedByJob } from '../controllers/Application/groupedByJob.js'
 import { getApplicationsByJobId } from '../controllers/Application/getApplicationByJobId.js'
+import { getCandidateAppDetail } from '../controllers/Application/getCandidateAppDetail.js';
 
 router.post("/add-application", upload.single("resume"), addApplication);
 router.get('/get-application/:id', getApplication);
@@ -16,5 +17,6 @@ router.get('/all-application/', getApplications);
 router.get('/candidate/:candidateId', getCandidateApplications);
 router.get('/grouped-by-job', getAllApplicationsGroupedByJob);
 router.get('/job/:jobId', getApplicationsByJobId);
+router.get('/candidate-details/:candidateId/:jobId', getCandidateAppDetail);
 
 export default router;
