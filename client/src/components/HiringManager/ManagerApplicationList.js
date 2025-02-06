@@ -1,51 +1,63 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-
 const ApplicationList = () => {
     const navigate = useNavigate();
-    const [ applications, setApplications ] = useState( [] );
-    const [ selectedJobField, setSelectedJobField ] = useState( "All" );
-    const [ detailedApplication, setDetailedApplication ] = useState( null );
-    const [ page, setPage ] = useState( 1 );
-    const [ totalPages, setTotalPages ] = useState( 1 );
-    const [ search, setSearch ] = useState( "" );
+    const [applications, setApplications] = useState([]);
+    const [selectedJobField, setSelectedJobField] = useState("All");
+    const [search, setSearch] = useState("");
+    const [detailedApplication, setDetailedApplication] = useState(null);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [editForm, setEditForm] = useState({
+        date: "",
+        time: "",
+        interviewType: "",
+        meetingLink: ""
+    });
+    const [editingId, setEditingId] = useState(null);
 
-    const hiringManagerEmail = "nawaz@gmail.com";
+    const hiringManagerEmail = "hassan123@gmail.com";
 
-    // Fetch applications from API
-    useEffect( () => {
+    useEffect(() => {
         const fetchApplications = async () => {
             try {
-                const response = await fetch( `http://localhost:8080/application/get-application-hm/${ hiringManagerEmail }` );
-                if ( !response.ok ) throw new Error( "API not available" );
-
+                const response = await fetch(`http://localhost:8080/application/get-application-hm/${hiringManagerEmail}`);
+                if (!response.ok) throw new Error("API not available");
                 const data = await response.json();
-                console.log( "API Response:", data );
-
-                if ( Array.isArray( data ) ) {
-                    setApplications( data );
-                    setTotalPages( 1 ); // Assuming no pagination for now
-                } else {
-                    setApplications( [] );
-                }
-            } catch ( error ) {
-                console.error( "Error fetching applications:", error );
+                setApplications(Array.isArray(data) ? data : []);
+            } catch (error) {
+                console.error("Error fetching applications:", error);
             }
         };
-
         fetchApplications();
-    }, [ page, search ] );
+    }, []);
 
-    const jobFields = [ "All", ...new Set( applications.map( app => app.jobDetails?.title || "Unknown" ) ) ];
+    const jobFields = ["All", ...new Set(applications.map(app => app.jobDetails?.title || "Unknown"))];
 
-    const filteredApplications = applications.filter( app =>
-        ( selectedJobField === "All" || app.jobDetails?.title === selectedJobField ) &&
-        ( search === "" || app.AllPostedJobs.toLowerCase().includes( search.toLowerCase() ) )
+    const filteredApplications = applications.filter(app =>
+        (selectedJobField === "All" || app.jobDetails?.title === selectedJobField) &&
+        (search === "" || app.applicationStatus.toLowerCase().includes(search.toLowerCase()))
     );
 
-    const handleApplicationClick = ( application ) => {
-        setDetailedApplication( application );
+    const handleApplicationClick = (application) => {
+        setDetailedApplication(application);
+        setEditForm({
+            date: application.interview?.date || "",
+            time: application.interview?.time || "",
+            interviewType: application.interview?.interviewType || "",
+            meetingLink: application.interview?.meetingLink || ""
+        });
+        setEditingId(application._id);
+        setIsEditModalOpen(true);
+    };
+
+    const handleUpdate = () => {
+        setApplications(applications.map(app =>
+            app._id === editingId
+                ? { ...app, interview: { ...editForm } }
+                : app
+        ));
+        setIsEditModalOpen(false);
     };
 
     return (
@@ -56,64 +68,62 @@ const ApplicationList = () => {
                 <input
                     type="text"
                     placeholder="Search by Status"
-                    value={ search }
-                    onChange={ ( e ) => setSearch( e.target.value ) }
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
                     className="p-2 border rounded-md w-1/2 mb-4"
                 />
 
-                { detailedApplication ? (
-                    <div className="bg-white p-6 shadow rounded-md border">
-                        <h2 className="text-xl font-semibold mb-4">Application Details</h2>
-                        <p><strong>Job Title:</strong> { detailedApplication.jobDetails?.title || "N/A" }</p>
-                        <p><strong>User Name:</strong> { detailedApplication.candidateDetails.userName || "N/A" }</p>
-                        <p><strong>Contact Info:</strong> { detailedApplication.contactInfo || "N/A" }</p>
-                        <p><strong>Status:</strong> { detailedApplication.applicationStatus || "N/A" }</p>
-                        <p><strong>Experience:</strong> { detailedApplication.experience || "N/A" }</p>
-                        <p><strong>Resume:</strong> <a href={ detailedApplication.resume } target="_blank" rel="noopener noreferrer">View Resume</a></p>
-                        <button
-                            onClick={ () => setDetailedApplication( null ) }
-                            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                        >
-                            Back to List
-                        </button>
-                    </div>
-                ) : (
-                    <>
-                        <div className="mb-6">
-                            <label className="block text-gray-700 text-sm font-bold mb-2">Filter by Job Field:</label>
-                            <select
-                                className="w-1/3 p-2 border rounded-md"
-                                value={ selectedJobField }
-                                onChange={ ( e ) => setSelectedJobField( e.target.value ) }
-                            >
-                                { jobFields.map( ( field, index ) => (
-                                    <option key={ index } value={ field }>{ field }</option>
-                                ) ) }
-                            </select>
-                        </div>
+                <div className="mb-6">
+                    <label className="block text-gray-700 text-sm font-bold mb-2">Filter by Job Field:</label>
+                    <select
+                        className="w-1/3 p-2 border rounded-md"
+                        value={selectedJobField}
+                        onChange={(e) => setSelectedJobField(e.target.value)}
+                    >
+                        {jobFields.map((field, index) => (
+                            <option key={index} value={field}>{field}</option>
+                        ))}
+                    </select>
+                </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            { filteredApplications.map( ( app ) => (
-                                <div
-                                    key={ app._id }
-                                    className="bg-white p-6 shadow-lg rounded-xl border border-gray-200 cursor-pointer hover:shadow-2xl transition duration-300 transform hover:scale-105"
-                                    onClick={ () => handleApplicationClick( app ) }
-                                >
-                                    <h3 className="text-xl font-semibold text-gray-800 mb-2">{ app.jobDetails?.title || "N/A" }</h3>
-                                    <p className="text-sm text-gray-600 mb-1"><strong>Name:</strong>  { app.candidateDetails.userName?.charAt( 0 ).toUpperCase() + app.candidateDetails.userName?.slice( 1 ) || "N/A" }</p>
-                                    {/* <p className="text-sm text-gray-600 mb-1"><strong>Status:</strong> { app.applicationStatus || "N/A" }</p> */}
-                                    <p className="text-sm text-gray-600 mb-1"><strong>Gender:</strong> { app.candidateDetails.gender ? app.candidateDetails.gender.charAt( 0 ).toUpperCase() + app.candidateDetails.gender.slice( 1 ) : "N/A" }</p>
-                                    <p className="text-sm text-gray-600 mb-4"><strong>Experience:</strong> { app.experience || "N/A" }</p>
-                                    <button className="px-4 py-2 text-sm font-semibold rounded-md bg-blue-500 text-white hover:bg-blue-600 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300">
-                                        { app.applicationStatus || "N/A" }
-                                    </button>
-                                </div>
-
-                            ) ) }
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {filteredApplications.map(app => (
+                        <div key={app._id} className="bg-white p-4 shadow rounded-md border cursor-pointer hover:shadow-lg" onClick={() => handleApplicationClick(app)}>
+                            <h3 className="text-lg font-semibold text-gray-800">{app.jobDetails?.title || "N/A"}</h3>
+                            <p className="text-sm text-gray-600">Applicant Name: {app.candidateDetails.userName || "N/A"}</p>
+                            <p className="text-sm text-gray-600">Application Status: {app.applicationStatus || "N/A"}</p>
+                            {app.interview && (
+                                <p className="text-sm text-gray-600">Scheduled Interview: {app.interview.date} at {app.interview.time}</p>
+                            )}
                         </div>
-                    </>
-                ) }
+                    ))}
+                </div>
             </div>
+
+            {isEditModalOpen && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4 shadow-xl">
+                        <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-lg font-bold">Application & Interview Details</h2>
+                            <button onClick={() => setIsEditModalOpen(false)} className="text-gray-500 hover:text-gray-700">✕</button>
+                        </div>
+                        <div className="space-y-4">
+                            <p><strong>Job Title:</strong> {detailedApplication?.jobDetails?.title || "N/A"}</p>
+                            <p><strong>User Name:</strong> {detailedApplication?.candidateDetails?.userName || "N/A"}</p>
+                            <p><strong>Application Status:</strong> {detailedApplication?.applicationStatus || "N/A"}</p>
+                            <p><strong>Scheduled Interview:</strong> {editForm.date} at {editForm.time}</p>
+                            <input type="date" value={editForm.date} onChange={(e) => setEditForm({ ...editForm, date: e.target.value })} className="w-full border rounded-md p-2" />
+                            <input type="time" value={editForm.time} onChange={(e) => setEditForm({ ...editForm, time: e.target.value })} className="w-full border rounded-md p-2" />
+                            <input type="text" value={editForm.interviewType} onChange={(e) => setEditForm({ ...editForm, interviewType: e.target.value })} className="w-full border rounded-md p-2" placeholder="Interview Type" />
+                            <input type="url" value={editForm.meetingLink} onChange={(e) => setEditForm({ ...editForm, meetingLink: e.target.value })} className="w-full border rounded-md p-2" placeholder="Meeting Link" />
+                        </div>
+                        <div className="mt-6 flex justify-end space-x-2">
+                            <button onClick={() => setIsEditModalOpen(false)} className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">Cancel</button>
+                            <button onClick={handleUpdate} className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Save Changes</button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
