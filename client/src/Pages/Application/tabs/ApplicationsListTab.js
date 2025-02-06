@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom'; // <-- Import from react-router-dom
 
-const ApplicationsListTab = ({ applications }) => {
-    const [allApps, setAllApps] = useState(applications);
-    const [statusFilter, setStatusFilter] = useState('');
-    const [searchTerm, setSearchTerm] = useState('');
+const ApplicationsListTab = ( { applications } ) => {
+    // Load applications from localStorage or use provided applications prop
+    const [ allApps, setAllApps ] = useState( () => {
+        const storedApps = localStorage.getItem( 'applications' );
+        return storedApps ? JSON.parse( storedApps ) : applications;
+    } );
+    const [ statusFilter, setStatusFilter ] = useState( '' );
+    const [ searchTerm, setSearchTerm ] = useState( '' );
 
     const statuses = [
         { value: 'New Submission', color: 'blue' },
@@ -16,6 +20,17 @@ const ApplicationsListTab = ({ applications }) => {
         { value: 'Withdrawn', color: 'yellow' },
         { value: 'Rejected', color: 'red' }
     ];
+
+    useEffect( () => {
+        localStorage.setItem( 'applications', JSON.stringify( allApps ) );
+    }, [ allApps ] );
+
+    const handleStatusChange = ( appId, newStatus ) => {
+        const updated = allApps.map( app =>
+            app._id === appId ? { ...app, applicationStatus: newStatus } : app
+        );
+        setAllApps( updated );
+    };
 
     const getStatusCount = (status) => {
         return allApps.filter(app => app.applicationStatus === status).length;
@@ -29,13 +44,6 @@ const ApplicationsListTab = ({ applications }) => {
             app.contactInfo?.toLowerCase().includes(searchTerm.toLowerCase()) :
             true
         );
-
-    const handleStatusChange = (appId, newStatus) => {
-        const updated = allApps.map((app) =>
-            app._id === appId ? { ...app, applicationStatus: newStatus } : app
-        );
-        setAllApps(updated);
-    };
 
     const getStatusColor = (status) => {
         const statusObj = statuses.find(s => s.value === status);
@@ -189,6 +197,7 @@ const ApplicationsListTab = ({ applications }) => {
                                                             {status.value}
                                                         </option>
                                                     ))}
+                                                    
                                                 </select>
                                             </td>
                                         </tr>

@@ -11,7 +11,7 @@ const OtherApplicationsTab = ({ candidateId }) => {
 
     return (
         <div className="border p-4 rounded">
-            <h2 className="text-lg font-semibold mb-2">Other Applications</h2>
+            <h2 className="text-lg text-deepBlack font-semibold mb-2">Other Applications</h2>
             {applications.length > 0 ? applications.map((app) => (
                 <p key={app._id}>{app.jobID?.title || 'N/A'}</p>
             )) : <p>No other applications found.</p>}

@@ -41,7 +41,7 @@ const ApplicationList = () => {
 
     const filteredApplications = applications.filter( app =>
         ( selectedJobField === "All" || app.jobDetails?.title === selectedJobField ) &&
-        ( search === "" || app.applicationStatus.toLowerCase().includes( search.toLowerCase() ) )
+        ( search === "" || app.AllPostedJobs.toLowerCase().includes( search.toLowerCase() ) )
     );
 
     const handleApplicationClick = ( application ) => {
@@ -96,16 +96,19 @@ const ApplicationList = () => {
                             { filteredApplications.map( ( app ) => (
                                 <div
                                     key={ app._id }
-                                    className="bg-white p-4 shadow rounded-md border cursor-pointer hover:shadow-lg"
+                                    className="bg-white p-6 shadow-lg rounded-xl border border-gray-200 cursor-pointer hover:shadow-2xl transition duration-300 transform hover:scale-105"
                                     onClick={ () => handleApplicationClick( app ) }
                                 >
-                                    <h3 className="text-lg font-semibold text-gray-800">{ app.jobDetails?.title || "N/A" }</h3>
-                                    <p className="text-sm text-gray-600">Applicant Name: { app.candidateDetails.userName || "N/A" }</p>
-                                    <p className="text-sm text-gray-600">Application Status: { app.applicationStatus || "N/A" }</p>
-                                    <button className="mt-2 px-2 py-1 text-sm font-semibold rounded-md bg-blue-100 text-blue-800">
+                                    <h3 className="text-xl font-semibold text-gray-800 mb-2">{ app.jobDetails?.title || "N/A" }</h3>
+                                    <p className="text-sm text-gray-600 mb-1"><strong>Name:</strong>  { app.candidateDetails.userName?.charAt( 0 ).toUpperCase() + app.candidateDetails.userName?.slice( 1 ) || "N/A" }</p>
+                                    {/* <p className="text-sm text-gray-600 mb-1"><strong>Status:</strong> { app.applicationStatus || "N/A" }</p> */}
+                                    <p className="text-sm text-gray-600 mb-1"><strong>Gender:</strong> { app.candidateDetails.gender ? app.candidateDetails.gender.charAt( 0 ).toUpperCase() + app.candidateDetails.gender.slice( 1 ) : "N/A" }</p>
+                                    <p className="text-sm text-gray-600 mb-4"><strong>Experience:</strong> { app.experience || "N/A" }</p>
+                                    <button className="px-4 py-2 text-sm font-semibold rounded-md bg-blue-500 text-white hover:bg-blue-600 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300">
                                         { app.applicationStatus || "N/A" }
                                     </button>
                                 </div>
+
                             ) ) }
                         </div>
                     </>
