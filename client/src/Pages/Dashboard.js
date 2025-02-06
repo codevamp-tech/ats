@@ -3,7 +3,6 @@ import Stats from "../components/Stats";
 import BarChart from "../components/BarChart";
 import LineChart from "../components/LineChart";
 // import Header from '../components/Header';
-import Particles from "../components/Login/Particles"
 
 export default function Dashboard() {
     // Mock data for charts
@@ -26,11 +25,7 @@ export default function Dashboard() {
     ];
 
     return (
-        <div className="relative h-auto w-screen flex items-center justify-center">
-            {/* Add ParticlesComponent as the background */ }
-            <div className="absolute top-0 left-0 w-full h-full -z-10">
-                <Particles />
-            </div>
+        
             <div className="min-h-screen bg-transparent p-4 md:p-8">
                 <div className="max-w-7xl mx-auto">
                     {/* <div> <Header /></div> */ }
@@ -69,6 +64,5 @@ export default function Dashboard() {
                     </div>
                 </div>
             </div>
-        </div>
     );
 }

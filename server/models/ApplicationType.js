@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const ApplicationTypeSchema = new mongoose.Schema({
+const ApplicationTypeSchema = new mongoose.Schema( {
   applicationStep: {
     type: String,
     required: true,
@@ -9,7 +9,10 @@ const ApplicationTypeSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-});
+
+},
+  { timestamps: true }
+);
 
 const ApplicationType = mongoose.model(
   "ApplicationType",

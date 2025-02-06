@@ -40,8 +40,7 @@ const InterViewDialog = ({
             fontSize: "1.5rem",
             fontWeight: "bold",
             marginBottom: "20px",
-            color: "#333",
-            textAlign: "center",
+            textAlign: "start",
           }}
         >
           {dialogMode === "add" ? "Add Interview Round" : "Edit Interview Round"}

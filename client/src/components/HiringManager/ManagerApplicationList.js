@@ -16,7 +16,7 @@ const ApplicationList = () => {
     });
     const [editingId, setEditingId] = useState(null);
 
-    const hiringManagerEmail = "hassan123@gmail.com";
+    const hiringManagerEmail = "nawaz@gmail.com";
 
     useEffect(() => {
         const fetchApplications = async () => {
