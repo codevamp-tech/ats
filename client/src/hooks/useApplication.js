@@ -47,7 +47,7 @@ export const useAddApplication = () => {
  */
 const updateApplicationType = async ({ applicationTypeId, formData }) => {
   await axios.put(
-    `http://localhost:8080/applicationTypes/update-application-type/${applicationTypeId}`,
+    `http://localhost:8080/application-types/update-application-type/${applicationTypeId}`,
     formData
   );
 };
