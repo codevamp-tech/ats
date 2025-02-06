@@ -50,7 +50,8 @@ const CandidateDetailsPage = () => {
     }
 
     return (
-        <div className="p-6 bg-white border border-gray-200 rounded-lg shadow-md">
+        
+        <div className="py-3 px-6  bg-white border border-gray-200 rounded-lg shadow-md ">
             <h1 className="text-2xl font-bold mb-4">Candidate Details</h1>
             <CandidateInfo applicationData={applicationData} />
             <ApplicationTabs activeTab={activeTab} setActiveTab={setActiveTab} applicationData={applicationData} />

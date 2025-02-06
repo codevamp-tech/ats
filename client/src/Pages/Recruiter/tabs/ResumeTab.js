@@ -1,7 +1,7 @@
 import React from 'react';
 
 const ResumeTab = ({ applicationData }) => (
-    <div className="border p-4 rounded">
+    <div className="border p-4 rounded bg-lightGray">
         <h2 className="text-lg font-semibold mb-2">Resume</h2>
         {applicationData.resume ? (
             <object data={applicationData.resume} type="application/pdf" width="100%" height="500">

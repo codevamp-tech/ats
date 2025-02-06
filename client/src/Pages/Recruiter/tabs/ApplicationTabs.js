@@ -4,7 +4,7 @@ import DetailsTab from './DetailsTab';
 import QATab from './QATab';
 import OtherApplicationsTab from './OtherApplicationsTab';
 
-const ApplicationTabs = ({ activeTab, setActiveTab, applicationData }) => {
+const ApplicationTabs = ( { activeTab, setActiveTab, applicationData } ) => {
     const tabs = [
         { id: 'resume', label: 'CV / Resume' },
         { id: 'details', label: 'Application Details' },
@@ -14,24 +14,26 @@ const ApplicationTabs = ({ activeTab, setActiveTab, applicationData }) => {
 
     return (
         <>
-            <div className="flex space-x-4 border-b">
-                {tabs.map((tab) => (
+            <div className="flex space-x-6 border-b-2 pb-2 mb-6 border-gray-300">
+                { tabs.map( ( tab ) => (
                     <button
-                        key={tab.id}
-                        onClick={() => setActiveTab(tab.id)}
-                        className={`py-2 px-4 text-sm font-medium transition-colors duration-200 
-                            ${activeTab === tab.id ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-500 hover:text-blue-500'}`}
+                        key={ tab.id }
+                        onClick={ () => setActiveTab( tab.id ) }
+                        className={ `py-3 px-6 text-lg font-semibold transition-all duration-300 rounded-lg 
+                            ${ activeTab === tab.id
+                                ? 'border-b-4 border-blue-600 text-blue-600'
+                                : 'text-gray-600 hover:text-blue-500 hover:border-b-4 hover:border-blue-300' }` }
                     >
-                        {tab.label}
+                        { tab.label }
                     </button>
-                ))}
+                ) ) }
             </div>
 
-            <div className="mt-4">
-                {activeTab === 'resume' && <ResumeTab applicationData={applicationData} />}
-                {activeTab === 'details' && <DetailsTab applicationData={applicationData} />}
-                {activeTab === 'qa' && <QATab applicationData={applicationData} />}
-                {activeTab === 'other' && <OtherApplicationsTab candidateId={applicationData?.candidateID?._id} />}
+            <div className="p-6 bg-lightGray rounded-lg shadow-lg">
+                { activeTab === 'resume' && <ResumeTab applicationData={ applicationData } /> }
+                { activeTab === 'details' && <DetailsTab applicationData={ applicationData } /> }
+                { activeTab === 'qa' && <QATab applicationData={ applicationData } /> }
+                { activeTab === 'other' && <OtherApplicationsTab candidateId={ applicationData?.candidateID?._id } /> }
             </div>
         </>
     );
