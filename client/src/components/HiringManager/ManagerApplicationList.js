@@ -7,6 +7,9 @@ const ApplicationList = () => {
     const [selectedJobField, setSelectedJobField] = useState("All");
     const [search, setSearch] = useState("");
     const [detailedApplication, setDetailedApplication] = useState(null);
+    const [interviewers, setInterviewers] = useState([]);
+    const [assignments, setAssignments] = useState({});
+
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [editForm, setEditForm] = useState({
         date: "",
@@ -15,6 +18,8 @@ const ApplicationList = () => {
         meetingLink: ""
     });
     const [editingId, setEditingId] = useState(null);
+    const interviewTypes = ["online", "walkin"];
+
 
     const hiringManagerEmail = "hassan123@gmail.com";
 
@@ -42,6 +47,7 @@ const ApplicationList = () => {
     const handleApplicationClick = (application) => {
         setDetailedApplication(application);
         setEditForm({
+            ApplcationID: application._id,
             date: application.interview?.date || "",
             time: application.interview?.time || "",
             interviewType: application.interview?.interviewType || "",
@@ -51,13 +57,61 @@ const ApplicationList = () => {
         setIsEditModalOpen(true);
     };
 
-    const handleUpdate = () => {
-        setApplications(applications.map(app =>
-            app._id === editingId
-                ? { ...app, interview: { ...editForm } }
-                : app
-        ));
-        setIsEditModalOpen(false);
+    const handleCreate = async () => {
+        if (!editingId) {
+            alert("No application selected.");
+            return;
+        }
+
+        const payload = {
+            applicationID: editingId,
+            interviewerID: editForm.interviewerId,
+            date: editForm.date || new Date().toISOString().split('T')[0], // Default to today's date
+            scheduledTime: editForm.time || "00:00", // Default time
+            interviewerType: editForm.interviewType || "Technical", // Default type
+            meetingLink: editForm.meetingLink || "https://meet.google.com/default-link" // Default link
+        };
+
+        try {
+            const response = await fetch("http://localhost:8080/interviewer-app/interviewer-app", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(payload),
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to assign interviewer");
+            }
+
+            const data = await response.json();
+            alert("Interviewer assigned successfully!");
+            console.log("Success:", data);
+        } catch (error) {
+            console.error("Error assigning interviewer:", error);
+            alert("Error assigning interviewer.");
+        }
+    };
+
+    useEffect(() => {
+        const fetchInterviewers = async () => {
+            try {
+                const response = await fetch('http://localhost:8080/users/interviewers');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const data = await response.json();
+                setInterviewers(data);
+            } catch (error) {
+                console.error('Error fetching interviewers:', error.message);
+            }
+        };
+
+        fetchInterviewers();
+    }, []);
+    const handleAssign = (interviewerId) => {
+        setEditForm(prev => ({ ...prev, interviewerId }));
     };
 
     return (
@@ -114,12 +168,37 @@ const ApplicationList = () => {
                             <p><strong>Scheduled Interview:</strong> {editForm.date} at {editForm.time}</p>
                             <input type="date" value={editForm.date} onChange={(e) => setEditForm({ ...editForm, date: e.target.value })} className="w-full border rounded-md p-2" />
                             <input type="time" value={editForm.time} onChange={(e) => setEditForm({ ...editForm, time: e.target.value })} className="w-full border rounded-md p-2" />
-                            <input type="text" value={editForm.interviewType} onChange={(e) => setEditForm({ ...editForm, interviewType: e.target.value })} className="w-full border rounded-md p-2" placeholder="Interview Type" />
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Interview Type</label>
+                                <select
+                                    value={editForm.interviewType}
+                                    onChange={(e) => setEditForm({ ...editForm, interviewType: e.target.value })}
+                                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
+                                >
+                                    {interviewTypes.map(type => (
+                                        <option key={type} value={type}>
+                                            {type.charAt(0).toUpperCase() + type.slice(1)}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
                             <input type="url" value={editForm.meetingLink} onChange={(e) => setEditForm({ ...editForm, meetingLink: e.target.value })} className="w-full border rounded-md p-2" placeholder="Meeting Link" />
+                            <select
+                                className="border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                onChange={(e) => handleAssign(e.target.value)}
+                            >
+                                <option value="">Select Interviewer</option>
+                                {interviewers.map((interviewer) => (
+                                    <option key={interviewer._id} value={interviewer._id}>
+                                        {interviewer.userName}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
                         <div className="mt-6 flex justify-end space-x-2">
                             <button onClick={() => setIsEditModalOpen(false)} className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">Cancel</button>
-                            <button onClick={handleUpdate} className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Save Changes</button>
+                            <button onClick={handleCreate} className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Save Changes</button>
                         </div>
                     </div>
                 </div>
