@@ -16,6 +16,8 @@ const postJob = async (jobData) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(jobData),
     });
+    console.log(response)
+
     if (!response.ok) {
         throw new Error("Error posting job");
     }
@@ -36,7 +38,7 @@ const updateJob = async (jobData) => {
 };
 
 // React Query Hooks
-export const useJobs = () => 
+export const useJobs = () =>
     useQuery({
         queryKey: ['jobs'],
         queryFn: fetchJobs,
