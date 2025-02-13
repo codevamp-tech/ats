@@ -45,7 +45,7 @@ export const AllJobs = () => {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-200">
-                            {jobs.map((job) => (
+                            {jobs.jobs?.map((job) => (
                                 <tr
                                     key={job._id}
                                     className="hover:bg-gray-50 transition-colors duration-200"

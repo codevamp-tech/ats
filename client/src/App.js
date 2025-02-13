@@ -16,7 +16,7 @@ import { ShortlistedDetails } from './components/ShortlistedDetails';
 import { ApplicationForm } from './Pages/Candidate/ApplicationForm';
 import { AssignRecruiter } from './Pages/Coordinator/AssignRecruiter';
 import { Footer } from './components/Footer';
-import { AllPostedJobs } from './components/AllPostedJobs'
+import AllPostedJobs from './components/AllPostedJobs'
 import { useContext } from 'react';
 import { LoginContext } from './components/ContextProvider/Context';
 import MyJobs from './Pages/Candidate/MyJobs';
@@ -24,8 +24,8 @@ import UserListing from './Pages/User/UserListing';
 import InterviewListing from './Pages/InterviewRounds/InterviewListing';
 import ApplicationListing from "./Pages/Application/ApplicationListing";
 import Dashboard from './Pages/Dashboard';
-import Profile from  './Pages/Profile/Profile';
-import ScheduledInterview  from './Pages/ScheduledInterview/ScheduledInterview'
+import Profile from './Pages/Profile/Profile';
+import ScheduledInterview from './Pages/ScheduledInterview/ScheduledInterview'
 import HiringManagerDashboard from './components/HiringManager/HiringManagerDashboard';
 import ManagerApplicationList from './components/HiringManager/ManagerApplicationList'
 import AssignedInterviews from './components/HiringManager/AssignedInterviews';
@@ -33,7 +33,7 @@ import CandidateApplication from './Pages/Application/CandidateApplication';
 import ApplicationJobDetail from './Pages/Application/ApplicationJobDetail';
 
 function App() {
-  const { loginData, setLoginData } = useContext( LoginContext );
+  const { loginData, setLoginData } = useContext(LoginContext);
 
   return (
     <div className="App">
@@ -63,9 +63,9 @@ function App() {
 
           <Route
             path="/shortlist/details/:candidate_id/:job_id"
-            element={ <ShortlistedDetails /> }
+            element={<ShortlistedDetails />}
           />
-          <Route path="/assign-recruiter/:id" element={ <AssignRecruiter /> } />
+          <Route path="/assign-recruiter/:id" element={<AssignRecruiter />} />
 
           {/* <Route path='/job-detail' element={<JobDetails />}/> */}
           <Route path='/current-job/:id' element={<JobDetails />} />
@@ -78,19 +78,19 @@ function App() {
           {/* <Route path='/dash' element={<Dashboard />} /> */}
           <Route path='/all-posted-jobs' element={<AllPostedJobs />} />
           <Route path='/my-jobs/' element={<MyJobs />} />
-          <Route path='/hiring_manager' element={ <HiringManagerDashboard /> } />
-          <Route path='/assigned-interviews' element={ <AssignedInterviews /> } />
-          <Route path='/application-list' element={ <ManagerApplicationList /> } />
+          <Route path='/hiring_manager' element={<HiringManagerDashboard />} />
+          <Route path='/assigned-interviews' element={<AssignedInterviews />} />
+          <Route path='/application-list' element={<ManagerApplicationList />} />
 
 
           <Route
             path="/coordinator/review"
-            element={ <CoordinatorDashboard /> }
+            element={<CoordinatorDashboard />}
           />
-          <Route path="/dash" element={ <Dashboard /> } />
-          <Route path="/all-posted-jobs" element={ <AllPostedJobs /> } />
-          {/* <Route path="/update-job/:id" element={<UpdateJob />} /> */ }
-          <Route path="/my-jobs/" element={ <MyJobs /> } />
+          <Route path="/dash" element={<Dashboard />} />
+          <Route path="/all-posted-jobs" element={<AllPostedJobs />} />
+          {/* <Route path="/update-job/:id" element={<UpdateJob />} /> */}
+          <Route path="/my-jobs/" element={<MyJobs />} />
         </Route >
       </Routes >
       <Footer />

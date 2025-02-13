@@ -22,11 +22,11 @@ const ApplicationsListTab = ({ applications }) => {
 
     const filteredApps = allApps
         .filter(app => statusFilter ? app.applicationStatus === statusFilter : true)
-        .filter(app => 
-            searchTerm ? 
-            app.candidateID?.userName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            app.contactInfo?.toLowerCase().includes(searchTerm.toLowerCase()) :
-            true
+        .filter(app =>
+            searchTerm ?
+                app.candidateID?.userName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                app.contactInfo?.toLowerCase().includes(searchTerm.toLowerCase()) :
+                true
         );
 
     const handleStatusChange = (appId, newStatus) => {
@@ -50,9 +50,8 @@ const ApplicationsListTab = ({ applications }) => {
                     <div className="space-y-2">
                         <button
                             onClick={() => setStatusFilter('')}
-                            className={`w-full text-left px-3 py-2 rounded-md text-sm ${
-                                statusFilter === '' ? 'bg-blue-50 text-blue-700' : 'hover:bg-gray-50'
-                            }`}
+                            className={`w-full text-left px-3 py-2 rounded-md text-sm ${statusFilter === '' ? 'bg-blue-50 text-blue-700' : 'hover:bg-gray-50'
+                                }`}
                         >
                             <div className="flex justify-between items-center">
                                 <span>All Applications</span>
@@ -65,9 +64,8 @@ const ApplicationsListTab = ({ applications }) => {
                             <button
                                 key={status.value}
                                 onClick={() => setStatusFilter(status.value)}
-                                className={`w-full text-left px-3 py-2 rounded-md text-sm ${
-                                    statusFilter === status.value ? `bg-${status.color}-50 text-${status.color}-700` : 'hover:bg-gray-50'
-                                }`}
+                                className={`w-full text-left px-3 py-2 rounded-md text-sm ${statusFilter === status.value ? `bg-${status.color}-50 text-${status.color}-700` : 'hover:bg-gray-50'
+                                    }`}
                             >
                                 <div className="flex justify-between items-center">
                                     <div className="flex items-center">
