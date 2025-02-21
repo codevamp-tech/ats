@@ -32,9 +32,11 @@ import CandidateApplication from './Pages/Application/CandidateApplication';
 import ApplicationJobDetail from './Pages/Application/ApplicationJobDetail';
 import CandidateDetailsPage from './Pages/Recruiter/CandidateDetailsPage';
 import ShortlistedApplications from './Pages/Application/ShortlistedApplication/ShortlistedApplications';
+import { useAuth } from './hooks/useAuth';
+import CompanyListing from './Pages/company/CompanyListing';
 
 function App() {
-  const { loginData, setLoginData } = useContext(LoginContext);
+  useAuth();
 
   return (
     <div className="App">
@@ -55,6 +57,8 @@ function App() {
           <Route path='/profile' element={<Profile />} />
           <Route path='/all-applications' element={<CandidateApplication />} />
           <Route path='/shortlisted-applications' element={<ShortlistedApplications />} />
+
+          <Route path='/all-companies' element={<CompanyListing />} />
 
           <Route path='/job-detail/:id' element={<ApplicationJobDetail />} />
           <Route path="/current-job/:id" element={<JobDetails />} />

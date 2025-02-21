@@ -2,6 +2,11 @@ import React, { useState, useEffect, useRef } from "react";
 import { Outlet, NavLink, Link } from "react-router-dom";
 
 // Navigation Arrays
+const superNavItems = [
+  { label: "Users", path: "/all-users" },
+  { label: "Companies", path: "/all-companies" }
+];
+
 const adminNavItems = [
   { label: "Dashboard", path: "/dashboard" },
   { label: "Users", path: "/all-users" },
@@ -78,6 +83,9 @@ export const Navbar = () => {
   useEffect(() => {
     if (loginData) {
       switch (loginData.role) {
+        case "super":
+          setNavItems(superNavItems);
+          break;
         case "admin":
           setNavItems(adminNavItems);
           break;
