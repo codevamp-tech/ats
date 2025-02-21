@@ -10,7 +10,6 @@ import { Register } from './components/Login/Register';
 import RecruiterDashboard from './Pages/Recruiter/RecruiterDashboard';
 import { CoordinatorDashboard } from './Pages/Coordinator/CoordinatorDashboard';
 import { JobDetails } from './components/Home/JobDetails';
-import { CandidateProfile } from './Pages/Recruiter/CandidateProfile';
 import { Applications } from './components/Applications';
 import { ShortlistedDetails } from './components/ShortlistedDetails';
 import { ApplicationForm } from './Pages/Candidate/ApplicationForm';
@@ -31,6 +30,8 @@ import ManagerApplicationList from './components/HiringManager/ManagerApplicatio
 import AssignedInterviews from './components/HiringManager/AssignedInterviews';
 import CandidateApplication from './Pages/Application/CandidateApplication';
 import ApplicationJobDetail from './Pages/Application/ApplicationJobDetail';
+import CandidateDetailsPage from './Pages/Recruiter/CandidateDetailsPage';
+import ShortlistedApplications from './Pages/Application/ShortlistedApplication/ShortlistedApplications';
 
 function App() {
   const { loginData, setLoginData } = useContext(LoginContext);
@@ -53,13 +54,14 @@ function App() {
           <Route path='/interview-rounds' element={<InterviewListing />} />
           <Route path='/profile' element={<Profile />} />
           <Route path='/all-applications' element={<CandidateApplication />} />
+          <Route path='/shortlisted-applications' element={<ShortlistedApplications />} />
 
           <Route path='/job-detail/:id' element={<ApplicationJobDetail />} />
           <Route path="/current-job/:id" element={<JobDetails />} />
           <Route path="/application-form/:id" element={<ApplicationForm />} />
-          <Route path="/candidate/:id" element={<CandidateProfile />} />
           <Route path="/shortlist" element={<Applications />} />
           <Route path='/scheduled-interview' element={<ScheduledInterview />} />
+          <Route path="/candidate-details/:candidateId/:jobId" element={<CandidateDetailsPage />} />
 
           <Route
             path="/shortlist/details/:candidate_id/:job_id"
@@ -70,7 +72,6 @@ function App() {
           {/* <Route path='/job-detail' element={<JobDetails />}/> */}
           <Route path='/current-job/:id' element={<JobDetails />} />
           <Route path='/application-form/:id' element={<ApplicationForm />} />
-          <Route path='/candidate/:id' element={<CandidateProfile />} />
           <Route path='/shortlist' element={<Applications />} />
           <Route path='/shortlist/details/:candidate_id/:job_id' element={<ShortlistedDetails />} />
           <Route path='/assign-recruiter/:id' element={<AssignRecruiter />} />

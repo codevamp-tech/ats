@@ -120,18 +120,21 @@ const UserDialog = ({ handleCloseDialog, dialogMode, formData, handleFormChange,
                             </select>
                         </div>
 
-                        <div className="flex items-center">
-                            <input
-                                type="checkbox"
-                                name="head"
-                                checked={formData.head || false}
-                                onChange={handleFormChange}
-                                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                            />
-                            <label className="ml-2 text-sm text-gray-700">
-                                Are you a head?
-                            </label>
-                        </div>
+                        {/* Conditionally render the checkbox only if the selected role is Recruter manager */ }
+                        { formData.role === 'recruiter_manager' && (
+                            <div className="flex items-center">
+                                <input
+                                    type="checkbox"
+                                    name="head"
+                                    checked={ formData.head || false }
+                                    onChange={ handleFormChange }
+                                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                                />
+                                <label className="ml-2 text-sm text-gray-700">
+                                    Are you a head?
+                                </label>
+                            </div>
+                        ) }
                     </div>
 
                     <div className="flex justify-end space-x-4 pt-4 border-t border-gray-200">

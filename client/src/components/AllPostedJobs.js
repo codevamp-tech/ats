@@ -45,7 +45,6 @@ const AllPostedJobs = () => {
 
   const fetchJobs = async ({ queryKey }) => {
     const [_, page, limit, debouncedSearch, jobType, locationType, scheduleType] = queryKey;
-
     const params = { page, limit, search: debouncedSearch };
 
     if (jobType) params.type = jobType.value;

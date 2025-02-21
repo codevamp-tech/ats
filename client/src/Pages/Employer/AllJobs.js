@@ -23,6 +23,7 @@ export const AllJobs = () => {
                 <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4">
                     <div className="flex justify-between items-center">
                         <h3 className="text-xl font-bold text-white">All Posted Jobs</h3>
+                      
                         <Link
                             to="/post-job"
                             className="inline-flex items-center px-4 py-2 bg-white text-blue-600 rounded-lg font-medium hover:bg-blue-50 transition-colors duration-200"
@@ -30,6 +31,7 @@ export const AllJobs = () => {
                             <span className="mr-2">+</span>
                             Add Job
                         </Link>
+                        
                     </div>
                 </div>
 
