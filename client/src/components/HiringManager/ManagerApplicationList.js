@@ -16,12 +16,23 @@ const ApplicationList = () => {
     });
     const [editingId, setEditingId] = useState(null);
 
-    const hiringManagerEmail = "nawaz@gmail.com";
-
-    useEffect(() => {
+     useEffect(() => {
         const fetchApplications = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/application/get-application-hm/${hiringManagerEmail}`);
+                // Get email from localStorage
+                const storedUser = localStorage.getItem("user");
+                if (!storedUser) {
+                    navigate('/login'); // Redirect if not logged in
+                    return;
+                }
+                const hiringManager = JSON.parse(storedUser); // Parse the stored email
+                const hiringManagerEmail = hiringManager.email;
+                
+                console.log( "Hiring Manager Email:", hiringManagerEmail );
+
+                const response = await fetch(
+                    `http://localhost:8080/application/get-application-hm/${hiringManagerEmail}`
+                );
                 if (!response.ok) throw new Error("API not available");
                 const data = await response.json();
                 setApplications(Array.isArray(data) ? data : []);
@@ -30,7 +41,7 @@ const ApplicationList = () => {
             }
         };
         fetchApplications();
-    }, []);
+    }, [navigate]);
 
     const jobFields = ["All", ...new Set(applications.map(app => app.jobDetails?.title || "Unknown"))];
 
