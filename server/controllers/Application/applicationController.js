@@ -5,7 +5,7 @@ import Application from '../../models/Application.js';
 const getCandidateApplications = async (req, res) => {
   try {
     const { candidateId } = req.params;      // e.g., /api/applications/candidate/:candidateId
-    let { page = 1, limit = 10, search = '' } = req.query; 
+    let { page = 1, limit = 10, search = '' } = req.query;
 
     // Convert to numbers
     page = parseInt(page, 10);

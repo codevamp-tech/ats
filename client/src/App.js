@@ -15,7 +15,7 @@ import { ShortlistedDetails } from './components/ShortlistedDetails';
 import { ApplicationForm } from './Pages/Candidate/ApplicationForm';
 import { AssignRecruiter } from './Pages/Coordinator/AssignRecruiter';
 import { Footer } from './components/Footer';
-import { AllPostedJobs } from './components/AllPostedJobs'
+import AllPostedJobs from './components/AllPostedJobs'
 import { useContext } from 'react';
 import { LoginContext } from './components/ContextProvider/Context';
 import MyJobs from './Pages/Candidate/MyJobs';

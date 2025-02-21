@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Outlet, NavLink, Link } from "react-router-dom";
+import {
+  UserPen, LogOut
+} from "lucide-react";
 
 // Navigation Arrays
 const superNavItems = [
@@ -18,8 +21,6 @@ const hiringManagerNavItems = [
   { label: "Dashboard", path: "/hiring_manager" },
   { label: "Application List", path: "/application-list" },
   { label: "Assigned Interviews", path: "/assigned-interviews" },
-  
-  // { label: "Candidates", path: "/shortlist" },
 ];
 
 const interviewerNavItems = [
@@ -176,17 +177,20 @@ export const Navbar = () => {
                 {loginData?.userName}
               </button>
               {isDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-40 bg-lightGray text-white border rounded shadow-lg z-10">
-                  {/* <Link
-                   to="/profile"
-                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                 >
-                   Profile
-                 </Link> */}
+
+                <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+                  <Link
+                    to="/profile"
+                    className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:rounded-lg  transition-colors"
+                  >
+                    <UserPen className="w-4 h-4 mr-2 text-gray-600" />
+                    <span>Profile</span>
+                  </Link>
                   <button
                     onClick={logoutHandler}
-                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    className="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:rounded-lg transition-colors"
                   >
+                    <LogOut className="w-4 h-4 mr-2 text-gray-600" />
                     Logout
                   </button>
                 </div>
@@ -219,11 +223,11 @@ export const Navbar = () => {
             onClick={handlerIsMenuOpen}
           ></box-icon>
         </div>
-      </nav>
+      </nav >
 
 
       {/* MAIN MENU sm device */}
-      <div
+      <div div
         className={` ${isMenuOpen ? "" : "hidden"
           } font-bold px-4 bg-gray-200 py-5 rounded`}
       >
@@ -259,9 +263,9 @@ export const Navbar = () => {
             )}
           </div>
         </ul>
-      </div>
+      </div >
 
       <Outlet />
-    </div>
+    </div >
   );
 };
