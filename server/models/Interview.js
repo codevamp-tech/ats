@@ -10,7 +10,9 @@ const InterviewSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-});
+},
+  { timestamps: true }
+);
 
 const Interview = mongoose.model('Interview', InterviewSchema);
 

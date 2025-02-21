@@ -21,7 +21,7 @@ const InterviewListing = () => {
     error,
   } = useInterviews({
     page: currentPage,
-    limit: 5,
+    limit: 9,
     search,
   });
 
@@ -108,147 +108,91 @@ const InterviewListing = () => {
   if (isError) return <p>Error: {error.message}</p>;
 
   return (
-    <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
-      <h1 style={{ textAlign: "center", color: "#333", marginBottom: "20px" }}>
-        Interview Round List
-      </h1>
+    <div className="w-screen mx-auto px-4 py-8 h-auto">
+      <div className="bg-white rounded-lg shadow-lg p-6">
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-8">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4 sm:mb-0">Interview Management</h1>
 
-      {/* Search Field */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          marginBottom: "20px",
-        }}
-      >
-        <input
-          type="text"
-          placeholder="Search by name or email"
-          value={search}
-          onChange={handleSearchChange}
-          style={{
-            padding: "10px",
-            width: "300px",
-            borderRadius: "8px",
-            border: "1px solid #ddd",
-            outline: "none",
-            boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-          }}
-        />
-      </div>
-
-      {/* Add Button */}
-      <div style={{ textAlign: "center", marginBottom: "20px" }}>
-        <button
-          onClick={handleOpenAddDialog}
-          style={{
-            backgroundColor: "#007BFF",
-            color: "#fff",
-            padding: "10px 20px",
-            borderRadius: "8px",
-            border: "none",
-            cursor: "pointer",
-            fontSize: "16px",
-            transition: "background 0.3s",
-          }}
-          onMouseOver={(e) => (e.target.style.backgroundColor = "#0056b3")}
-          onMouseOut={(e) => (e.target.style.backgroundColor = "#007BFF")}
-        >
-          Add Interview Round
-        </button>
-      </div>
-
-      {/* Interview List */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
-        {interviews.map((interview) => (
-          <div
-            key={interview._id}
-            style={{
-              border: "1px solid #ddd",
-              borderRadius: "8px",
-              padding: "15px",
-              boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-            }}
-          >
-            <p>
-              <strong>Round Name:</strong> {interview.roundName}
-            </p>
-            <p>
-              <strong>Round Number:</strong> {interview.roundNumber}
-            </p>
-            <button
-              onClick={() => handleOpenEditDialog(interview)}
-              style={{
-                backgroundColor: "#28a745",
-                color: "#fff",
-                padding: "5px 10px",
-                borderRadius: "8px",
-                border: "none",
-                cursor: "pointer",
-                fontSize: "14px",
-                transition: "background 0.3s",
-              }}
-              onMouseOver={(e) => (e.target.style.backgroundColor = "#218838")}
-              onMouseOut={(e) => (e.target.style.backgroundColor = "#28a745")}
-            >
-              Edit
-            </button>
+          {/* Search Bar */ }
+          <div className="relative ml-[45vw]">
+            <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+              🔍
+            </span>
+            <input
+              type="text"
+              placeholder="Search rounds..."
+              value={ search }
+              onChange={ handleSearchChange }
+              className="w-full pl-10 pr-4 py-2 rounded-lg focus:border-transparent hover:bg-lightGray bg-gray-100"
+            />
           </div>
-        ))}
+
+          {/* Add Button */ }
+          <button
+            onClick={ handleOpenAddDialog }
+            className="flex items-center px-4 py-2 text-deepBlack rounded-lg hover:bg-lightGray bg-gray-100"
+          >
+            <span className="mr-2"><strong>+</strong></span>
+            <strong>Add New Interview Round</strong>
+          </button>
+        </div>
+
+        {/* Interview List */ }
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          { interviews.map( ( interview ) => (
+            <div
+              key={ interview._id }
+              className="bg-gray-50 p-4 rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all duration-200"
+            >
+              <div className="flex items-center justify-between bg-white p-4 rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-all duration-200 h-[20vh]">
+                <div className="flex flex-col">
+                  <div className="flex items-center">
+                    <h3 className="font-semibold text-gray-900 mr-2">Round Name:</h3>
+                    <p className="text-lg font-semibold text-purple-800">{ interview.roundName }</p>
+                  </div>
+                  <div className="flex items-center mt-2">
+                    <h3 className="font-semibold text-gray-900 mr-2">Round Number:</h3>
+                    <p className="text-sm font-semibold text-green-800">{ interview.roundNumber }</p>
+                  </div>
+                </div>
+                <button
+                  onClick={ () => handleOpenEditDialog( interview ) }
+                  className="p-2 hover:bg-gray-200 rounded-lg transition-colors"
+                >
+                  ✏️
+                </button>
+              </div>
+            </div>
+          ) ) }
+        </div>
+
+        {/* Pagination */ }
+        <div className="flex items-center justify-between border-t border-gray-200 pt-4">
+          { currentPage > 1 ? (
+            <button onClick={ () => setCurrentPage( ( p ) => p - 1 ) } className="px-4 py-2 bg-white border rounded-lg">← Previous</button>
+          ) : (
+            <div className="w-[84px]"></div>
+          ) }
+          <span className="text-sm text-gray-600">Page { currentPage } of { totalPages }</span>
+          { currentPage < totalPages ? (
+            <button onClick={ () => setCurrentPage( ( p ) => p + 1 ) } className="px-4 py-2 bg-white border rounded-lg">Next →</button>
+          ) : (
+            <div className="w-[84px]"></div>
+          ) }
+        </div>
       </div>
 
-      {/* Pagination */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          marginTop: "20px",
-        }}
-      >
-        <button
-          onClick={goToPreviousPage}
-          disabled={currentPage === 1}
-          style={{
-            backgroundColor: "#ddd",
-            border: "none",
-            padding: "8px 15px",
-            borderRadius: "5px",
-            cursor: currentPage === 1 ? "not-allowed" : "pointer",
-            marginRight: "10px",
-          }}
-        >
-          Previous
-        </button>
-        <span style={{ fontSize: "16px" }}>
-          Page {currentPage} of {totalPages}
-        </span>
-        <button
-          onClick={goToNextPage}
-          disabled={currentPage === totalPages}
-          style={{
-            backgroundColor: "#ddd",
-            border: "none",
-            padding: "8px 15px",
-            borderRadius: "5px",
-            cursor: currentPage === totalPages ? "not-allowed" : "pointer",
-            marginLeft: "10px",
-          }}
-        >
-          Next
-        </button>
-      </div>
-
-      {/* Dialog */}
-      {isDialogOpen && (
+      {/* Dialog Box */ }
+      { isDialogOpen && (
         <InterViewDialog
-          dialogMode={dialogMode}
-          formData={formData}
-          handleFormChange={handleFormChange}
-          handleFormSubmit={handleFormSubmit}
-          handleCloseDialog={handleCloseDialog}
+          isOpen={ isDialogOpen }
+          dialogMode={ dialogMode }
+          formData={ formData }
+          handleFormChange={ handleFormChange }
+          handleFormSubmit={ handleFormSubmit }
+          handleCloseDialog={ handleCloseDialog }
         />
-      )}
+      ) }
     </div>
   );
 };
