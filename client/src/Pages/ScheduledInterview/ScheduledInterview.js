@@ -46,7 +46,7 @@ export const ScheduledInterview = () => {
     const [interviews, setInterviews] = useState(dummyScheduledInterviews);
     const [editingId, setEditingId] = useState(null);
     const [interviewers, setInterviewers] = useState([]);
-    
+
     const [assignments, setAssignments] = useState({});
     const tableDataCss = "border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4";
     const [editForm, setEditForm] = useState({
@@ -63,7 +63,7 @@ export const ScheduledInterview = () => {
         attachment: null
     });
 
-    
+
     const statusOptions = ["pending", "complete", "cancel", "postpone"];
     const interviewTypes = ["online", "walkin"];
     const feedbackTitles = [
