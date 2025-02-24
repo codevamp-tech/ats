@@ -24,6 +24,7 @@ const getUsers = async (req, res) => {
 
     // Find users with pagination and search
     const users = await User.find(query)
+      .sort( { createdAt: -1 } )
       .skip((page - 1) * limit)
       .limit(limit);
 
