@@ -3,10 +3,7 @@ import { Link } from 'react-router-dom'; // <-- Import from react-router-dom
 
 const ApplicationsListTab = ( { applications } ) => {
     // Load applications from localStorage or use provided applications prop
-    const [ allApps, setAllApps ] = useState( () => {
-        const storedApps = localStorage.getItem( 'applications' );
-        return storedApps ? JSON.parse( storedApps ) : applications;
-    } );
+    const [ allApps, setAllApps ] = useState(applications);
     const [ statusFilter, setStatusFilter ] = useState( '' );
     const [ searchTerm, setSearchTerm ] = useState( '' );
 
@@ -20,10 +17,6 @@ const ApplicationsListTab = ( { applications } ) => {
         { value: 'Withdrawn', color: 'yellow' },
         { value: 'Rejected', color: 'red' }
     ];
-
-    useEffect( () => {
-        localStorage.setItem( 'applications', JSON.stringify( allApps ) );
-    }, [ allApps ] );
 
     const handleStatusChange = ( appId, newStatus ) => {
         const updated = allApps.map( app =>
