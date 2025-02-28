@@ -1,18 +1,27 @@
+import axios from "axios";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
-const fetchAssignedInterviews = async () => {
-    const response = await fetch("http://localhost:8080/applicationscheduledlist/scheduled-interviewer-app");
-    if (!response.ok) throw new Error("API not available");
-    return response.json();
+const fetchAssignedInterviews = async ({ queryKey }) => {
+    const [, page, limit] = queryKey;
+    console.log("Fetching data with params:", { page, limit });
+
+    const response = await axios.get("http://localhost:8080/applicationscheduledlist/scheduled-interviewer-app", {
+        params: { page, limit },
+    });
+
+    console.log("Response Data:", response.data);
+    return response.data;
 };
 
-const useScheduledInterview = () => {
+
+const useScheduledInterview = (page , limit ) => {
     const queryClient = useQueryClient();
 
-    // Fetch assigned interviews using React Query
+    // Fetch assigned interviews with pagination
     const { data: assignedInterviews = [], error, isLoading } = useQuery({
-        queryKey: ["assignedInterviews"],
-        queryFn: fetchAssignedInterviews
+        queryKey: ["assignedInterviews", page, limit], // Include page & limit in the queryKey
+        queryFn: fetchAssignedInterviews,
+        keepPreviousData: true, // Helps with smooth pagination
     });
 
     // Mutation for refetching after updates
