@@ -114,7 +114,7 @@ const ApplicationList = ( { assignedInterviews, setAssignedInterviews } ) => {
                                 onClick={ () => setDetailedApplication( null ) }
                                 className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700"
                             >
-                                Back to List
+                                Back
                             </button>
                         </div>
                     </div>

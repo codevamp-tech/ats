@@ -26,6 +26,7 @@ export const Login = () => {
       if (result.success) {
         localStorage.setItem("usertoken", result.token);
         localStorage.setItem("user", JSON.stringify(result.user));
+        localStorage.setItem( "email", result.email );
         setSuccess("Login successful! Redirecting...");
         setTimeout(() => {
           window.location.href = "/";

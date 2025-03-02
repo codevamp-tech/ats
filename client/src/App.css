@@ -5,21 +5,30 @@
 
 body {
   font-family: "DM Sans", sans-serif;
-  overflow: auto; /* Ensure scrolling is enabled */
-  scrollbar-width: none; /* Hides scrollbars in Firefox */
-  -ms-overflow-style: none; /* Hides scrollbars in IE and Edge */
+  overflow: auto;
+  /* Ensure scrolling is enabled */
+  scrollbar-width: none;
+  /* Hides scrollbars in Firefox */
+  -ms-overflow-style: none;
+  /* Hides scrollbars in IE and Edge */
 }
+
 body::-webkit-scrollbar {
-  display: none; /* Hides scrollbars in Chrome, Safari, and Edge */
+  display: none;
+  /* Hides scrollbars in Chrome, Safari, and Edge */
 }
 
 /* Ensures all scrolling containers also hide scrollbars */
 * {
-  scrollbar-width: none; /* Hides scrollbars in Firefox */
-  -ms-overflow-style: none; /* Hides scrollbars in IE and Edge */
+  scrollbar-width: none;
+  /* Hides scrollbars in Firefox */
+  -ms-overflow-style: none;
+  /* Hides scrollbars in IE and Edge */
 }
+
 *::-webkit-scrollbar {
-  display: none; /* Hides scrollbars in Chrome, Safari, and Edge */
+  display: none;
+  /* Hides scrollbars in Chrome, Safari, and Edge */
 }
 
 .active {
@@ -112,6 +121,59 @@ li {
   cursor: pointer;
 }
 
+@keyframes customShake {
+
+  0%,
+  100% {
+    transform: translateX(0) rotate(0deg);
+  }
+
+  10% {
+    transform: translateX(-3px) rotate(-1deg);
+  }
+
+  20% {
+    transform: translateX(3px) rotate(1deg);
+  }
+
+  30% {
+    transform: translateX(-3px) rotate(-1deg);
+  }
+
+  40% {
+    transform: translateX(3px) rotate(1deg);
+  }
+
+  50% {
+    transform: translateX(-2px) rotate(-0.5deg);
+  }
+
+  60% {
+    transform: translateX(2px) rotate(0.5deg);
+  }
+
+  70% {
+    transform: translateX(-1px) rotate(-0.25deg);
+  }
+
+  80% {
+    transform: translateX(1px) rotate(0.25deg);
+  }
+
+  90% {
+    transform: translateX(0) rotate(0deg);
+  }
+}
+
+.animate-custom-shake {
+  animation: customShake 2s ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: normal;
+  animation-delay: 0s;
+  animation-duration: 4s;
+  /* 2s for animation, 2s for pause */
+}
+
 .checkmark {
   position: absolute;
   top: 0;
@@ -126,11 +188,11 @@ li {
   background: linear-gradient(blue, crimson);
 }
 
-.sidebar-label-container:hover input ~ .checkmark {
+.sidebar-label-container:hover input~.checkmark {
   background-color: #ccc;
 }
 
-.sidebar-label-container input:checked ~ .checkmark {
+.sidebar-label-container input:checked~.checkmark {
   background-color: #2196f3;
 }
 
@@ -140,7 +202,7 @@ li {
   display: none;
 }
 
-.sidebar-label-container input:checked ~ .checkmark:after {
+.sidebar-label-container input:checked~.checkmark:after {
   display: block;
 }
 
@@ -168,4 +230,33 @@ li {
   @apply block w-full bg-white py-1.5 pl-3 text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm sm:leading-6;
 }
 
-/* Table CSS */
+.animate-in {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.5);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.7);
+}
+
+/* Gradient text */
+.gradient-text {
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  background-image: linear-gradient(to right, #6366f1, #a855f7);
+}
