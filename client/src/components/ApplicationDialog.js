@@ -37,7 +37,7 @@ const ApplicationDialog = ({
                 Application Step
               </label>
               <input
-                type="text"
+                type="number"
                 name="applicationStep"
                 value={formData.applicationStep}
                 onChange={handleFormChange}

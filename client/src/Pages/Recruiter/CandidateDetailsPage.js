@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Loader, AlertCircle } from 'lucide-react';
 import CandidateInfo from './tabs/CandidateInfo';
 import ApplicationTabs from './tabs/ApplicationTabs';
+import { ChevronLeft } from 'lucide-react'
 
 const CandidateDetailsPage = () => {
     const { candidateId, jobId } = useParams(); 
@@ -52,6 +53,13 @@ const CandidateDetailsPage = () => {
     return (
         
         <div className="py-3 px-6  bg-white border border-gray-200 rounded-lg shadow-md ">
+            <button
+                className="flex items-center text-blue-600 hover:text-blue-800 transition-colors mb-5"
+                onClick={() => window.history.back()}
+            >
+                <ChevronLeft size={18} />
+                <span className="ml-1">Back</span>
+            </button>
             <h1 className="text-2xl font-bold mb-4">Candidate Details</h1>
             <CandidateInfo applicationData={applicationData} />
             <ApplicationTabs activeTab={activeTab} setActiveTab={setActiveTab} applicationData={applicationData} />

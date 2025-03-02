@@ -1,49 +1,38 @@
 import Job from '../../models/Job.js';
 
-const getJobs = async (req, res) => {
+const getJobs = async ( req, res ) => {
     try {
-        const { page = 1, limit = 3, search, type, locationType, scheduleType } = req.query;
+        let { page = 1, limit = 6, title, locationType, type, scheduleType, hireType, city } = req.query;
 
-        let query = {};
+        // Convert page & limit to numbers safely
+        const pageNumber = parseInt( page, 10 ) || 1;
+        const limitNumber = parseInt( limit, 10 ) || 6;
 
-        if (search) {
-            query.$or = [
-                { title: { $regex: search, $options: 'i' } },
-                { description: { $regex: search, $options: 'i' } },
-            ];
-        }
+        let filter = {};
 
-        if (type && type !== "") {
-            query.type = type;
-        }
-        if (locationType && locationType !== "") {
-            query.locationType = locationType;
-        }
-        if (scheduleType && scheduleType !== "") {
-            query.scheduleType = scheduleType;
-        }
+        // Apply filters only if values exist
+        if ( title ) filter.title = { $regex: title, $options: 'i' };
+        if ( locationType ) filter.locationType = { $regex: locationType, $options: 'i' };
+        if ( city ) filter.city = { $regex: city, $options: 'i' };
+        if ( type ) filter.type = { $regex: type, $options: 'i' };
+        if ( scheduleType ) filter.scheduleType = { $regex: scheduleType, $options: 'i' };
+        if ( hireType ) filter.hireType = { $regex: hireType, $options: 'i' };
 
-        const pageInt = parseInt(page, 10) || 1;
-        let limitInt = parseInt(limit, 10);
-        if (isNaN(limitInt) || limitInt <= 0) limitInt = 3;
+        const totalCount = await Job.countDocuments( filter );
 
-        const startIndex = (pageInt - 1) * limitInt;
-        const total = await Job.countDocuments(query);
+        const jobs = await Job.find( filter )
+            .sort( { createdAt: -1 } )
+            .skip( ( pageNumber - 1 ) * limitNumber )
+            .limit( limitNumber );
 
-        const jobs = await Job.find(query).skip(startIndex).limit(limitInt);
-
-        if (!Array.isArray(jobs)) {
-            return res.status(500).json({ message: "Unexpected response format from database" });
-        }
-
-        res.status(200).json({
+        res.status( 200 ).json( {
             jobs,
-            totalPages: Math.ceil(total / limitInt),
-            currentPage: pageInt,
-        });
-    } catch (error) {
-        console.error("Error fetching jobs:", error);
-        res.status(500).json({ message: error.message });
+            totalCount,
+            currentPage: pageNumber,
+            totalPages: Math.ceil( totalCount / limitNumber ),
+        } );
+    } catch ( error ) {
+        res.status( 500 ).json( { message: error.message } );
     }
 };
 

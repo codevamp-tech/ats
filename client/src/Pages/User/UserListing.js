@@ -25,7 +25,7 @@ const UserListing = () => {
     error,
   } = useUsers( {
     page: currentPage,
-    limit: 10,
+    limit: 9,
     search,
   } );
 

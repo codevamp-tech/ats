@@ -14,7 +14,7 @@ const ApplicationListing = () => {
   const [dialogMode, setDialogMode] = useState("add");
   const [selectedApplication, setSelectedApplication] = useState(null);
   const [formData, setFormData] = useState({
-    applicationStep: "",
+    applicationStep: 0,
     applicationStatus: "",
   });
 
@@ -25,7 +25,7 @@ const ApplicationListing = () => {
     error,
   } = useApplicationTypes({
     page: currentPage,
-    limit: 9,
+    limit: 6,
     search,
   });
 
@@ -40,12 +40,6 @@ const ApplicationListing = () => {
     setSearch(e.target.value);
     setCurrentPage(1);
   };
-
-  const filteredApplications = useMemo(() => {
-    return applicationTypes.filter((application) =>
-      application.applicationStep?.toLowerCase().includes(search.toLowerCase())
-    );
-  }, [applicationTypes, search]);
 
   const handleOpenAddDialog = () => {
     setDialogMode("add");
@@ -79,11 +73,6 @@ const ApplicationListing = () => {
   };
 
   // Memoize the filtered users
-  const filteredUsers = useMemo( () => {
-    return applicationTypes.filter( ( user ) =>
-      user.name?.toLowerCase().includes( search.toLowerCase() )
-    );
-  }, [ applicationTypes, search ] );
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
@@ -114,59 +103,48 @@ const ApplicationListing = () => {
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    );
-  }
-
-  if (isError) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="bg-red-50 p-4 rounded-lg">
-          <p className="text-red-600">Error: {error.message}</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="w-screen mx-auto px-4 py-8 h-auto">
       <div className="bg-white rounded-lg shadow-lg p-6">
         <div className="flex flex-col sm:flex-row justify-between items-center mb-8">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4 sm:mb-0">Application Management</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-4 sm:mb-0">Application Types</h1>
           <div className="relative ml-[45vw]">
             <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
               🔍
             </span>
             <input
               type="text"
-              placeholder="Search users..."
-              value={ search }
-              onChange={ ( e ) => handleSearchChange( e ) }
+              placeholder="Search Status..."
+              value={search}
+              onChange={(e) => handleSearchChange(e)}
               className="w-full pl-10 pr-4 py-2 rounded-lg  focus:border-transparent hover:bg-lightGray bg-gray-100"
             />
-            <ul>
-              { filteredUsers.map( ( user ) => (
-                <li key={ user.id }>{ user.name }</li>
-              ) ) }
-            </ul>
           </div>
           <button
             onClick={handleOpenAddDialog}
             className="flex items-center px-4 py-2 text-deepBlack rounded-lg hover:bg-lightGray bg-gray-100"
           >
             <span className="mr-2"><strong>+</strong></span>
-            <strong>Add New Application</strong>
+            <strong>Add New Application Status</strong>
           </button>
         </div>
 
-       
+
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          {filteredApplications.map((application) => (
+          {isLoading &&
+            <div className="min-h-screen flex items-center justify-center">
+              <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          }
+          {isError &&
+            <div className="min-h-screen flex items-center justify-center">
+              <div className="bg-red-50 p-4 rounded-lg">
+                <p className="text-red-600">Error: {error.message}</p>
+              </div>
+            </div>
+          }
+          {applicationTypes.map((application) => (
             <div
               key={application._id}
               className="bg-gray-50 p-4 rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all duration-200 "
@@ -175,11 +153,11 @@ const ApplicationListing = () => {
                 <div className="flex flex-col">
                   <div className="flex items-center">
                     <h3 className="font-semibold text-gray-900 mr-2">Application Step:</h3>
-                    <p className="text-lg font-semibold text-purple-800">{ application.applicationStep }</p>
+                    <p className="text-lg font-semibold text-purple-800">{application.applicationStep}</p>
                   </div>
                   <div className="flex items-center mt-2">
                     <h3 className="font-semibold text-gray-900 mr-2">Application Status:</h3>
-                    <p className="text-sm font-semibold text-green-800">{ application.applicationStatus }</p>
+                    <p className="text-sm font-semibold text-green-800">{application.applicationStatus}</p>
                   </div>
                 </div>
                 <button
