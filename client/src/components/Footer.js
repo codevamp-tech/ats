@@ -10,7 +10,7 @@ export const Footer = () => {
     ]
 
     return (
-        <footer className="py-12 border-t border-white/10 bg-black">
+        <footer className="py-12 border-t border-white/10 bg-indigo-900">
             <div className="max-w-screen-xl mx-auto px-4">
                 <div className="grid md:grid-cols-4 gap-8">
                     <div>

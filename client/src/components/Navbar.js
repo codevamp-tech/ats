@@ -126,7 +126,7 @@ export const Navbar = () => {
   };
   return (
     <div className="w-full ">
-      <nav className="flex justify-between items-center py-6 px-4 text-clearWhite bg-deepBlack">
+      <nav className="flex justify-between items-center py-6 px-4 text-clearWhite bg-gradient-to-r from-slate-600 to-slate-700">
         {/* BRAND */}
         <NavLink
           to="/"
