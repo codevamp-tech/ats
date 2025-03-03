@@ -1,12 +1,33 @@
 import React, { useEffect, useState } from 'react';
-
-import Modal from './Modal'
+import Modal from './Modal';
+import { 
+  Briefcase, 
+  MapPin, 
+  Clock, 
+  EyeIcon, 
+  Edit2, 
+  ChevronLeft, 
+  ChevronRight,
+  CalendarDays,
+  Phone,
+  FileText,
+  AlertCircle,
+  X,
+  Save,
+  Check
+} from 'lucide-react';
 
 const MyJobs = () => {
     const [loginData, setLoginData] = useState(null);
     const [applications, setApplications] = useState([]);
     const [selectedApp, setSelectedApp] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [updatedApplication, setUpdatedApplication] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const limit = 3;
 
     useEffect(() => {
         const token = localStorage.getItem('user');
@@ -17,19 +38,23 @@ const MyJobs = () => {
     useEffect(() => {
         const fetchApplications = async () => {
             try {
+                setIsLoading(true);
                 if (!loginData?._id) return;
                 const res = await fetch(
-                    `http://localhost:8080/application/candidate/${loginData._id}`
+                    `http://localhost:8080/application/candidate/${loginData._id}?page=${currentPage}&limit=${limit}`
                 );
                 const data = await res.json();
                 setApplications(data.applications);
+                setTotalPages(data.totalPages);
             } catch (error) {
                 console.error(error);
+            } finally {
+                setIsLoading(false);
             }
         };
 
         fetchApplications();
-    }, [loginData]);
+    }, [loginData, currentPage]);
 
     const getStatusColor = (status) => {
         switch (status) {
@@ -46,51 +71,136 @@ const MyJobs = () => {
         }
     };
 
-    return (
-        <div className="p-6 max-w-6xl mx-auto">
-            <h1 className="text-3xl font-bold mb-6">My Applications</h1>
+    const getStatusIcon = (status) => {
+        switch (status) {
+            case 'New Submission':
+                return <FileText className="h-4 w-4" />;
+            case 'In Review':
+                return <EyeIcon className="h-4 w-4" />;
+            case 'Accepted':
+                return <Check className="h-4 w-4" />;
+            case 'Rejected':
+                return <X className="h-4 w-4" />;
+            default:
+                return <AlertCircle className="h-4 w-4" />;
+        }
+    };
 
-            {applications.length > 0 ? (
-                <div className="space-y-4">
+    const handleEdit = (app) => {
+        setSelectedApp(app);
+        setUpdatedApplication({
+            ...app,
+            experience: app.experience || '',
+            contactInfo: app.contactInfo || '',
+            questions: app.questions ? JSON.parse(app.questions) : [],
+            answers: app.answers ? JSON.parse(app.answers) : []
+        });
+        setIsEditModalOpen(true);
+    };
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setUpdatedApplication((prevState) => ({
+            ...prevState,
+            [name]: value,
+        }));
+    };
+
+    const handleQuestionAnswerChange = (index, field, value) => {
+        const updatedQuestionsAnswers = [...updatedApplication[field]];
+        updatedQuestionsAnswers[index] = value;
+        setUpdatedApplication((prevState) => ({
+            ...prevState,
+            [field]: updatedQuestionsAnswers,
+        }));
+    };
+
+    const handleSubmitEdit = async () => {
+        try {
+            const response = await fetch(
+                `http://localhost:8080/application/update-candidate-application/${selectedApp._id}`,
+                {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(updatedApplication),
+                }
+            );
+            const result = await response.json();
+            if (response.ok) {
+                setIsEditModalOpen(false);
+                alert('Application updated successfully');
+                setApplications((prev) =>
+                    prev.map((app) =>
+                        app._id === selectedApp._id ? updatedApplication : app
+                    )
+                );
+            } else {
+                alert('Failed to update application');
+            }
+        } catch (error) {
+            console.error('Error updating application:', error);
+        }
+    };
+
+    return (
+        <div className="container mx-auto px-4 py-8 max-w-6xl">
+            <h1 className="text-center text-3xl md:text-4xl font-extrabold text-gray-800 mb-10">
+                <Briefcase className="inline-block mr-2 mb-1" />
+                My Applications
+            </h1>
+
+            {isLoading ? (
+                <div className="flex justify-center items-center h-64">
+                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
+                </div>
+            ) : applications.length > 0 ? (
+                <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {applications.map((app) => (
-                        <div key={app._id} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border p-6">
-                            <div className="flex justify-between items-start">
-                                <div>
-                                    <h2 className="text-xl font-semibold mb-2">{app?.jobID?.title}</h2>
-                                    <div className="space-y-2">
-                                        <div className="flex items-center gap-2 text-gray-600">
-                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                                            </svg>
-                                            <span>{app?.jobID?.city}, {app?.jobID?.state}, {app?.jobID?.country}</span>
-                                        </div>
-                                        <div className="flex items-center gap-2 text-gray-600">
-                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                            </svg>
-                                            <span>{app?.jobID?.locationType}</span>
-                                        </div>
-                                        <div className="flex items-center gap-2 text-gray-600">
-                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                            </svg>
-                                            <span>{app?.jobID?.shiftStart} - {app?.jobID?.shiftEnd}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="flex flex-col items-end gap-2">
-                                    <span className={`px-3 py-1 rounded-full text-sm ${getStatusColor(app.applicationStatus)}`}>
+                        <div key={app._id} className="bg-white rounded-xl shadow-lg border border-gray-200 hover:shadow-2xl transition-all duration-300 overflow-hidden">
+                            <div className="p-6">
+                                <div className="flex justify-between items-start mb-3">
+                                    <h2 className="text-xl font-bold text-gray-800 capitalize line-clamp-1">{app?.jobID?.title}</h2>
+                                    <span className={`flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold ${getStatusColor(app.applicationStatus)}`}>
+                                        {getStatusIcon(app.applicationStatus)}
                                         {app.applicationStatus}
                                     </span>
-                                    <button
-                                        onClick={() => {
-                                            setSelectedApp(app);
-                                            setIsModalOpen(true);
-                                        }}
-                                        className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
+                                </div>
+                                
+                                <div className="space-y-2 mb-4">
+                                    <p className="text-sm text-gray-600 flex items-center">
+                                        <Briefcase className="h-4 w-4 mr-2 text-gray-500" />
+                                        {app?.jobID?.locationType}
+                                    </p>
+                                    <p className="text-sm text-gray-700 flex items-center">
+                                        <MapPin className="h-4 w-4 mr-2 text-gray-500" />
+                                        {app?.jobID?.city}, {app?.jobID?.state}
+                                    </p>
+                                    <p className="text-sm text-gray-600 flex items-center">
+                                        <Clock className="h-4 w-4 mr-2 text-gray-500" />
+                                        {app?.jobID?.shiftStart} - {app?.jobID?.shiftEnd}
+                                    </p>
+                                    {app.submittedAt && (
+                                        <p className="text-sm text-gray-600 flex items-center">
+                                            <CalendarDays className="h-4 w-4 mr-2 text-gray-500" />
+                                            Applied: {new Date(app.submittedAt).toLocaleDateString()}
+                                        </p>
+                                    )}
+                                </div>
+                                
+                                <div className="flex justify-between mt-5 pt-3 border-t border-gray-100">
+                                    <button 
+                                        onClick={() => { setSelectedApp(app); setIsModalOpen(true); }} 
+                                        className="flex items-center bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition-colors text-sm shadow-md"
                                     >
-                                        View Details
+                                        <EyeIcon className="h-4 w-4 mr-1" /> View
+                                    </button>
+                                    <button 
+                                        onClick={() => handleEdit(app)} 
+                                        className="flex items-center bg-amber-500 text-white px-4 py-2 rounded-lg hover:bg-amber-600 transition-colors text-sm shadow-md"
+                                    >
+                                        <Edit2 className="h-4 w-4 mr-1" /> Edit
                                     </button>
                                 </div>
                             </div>
@@ -98,21 +208,143 @@ const MyJobs = () => {
                     ))}
                 </div>
             ) : (
-                <div className="text-center py-8">
-                    <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                    <h3 className="mt-2 text-sm font-semibold text-gray-900">No applications</h3>
-                    <p className="mt-1 text-sm text-gray-500">You haven't submitted any job applications yet.</p>
+                <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-12 text-center">
+                    <div className="flex justify-center mb-4">
+                        <Briefcase className="h-16 w-16 text-gray-300" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-gray-800">No applications yet</h3>
+                    <p className="mt-2 text-gray-600 max-w-md mx-auto">You haven't submitted any job applications yet. Start exploring open positions to begin your journey.</p>
+                    <button className="mt-6 bg-purple-500 text-white px-6 py-3 rounded-lg hover:bg-purple-600 transition-colors shadow-md">
+                        Find Jobs
+                    </button>
                 </div>
             )}
 
-            <Modal
-                getStatusColor={getStatusColor}
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                app={selectedApp}
-            />
+            {totalPages > 1 && (
+                <div className="flex justify-center mt-10 space-x-4">
+                    <button
+                        disabled={currentPage === 1}
+                        onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                        className="flex items-center w-32 px-4 py-2 bg-gray-700 text-white rounded-lg disabled:bg-gray-300 disabled:cursor-not-allowed text-center justify-center hover:bg-gray-800 transition-colors shadow-md"
+                    >
+                        <ChevronLeft className="h-4 w-4 mr-1" /> Previous
+                    </button>
+                    <span className="px-4 py-2 bg-white rounded-lg shadow-md border border-gray-200">
+                        Page {currentPage} of {totalPages}
+                    </span>
+                    <button
+                        disabled={currentPage === totalPages}
+                        onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                        className="flex items-center w-32 px-4 py-2 bg-gray-700 text-white rounded-lg disabled:bg-gray-300 disabled:cursor-not-allowed text-center justify-center hover:bg-gray-800 transition-colors shadow-md"
+                    >
+                        Next <ChevronRight className="h-4 w-4 ml-1" />
+                    </button>
+                </div>
+            )}
+
+            <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} app={selectedApp} getStatusColor={getStatusColor} />
+
+            {/* Enhanced Edit Modal */}
+            {isEditModalOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-75 backdrop-blur-sm">
+                    <div className="bg-white rounded-lg shadow-2xl p-6 w-full max-w-lg max-h-screen overflow-y-auto">
+                        <div className="flex justify-between items-center mb-6 border-b pb-3">
+                            <h2 className="text-2xl font-bold text-gray-800">Edit Application</h2>
+                            <button 
+                                onClick={() => setIsEditModalOpen(false)} 
+                                className="text-gray-500 hover:text-gray-700"
+                            >
+                                <X className="h-6 w-6" />
+                            </button>
+                        </div>
+                        
+                        <div className="mb-6 bg-gray-50 p-4 rounded-lg">
+                            <h3 className="text-lg font-semibold mb-2 text-gray-800">
+                                <Briefcase className="inline-block mr-2 mb-1" />
+                                {selectedApp?.jobID?.title}
+                            </h3>
+                            <p className="text-sm text-gray-600 flex items-center mb-1">
+                                <MapPin className="h-4 w-4 mr-2 text-gray-500" />
+                                {selectedApp?.jobID?.city}, {selectedApp?.jobID?.state}
+                            </p>
+                            <p className="text-sm text-gray-600 flex items-center">
+                                <Clock className="h-4 w-4 mr-2 text-gray-500" />
+                                {selectedApp?.jobID?.shiftStart} - {selectedApp?.jobID?.shiftEnd}
+                            </p>
+                        </div>
+                        
+                        <div className="space-y-6">
+                            <div>
+                                <label className="block text-gray-700 font-medium mb-2 flex items-center">
+                                    <Phone className="h-4 w-4 mr-2" />
+                                    Contact Information
+                                </label>
+                                <input
+                                    type="text"
+                                    name="contactInfo"
+                                    value={updatedApplication?.contactInfo || ''}
+                                    onChange={handleInputChange}
+                                    placeholder="Phone, email, or other contact methods"
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                />
+                            </div>
+                            
+                            <div>
+                                <label className="block text-gray-700 font-medium mb-2 flex items-center">
+                                    <FileText className="h-4 w-4 mr-2" />
+                                    Work Experience
+                                </label>
+                                <textarea
+                                    name="experience"
+                                    value={updatedApplication?.experience || ''}
+                                    onChange={handleInputChange}
+                                    placeholder="Describe your relevant work experience"
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                    rows="4"
+                                />
+                            </div>
+
+                            {/* Questions and Answers */}
+                            {updatedApplication?.questions?.map((question, index) => (
+                                <div key={index} className="p-4 border border-gray-200 rounded-lg bg-gray-50">
+                                    <label className="block text-gray-700 font-medium mb-2">
+                                        Question {index + 1}
+                                    </label>
+                                    <div className="bg-white p-3 rounded border border-gray-200 mb-3">
+                                        {question}
+                                    </div>
+                                    <label className="block text-gray-700 font-medium mb-2">
+                                        Your Answer
+                                    </label>
+                                    <textarea
+                                        value={updatedApplication?.answers[index] || ''}
+                                        onChange={(e) => handleQuestionAnswerChange(index, 'answers', e.target.value)}
+                                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                        rows="3"
+                                    />
+                                </div>
+                            ))}
+
+                            <div className="flex justify-end space-x-4 pt-4 border-t border-gray-200">
+                                <button 
+                                    onClick={() => setIsEditModalOpen(false)} 
+                                    className="flex items-center px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors"
+                                >
+                                    <X className="h-4 w-4 mr-2" />
+                                    Cancel
+                                </button>
+                                <button 
+                                    onClick={handleSubmitEdit} 
+                                    className="flex items-center px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors shadow-md"
+                                >
+                                    <Save className="h-4 w-4 mr-2" />
+                                    Save Changes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

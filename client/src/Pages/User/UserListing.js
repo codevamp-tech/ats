@@ -25,7 +25,7 @@ const UserListing = () => {
     error,
   } = useUsers( {
     page: currentPage,
-    limit: 10,
+    limit: 9,
     search,
   } );
 
@@ -152,46 +152,45 @@ const UserListing = () => {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
+    <div className="w-screen mx-auto px-4 py-8 h-full">
       <div className="bg-white rounded-lg shadow-lg p-6">
         <div className="flex flex-col sm:flex-row justify-between items-center mb-8">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4 sm:mb-0">User Management</h1>
+          <h1 className="text-[1.8rem] font-bold text-gray-900 mb-4 sm:mb-0">User Management</h1>
+          
+            <div className="relative ml-[50vw]">
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                🔍
+              </span>
+              <input
+                type="text"
+                placeholder="Search users..."
+                value={ search }
+                onChange={ ( e ) => handleSearchChange( e ) }
+              className="w-full pl-10 pr-4 py-2 rounded-lg  focus:border-transparent hover:bg-lightGray bg-gray-100"
+              />
+              {/* Display filtered users */ }
+              <ul>
+                { filteredUsers.map( ( user ) => (
+                  <li key={ user.id }>{ user.name }</li>
+                ) ) }
+              </ul>
+            </div>
+
           <button
             onClick={ handleOpenAddDialog }
-            className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            className="flex items-center px-4 py-2 text-deepBlack rounded-lg hover:bg-lightGray bg-gray-100"
           >
-            <span className="mr-2">+</span>
-            Add New User
+            <span className="mr-2"><strong>+</strong></span>
+            <strong>Add New User</strong>
           </button>
         </div>
 
-        <div className="mb-6">
-          <div className="relative">
-            <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-              🔍
-            </span>
-            <input
-              type="text"
-              placeholder="Search users..."
-              value={ search }
-              onChange={ ( e ) => handleSearchChange( e ) }
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-            {/* Display filtered users */ }
-            <ul>
-              { filteredUsers.map( ( user ) => (
-                <li key={ user.id }>{ user.name }</li>
-              ) ) }
-            </ul>
-          </div>
 
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           { users.map( ( user ) => (
             <div
               key={ user._id }
-              className="bg-gray-50 p-4 rounded-lg border border-gray-200 hover:border-blue-500 transition-all duration-200"
+              className="bg-gray-50 p-4 rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all duration-200 "
             >
               <div className="flex items-start justify-between">
                 <div className="flex items-center space-x-3">

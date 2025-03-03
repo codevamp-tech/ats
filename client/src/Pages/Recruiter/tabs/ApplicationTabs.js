@@ -29,7 +29,7 @@ const ApplicationTabs = ( { activeTab, setActiveTab, applicationData } ) => {
                 ) ) }
             </div>
 
-            <div className="p-6 bg-lightGray rounded-lg shadow-lg">
+            <div className="p-6 rounded-lg shadow-lg">
                 { activeTab === 'resume' && <ResumeTab applicationData={ applicationData } /> }
                 { activeTab === 'details' && <DetailsTab applicationData={ applicationData } /> }
                 { activeTab === 'qa' && <QATab applicationData={ applicationData } /> }

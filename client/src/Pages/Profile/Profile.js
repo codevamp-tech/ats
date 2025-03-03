@@ -1,158 +1,174 @@
-// import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-// const ProfileEditForm = () => {
-//     const [formData, setFormData] = useState({
-//         name: "",
-//         email: "",
-//         password: "",
-//         profilePicture: null,
-//     });
+const Profile = () => {
+  const [user, setUser] = useState({
+    name: "",
+    email: "",
+    role: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [message, setMessage] = useState("");
 
-//     const [imagePreview, setImagePreview] = useState(null);
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const token = localStorage.getItem("user");
+        const userData = JSON.parse(token);
+        setUser({
+          name: userData.name,
+          email: userData.email,
+          role: userData.role,
+          password: "",
+          confirmPassword: "",
+        });
+      } catch (error) {
+        console.error("Error fetching user data", error);
+      }
+    };
+    fetchUser();
+  }, []);
 
-//     const handleInputChange = (e) => {
-//         const { name, value } = e.target;
-//         setFormData((prevData) => ({ ...prevData, [name]: value }));
-//     };
+  const handleChange = (e) => {
+    setUser({ ...user, [e.target.name]: e.target.value });
+  };
 
-//     const handleFileChange = (e) => {
-//         const file = e.target.files[0];
-//         if (file) {
-//             setFormData((prevData) => ({ ...prevData, profilePicture: file }));
-//             const reader = new FileReader();
-//             reader.onloadend = () => {
-//                 setImagePreview(reader.result);
-//             };
-//             reader.readAsDataURL(file);
-//         }
-//     };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (user.password !== user.confirmPassword) {
+      setMessage("Passwords do not match!");
+      return;
+    }
+    try {
+      await axios.put("http://localhost:8080/user/update-profile", user);
+      setMessage("Profile updated successfully!");
+    } catch (error) {
+      setMessage("Error updating profile");
+    }
+  };
 
-//     const handleSubmit = (e) => {
-//         e.preventDefault();
-//         console.log("Form submitted:", formData);
-//     };
+  return (
+    <div className="min-h-screen  flex items-center justify-center bg-gradient-to-b from-gray-900 to-black ">
+      <div className="w-full max-w-xl bg-black/40  backdrop-blur-lg rounded-xl shadow-xl overflow-hidden border-2 border-white/20">
+        <div className="p-8">
+          <h2 className="text-center text-white text-2xl md:text-3xl font-bold text-primary mb-8">
+            Edit Profile
+          </h2>
+          {message && (
+            <p
+              className={`text-center text-lg font-semibold ${message.includes("Error") ? "text-red-500" : "text-green-600"
+                } mb-6 animate-fade-in`}
+            >
+              {message}
+            </p>
+          )}
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Name Field */}
+            <div className="relative">
+              <label className="block text-sm font-medium text-gray-200 mb-1">
+                Name
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  name="name"
+                  value={user.name}
+                  onChange={handleChange}
+                  className="block w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-white placeholder:text-gray-500"
+                />
 
-//     return (
-//         <div className="max-w-2xl mx-auto mt-10 bg-white rounded-2xl shadow-xl">
-//             {/* Profile Header */}
-//             <div className="relative bg-gradient-to-r from-blue-500 to-purple-500 rounded-t-2xl p-8 text-center">
-//                 <div className="relative mx-auto w-32 h-32 mb-4">
-//                     <div className="w-full h-full rounded-full overflow-hidden border-4 border-white shadow-lg">
-//                         {imagePreview ? (
-//                             <img
-//                                 src={imagePreview}
-//                                 alt="Profile"
-//                                 className="w-full h-full object-cover"
-//                             />
-//                         ) : (
-//                             <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-//                                 {/* Camera Icon */}
-//                                 <div className="w-12 h-12 flex justify-center items-center bg-gray-400 rounded-full text-white">
-//                                     <div className="relative w-6 h-6">
-//                                         <div className="absolute inset-0 rounded-full bg-white scale-75"></div>
-//                                         <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-gray-800 rounded-full"></div>
-//                                     </div>
-//                                 </div>
-//                             </div>
-//                         )}
-//                     </div>
-//                     <label
-//                         htmlFor="profilePicture"
-//                         className="absolute bottom-0 right-0 bg-blue-500 rounded-full p-2 cursor-pointer hover:bg-blue-600 transition-colors"
-//                     >
-//                         {/* Smaller Camera Icon */}
-//                         <div className="w-5 h-5 flex justify-center items-center bg-white rounded-full text-blue-500">
-//                             <div className="relative w-4 h-4">
-//                                 <div className="absolute inset-0 rounded-full bg-blue-500 scale-75"></div>
-//                                 <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-white rounded-full"></div>
-//                             </div>
-//                         </div>
-//                         <input
-//                             type="file"
-//                             id="profilePicture"
-//                             name="profilePicture"
-//                             onChange={handleFileChange}
-//                             className="hidden"
-//                             accept="image/*"
-//                         />
-//                     </label>
-//                 </div>
-//                 <h2 className="text-2xl font-bold text-white">Edit Your Profile</h2>
-//             </div>
+              </div>
+            </div>
 
-//             {/* Form Section */}
-//             <form onSubmit={handleSubmit} className="p-8 space-y-6">
-//                 {/* Name Input */}
-//                 <div className="space-y-2">
-//                     <label
-//                         htmlFor="name"
-//                         className="text-sm font-medium text-gray-700 block"
-//                     >
-//                         Full Name
-//                     </label>
-//                     <input
-//                         type="text"
-//                         id="name"
-//                         name="name"
-//                         value={formData.name}
-//                         onChange={handleInputChange}
-//                         className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-//                         placeholder="Enter your name"
-//                         required
-//                     />
-//                 </div>
+            {/* Email Field */}
+            <div className="relative">
+              <label className="block text-sm font-medium text-gray-200 mb-1">
+                Email
+              </label>
+              <div className="relative">
+                <input
+                  type="email"
+                  name="email"
+                  value={user.email}
+                  disabled
+                  className="block w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-white placeholder:text-gray-500"
+                />
 
-//                 {/* Email Input */}
-//                 <div className="space-y-2">
-//                     <label
-//                         htmlFor="email"
-//                         className="text-sm font-medium text-gray-700 block"
-//                     >
-//                         Email Address
-//                     </label>
-//                     <input
-//                         type="email"
-//                         id="email"
-//                         name="email"
-//                         value={formData.email}
-//                         onChange={handleInputChange}
-//                         className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-//                         placeholder="Enter your email"
-//                         required
-//                     />
-//                 </div>
+              </div>
+            </div>
 
-//                 {/* Password Input */}
-//                 <div className="space-y-2">
-//                     <label
-//                         htmlFor="password"
-//                         className="text-sm font-medium text-gray-700 block"
-//                     >
-//                         Password
-//                     </label>
-//                     <input
-//                         type="password"
-//                         id="password"
-//                         name="password"
-//                         value={formData.password}
-//                         onChange={handleInputChange}
-//                         className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-//                         placeholder="Enter new password"
-//                     />
-//                 </div>
+            {/* Role Field */}
+            <div className="relative">
+              <label className="block text-sm font-medium text-gray-200 mb-1">
+                Role
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  name="role"
+                  value={user.role}
+                  disabled
+                  className="block w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-white placeholder:text-gray-500"
+                />
 
-//                 {/* Submit Button */}
-//                 <div className="pt-4">
-//                     <button
-//                         type="submit"
-//                         className="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white py-3 rounded-lg font-medium hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-//                     >
-//                         Save Changes
-//                     </button>
-//                 </div>
-//             </form>
-//         </div>
-//     );
-// };
+              </div>
+            </div>
 
-// export default ProfileEditForm;
+            {/* Password Field */}
+            <div className="relative">
+              <label className="block text-sm font-medium text-gray-200 mb-1">
+                New Password
+              </label>
+              <div className="relative">
+                <input
+                  type="password"
+                  name="password"
+                  value={user.password}
+                  onChange={handleChange}
+                  className="block w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-white placeholder:text-gray-500"
+                />
+
+              </div>
+            </div>
+
+            {/* Confirm Password Field */}
+            <div className="relative">
+              <label className="block text-sm font-medium text-gray-200 mb-1">
+                Confirm Password
+              </label>
+              <div className="relative">
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  value={user.confirmPassword}
+                  onChange={handleChange}
+                  className="block w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-white placeholder:text-gray-500"
+                />
+
+              </div>
+            </div>
+
+            {/* Submit Button */}
+            <div className="flex justify-center">
+              <button
+                type="submit"
+                className="w-40 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors"
+              >
+                <span className="mr-2">Update Profile</span>
+              </button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Profile;
+
+
+
+
+

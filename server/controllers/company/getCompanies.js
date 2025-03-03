@@ -1,8 +1,8 @@
-// controllers/User/getUsers.js
+// controllers/Company/getCompanys.js
 
-import User from '../../models/User.js';
+import Company from '../../models/company.js';
 
-const getUsers = async (req, res) => {
+const getCompanies = async (req, res) => {
   try {
     // Default values for page & limit
     let { page = 1, limit = 10, search = '' } = req.query;
@@ -11,33 +11,32 @@ const getUsers = async (req, res) => {
     page = parseInt(page);
     limit = parseInt(limit);
 
-    // Build a query for searching userName or email
+    // Build a query for searching CompanyName or email
     const query = {
       $or: [
-        { userName: { $regex: search, $options: 'i' } },
+        { CompanyName: { $regex: search, $options: 'i' } },
         { email: { $regex: search, $options: 'i' } },
       ],
     };
 
     // Count total documents that match the query
-    const totalCount = await User.countDocuments(query);
+    const totalCount = await Company.countDocuments(query);
 
-    // Find users with pagination and search
-    const users = await User.find(query)
-      .sort( { createdAt: -1 } )
+    // Find Companys with pagination and search
+    const Companys = await Company.find(query)
       .skip((page - 1) * limit)
       .limit(limit);
 
-    // Send back users array and totalCount
+    // Send back Companys array and totalCount
     res.status(200).json({ 
-      users,
+      Companys,
       totalCount,
       currentPage: page,
       totalPages: Math.ceil(totalCount / limit)
     });
   } catch (error) {
-    res.status(500).json({ message: 'Failed to get users' });
+    res.status(500).json({ message: 'Failed to get Companys' });
   }
 };
 
-export { getUsers };
+export { getCompanies };

@@ -25,10 +25,17 @@ const ApplicationList = () => {
     const limit = 2; // Increased from 2 to 5 for better UX
     const modalRef = useRef();
     const interviewTypes = ["online", "walkin"];
-
-    const hiringManagerEmail = "hassan123@gmail.com";
-
+    const storedUser = localStorage.getItem("user");
     const debouncedSearch = useDebounce(search, 1000);
+
+    // if (!storedUser) {
+    //     navigate('/login'); // Redirect if not logged in
+    //     return;
+    // }
+    const hiringManager = JSON.parse(storedUser); // Parse the stored email
+    const hiringManagerEmail = hiringManager.email;
+
+    console.log("Hiring Manager Email:", hiringManagerEmail);
 
     // Fetch applications with pagination and search
     const {
@@ -57,6 +64,8 @@ const ApplicationList = () => {
     useEffect(() => {
         const fetchInterviewers = async () => {
             try {
+                // Get email from localStorage
+
                 const response = await fetch("http://localhost:8080/users/interviewers");
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);

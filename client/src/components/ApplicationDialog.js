@@ -24,8 +24,8 @@ const ApplicationDialog = ({
         className="bg-white rounded-lg shadow-xl w-full max-w-md transform transition-all"
         onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
       >
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-2xl font-semibold text-gray-800">
+        <div className="px-6 py-4">
+          <h2 className="text-[1.5rem] font-semibold text-gray-800">
             {dialogMode === 'add' ? 'Add New Application' : 'Edit User Details'}
           </h2>
         </div>
@@ -37,7 +37,7 @@ const ApplicationDialog = ({
                 Application Step
               </label>
               <input
-                type="text"
+                type="number"
                 name="applicationStep"
                 value={formData.applicationStep}
                 onChange={handleFormChange}
