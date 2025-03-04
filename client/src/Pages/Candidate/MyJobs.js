@@ -1,26 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import Modal from './Modal';
-import { 
-  Briefcase, 
-  MapPin, 
-  Clock, 
-  EyeIcon, 
-  Edit2, 
-  ChevronLeft, 
-  ChevronRight,
-  CalendarDays,
-  Phone,
-  FileText,
-  AlertCircle,
-  X,
-  Save,
-  Check
+import { toast } from 'react-toastify';
+import {
+    Briefcase,
+    MapPin,
+    Clock,
+    EyeIcon,
+    Edit2,
+    ChevronLeft,
+    ChevronRight,
+    CalendarDays,
+    Phone,
+    FileText,
+    AlertCircle,
+    X,
+    Save,
+    Check,
+    FileUp
 } from 'lucide-react';
 
 const MyJobs = () => {
     const [loginData, setLoginData] = useState(null);
     const [applications, setApplications] = useState([]);
     const [selectedApp, setSelectedApp] = useState(null);
+    const [file, setFile] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
@@ -29,32 +32,22 @@ const MyJobs = () => {
     const [isLoading, setIsLoading] = useState(true);
     const limit = 3;
 
-    useEffect(() => {
-        const token = localStorage.getItem('user');
-        const user = JSON.parse(token);
-        setLoginData(user);
-    }, []);
-
-    useEffect(() => {
-        const fetchApplications = async () => {
-            try {
-                setIsLoading(true);
-                if (!loginData?._id) return;
-                const res = await fetch(
-                    `http://localhost:8080/application/candidate/${loginData._id}?page=${currentPage}&limit=${limit}`
-                );
-                const data = await res.json();
-                setApplications(data.applications);
-                setTotalPages(data.totalPages);
-            } catch (error) {
-                console.error(error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        fetchApplications();
-    }, [loginData, currentPage]);
+    const fetchApplications = async () => {
+        try {
+            setIsLoading(true);
+            if (!loginData?._id) return;
+            const res = await fetch(
+                `http://localhost:8080/application/candidate/${loginData._id}?page=${currentPage}&limit=${limit}`
+            );
+            const data = await res.json();
+            setApplications(data.applications);
+            setTotalPages(data.totalPages);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     const getStatusColor = (status) => {
         switch (status) {
@@ -115,34 +108,55 @@ const MyJobs = () => {
         }));
     };
 
+    const handleFileUpload = (e) => {
+        const selectedFile = e.target.files[0];
+        setFile(selectedFile);
+    };
+
     const handleSubmitEdit = async () => {
         try {
+            const formData = new FormData();
+
+            formData.append("candidateID", updatedApplication.candidateID._id);
+            formData.append("jobID", updatedApplication.jobID._id);
+            formData.append("contactInfo", updatedApplication.contactInfo);
+            formData.append("experience", updatedApplication.experience);
+            formData.append("questions", JSON.stringify(updatedApplication.questions));
+            formData.append("answers", JSON.stringify(updatedApplication.answers));
+            if (file) {
+                formData.append("resume", file);
+            }
+
             const response = await fetch(
                 `http://localhost:8080/application/update-candidate-application/${selectedApp._id}`,
                 {
                     method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(updatedApplication),
+                    body: formData
                 }
             );
             const result = await response.json();
             if (response.ok) {
                 setIsEditModalOpen(false);
-                alert('Application updated successfully');
-                setApplications((prev) =>
-                    prev.map((app) =>
-                        app._id === selectedApp._id ? updatedApplication : app
-                    )
-                );
+                fetchApplications();
+                toast.success('Application updated successfully');
             } else {
-                alert('Failed to update application');
+                toast.error('Failed to update application');
             }
         } catch (error) {
             console.error('Error updating application:', error);
         }
     };
+
+    useEffect(() => {
+        const token = localStorage.getItem('user');
+        const user = JSON.parse(token);
+        setLoginData(user);
+    }, []);
+
+    useEffect(() => {
+        fetchApplications();
+    }, [loginData, currentPage]);
+
 
     return (
         <div className="container mx-auto px-4 py-8 max-w-6xl">
@@ -167,7 +181,7 @@ const MyJobs = () => {
                                         {app.applicationStatus}
                                     </span>
                                 </div>
-                                
+
                                 <div className="space-y-2 mb-4">
                                     <p className="text-sm text-gray-600 flex items-center">
                                         <Briefcase className="h-4 w-4 mr-2 text-gray-500" />
@@ -188,16 +202,16 @@ const MyJobs = () => {
                                         </p>
                                     )}
                                 </div>
-                                
+
                                 <div className="flex justify-between mt-5 pt-3 border-t border-gray-100">
-                                    <button 
-                                        onClick={() => { setSelectedApp(app); setIsModalOpen(true); }} 
+                                    <button
+                                        onClick={() => { setSelectedApp(app); setIsModalOpen(true); }}
                                         className="flex items-center bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition-colors text-sm shadow-md"
                                     >
                                         <EyeIcon className="h-4 w-4 mr-1" /> View
                                     </button>
-                                    <button 
-                                        onClick={() => handleEdit(app)} 
+                                    <button
+                                        onClick={() => handleEdit(app)}
                                         className="flex items-center bg-amber-500 text-white px-4 py-2 rounded-lg hover:bg-amber-600 transition-colors text-sm shadow-md"
                                     >
                                         <Edit2 className="h-4 w-4 mr-1" /> Edit
@@ -250,14 +264,32 @@ const MyJobs = () => {
                     <div className="bg-white rounded-lg shadow-2xl p-6 w-full max-w-lg max-h-screen overflow-y-auto">
                         <div className="flex justify-between items-center mb-6 border-b pb-3">
                             <h2 className="text-2xl font-bold text-gray-800">Edit Application</h2>
-                            <button 
-                                onClick={() => setIsEditModalOpen(false)} 
+                            <button
+                                onClick={() => setIsEditModalOpen(false)}
                                 className="text-gray-500 hover:text-gray-700"
                             >
                                 <X className="h-6 w-6" />
                             </button>
                         </div>
-                        
+
+                        <div className="relative">
+                            <input
+                                type="file"
+                                id="resume"
+                                onChange={handleFileUpload}
+                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                                required
+                            />
+                            <div className="flex items-center justify-between px-4 py-3 border border-gray-300 border-dashed rounded-md bg-gray-50 text-gray-500">
+                                <div className="flex items-center">
+                                    <FileUp size={18} className="mr-2" />
+                                    <span>{file ? file.name : "Upload your resume"}</span>
+                                </div>
+                                <span className="text-sm text-blue-500">Browse</span>
+                            </div>
+                        </div>
+                        <p className="text-xs text-gray-500">PDF, DOCX, or RTF (Max 5MB)</p>
+
                         <div className="mb-6 bg-gray-50 p-4 rounded-lg">
                             <h3 className="text-lg font-semibold mb-2 text-gray-800">
                                 <Briefcase className="inline-block mr-2 mb-1" />
@@ -272,7 +304,7 @@ const MyJobs = () => {
                                 {selectedApp?.jobID?.shiftStart} - {selectedApp?.jobID?.shiftEnd}
                             </p>
                         </div>
-                        
+
                         <div className="space-y-6">
                             <div>
                                 <label className="block text-gray-700 font-medium mb-2 flex items-center">
@@ -288,7 +320,7 @@ const MyJobs = () => {
                                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                                 />
                             </div>
-                            
+
                             <div>
                                 <label className="block text-gray-700 font-medium mb-2 flex items-center">
                                     <FileText className="h-4 w-4 mr-2" />
@@ -326,15 +358,15 @@ const MyJobs = () => {
                             ))}
 
                             <div className="flex justify-end space-x-4 pt-4 border-t border-gray-200">
-                                <button 
-                                    onClick={() => setIsEditModalOpen(false)} 
+                                <button
+                                    onClick={() => setIsEditModalOpen(false)}
                                     className="flex items-center px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors"
                                 >
                                     <X className="h-4 w-4 mr-2" />
                                     Cancel
                                 </button>
-                                <button 
-                                    onClick={handleSubmitEdit} 
+                                <button
+                                    onClick={handleSubmitEdit}
                                     className="flex items-center px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors shadow-md"
                                 >
                                     <Save className="h-4 w-4 mr-2" />

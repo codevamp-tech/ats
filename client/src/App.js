@@ -95,7 +95,6 @@ function App() {
           <Route path="/dash" element={<Dashboard />} />
           <Route path="/all-posted-jobs" element={<AllPostedJobs />} />
           {/* <Route path="/update-job/:id" element={<UpdateJob />} /> */}
-          <Route path="/my-jobs/" element={<MyJobs />} />
         </Route >
       </Routes >
       <Footer />

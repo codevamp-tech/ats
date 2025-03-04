@@ -26,6 +26,10 @@ export const AllJobs = () => {
         return () => clearTimeout(handler);
     }, [search]);
 
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
     // Dropdown options
     const jobTypeOptions = [
         { value: "Full-Time", label: "Full-Time" },

@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react"
+import { Link } from "react-router-dom"
 import Particles from "../Login/Particles"
 import { Search, Briefcase, Users, BarChart, Star, ArrowRight, Building, FileText, Clock, Award } from "lucide-react"
 
@@ -45,7 +46,7 @@ export const Hero = () => {
       </div>
 
       {/* Hero Section */}
-      <div className="max-w-screen-2xl container mx-auto px-4 pt-20 pb-12">
+      <div className="max-w-screen-2xl container mx-auto px-4 pb-12">
         <div className="grid md:grid-cols-2 gap-8 items-center min-h-[80vh]">
           <div className="space-y-6 max-w-xl">
             <div className="inline-block px-4 py-1.5 rounded-full backdrop-blur-sm">
@@ -253,9 +254,11 @@ export const Hero = () => {
           </div>
 
           <div className="text-center mt-12">
-            <button className="bg-white/10 hover:bg-white/20 text-white py-3 px-8 rounded-lg font-medium backdrop-blur-sm transition-all duration-300">
-              View All Jobs
-            </button>
+            <Link to="/all-posted-jobs">
+              <button className="bg-white/10 hover:bg-white/20 text-white py-3 px-8 rounded-lg font-medium backdrop-blur-sm transition-all duration-300">
+                View All Jobs
+              </button>
+            </Link>
           </div>
         </div>
       </div>
