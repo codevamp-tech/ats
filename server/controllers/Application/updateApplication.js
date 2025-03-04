@@ -18,6 +18,7 @@ const updateApplication = async (req, res) => {
             console.log("Received new file:", req.file.originalname);
             updateFields.resume = await uploadToS3(req.file);
         }
+        console.log("updated", updateFields);
 
         // Find the application by id and update it.
         // The { new: true } option returns the updated document.
