@@ -3,6 +3,7 @@ import { Outlet, NavLink, Link } from "react-router-dom";
 import {
   UserPen, LogOut
 } from "lucide-react";
+import atslogo1URL from "../assets/img/logo1.png"
 
 // Navigation Arrays
 const superNavItems = [
@@ -132,7 +133,7 @@ export const Navbar = () => {
           to="/"
           className="flex items-center gap-2 text-2xl text-[#e1e5df]"
         >
-          {/* <a
+          <a
             href="/"
             className="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse"
         >
@@ -141,10 +142,10 @@ export const Navbar = () => {
                 className="rounded-full h-12 md:h-16"
                 alt="Flowbite Logo"
             />
-        </a> */}
-          <span className="text-clearWhite ml-8 font-extrabold text-xl md:text-3xl transition-transform duration-200 hover:scale-105">
+        </a>
+          {/* <span className="text-clearWhite ml-8 font-extrabold text-xl md:text-3xl transition-transform duration-200 hover:scale-105">
             A T S
-          </span>
+          </span> */}
         </NavLink>
 
         {/* MAIN MENU - Centered for large screens */}

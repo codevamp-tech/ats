@@ -6,11 +6,10 @@ import ConfirmationDialog from './ConfirmationDialog';
 import ResumeModal from './ResumeModal';
 // import { updateApplicationStatus, getResumeData } from '../services/applicationService';
 
-const ApplicationsListTab = ({ applications }) => {
+const ApplicationsListTab = ({ applications, page, limit, search, setPage, setLimit, setSearch, currentPage, totalApplications, totalPages }) => {
     // Load applications from localStorage or use provided applications prop
     const [allApps, setAllApps] = useState(applications);
     const [statusFilter, setStatusFilter] = useState('');
-    const [searchTerm, setSearchTerm] = useState('');
     const [statuses, setStatuses] = useState([]);
 
     // State for confirmation dialog
@@ -115,9 +114,9 @@ const ApplicationsListTab = ({ applications }) => {
     const filteredApps = allApps
         .filter(app => statusFilter ? app.applicationStatus === statusFilter : true)
         .filter(app =>
-            searchTerm
-                ? app.candidateID?.userName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                app.contactInfo?.toLowerCase().includes(searchTerm.toLowerCase())
+            search
+                ? app.candidateID?.userName?.toLowerCase().includes(search.toLowerCase()) ||
+                app.contactInfo?.toLowerCase().includes(search.toLowerCase())
                 : true
         );
 
@@ -139,33 +138,25 @@ const ApplicationsListTab = ({ applications }) => {
                 {/* Search Bar */}
                 <div className="flex items-center justify-between">
                     <h2 className="text-xl font-semibold">Applications List</h2>
-                    <div className="relative">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
-                        </div>
-                        <input
-                            type="text"
-                            placeholder="Search candidates..."
-                            className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                        />
-                    </div>
                 </div>
 
                 {/* Applications Table */}
-                {filteredApps.length === 0 ? (
-                    <EmptyState />
-                ) : (
-                    <ApplicationsTable
-                        filteredApps={filteredApps}
-                        statuses={statuses}
-                        onStatusChange={handleStatusChangeRequest}
-                        onViewResume={handleViewResume}
-                    />
-                )}
+                <ApplicationsTable
+                    filteredApps={filteredApps}
+                    statuses={statuses}
+                    onStatusChange={handleStatusChangeRequest}
+                    onViewResume={handleViewResume}
+                    page={page}
+                    limit={limit}
+                    search={search}
+                    setPage={setPage}
+                    setLimit={setLimit}
+                    setSearch={setSearch}
+                    currentPage={currentPage}
+                    totalApplications={totalApplications}
+                    totalPages={totalPages}
+                />
+
             </div>
 
             {/* Confirmation Dialog */}
