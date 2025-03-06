@@ -8,7 +8,7 @@ const AssignedInterviews = () => {
     const navigate = useNavigate();
     const [page, setPage] = useState(1);
     const itemsPerPage = 1; // Number of interviews per page
-    const limit = 1; // Set the number of items per page
+    const limit = 4; // Set the number of items per page
     const { assignedInterviews, error, isLoading, refetchAssignedInterviews } = useAssignedInterview(page, limit);
     const [search, setSearch] = useState("");
     const [filterStatus, setFilterStatus] = useState("all");
