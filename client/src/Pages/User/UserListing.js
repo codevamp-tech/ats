@@ -99,7 +99,7 @@ const UserListing = () => {
   const fetchCompanies = async () => {
     try {
       const response = await fetch(
-        `${ process.env.REACT_APP_BASE_URL }/companies/get`
+        `${process.env.REACT_APP_BASE_URL}/companies/get`
       )
       if (response.ok) {
         const data = await response.json()
@@ -162,36 +162,39 @@ const UserListing = () => {
 
   return (
     <div className="px-8 py-4 w-full min-h-screen"
-      style={ { background: 'linear-gradient(90deg, rgba(189, 189, 189, 1) 0%, rgba(189, 189, 189, 1) 7%, rgba(255, 255, 255, 1) 100%)' } }
+      style={{ background: 'linear-gradient(90deg, rgba(189, 189, 189, 1) 0%, rgba(189, 189, 189, 1) 7%, rgba(255, 255, 255, 1) 100%)' }}
     >
       <div className="max-w-screen-2xl">
-        <div className='mb-6 h-[15vh] flex items-center rounded-xl p-4 bg-gray-700'>
-          <div className="flex items-center w-full gap-4">
+        <div className='mb-6 h-auto md:h-[15vh] flex flex-col md:flex-row items-start md:items-center justify-between rounded-xl p-4 bg-gray-700 space-y-4 md:space-y-0 md:space-x-4'>
+          {/* Title Section */}
+          <div className="flex items-center gap-4 w-full md:w-auto">
             <Users className="h-6 w-6 text-white" />
             <h1 className="text-2xl font-bold text-white">User Management</h1>
           </div>
 
-          <div className="flex items-center gap-4 w-full sm:w-auto">
-            <div className="relative flex-grow">
+          {/* Search & Button Section */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full md:w-auto">
+            <div className="relative w-full sm:w-[50vw] md:w-[20vw]">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
               <input
                 type="text"
                 placeholder="Search users..."
                 value={search}
                 onChange={handleSearchChange}
-                className="w-[20vw] pl-10 pr-4 py-2 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                className="w-full pl-10 pr-4 py-2 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
               />
             </div>
 
             <button
               onClick={handleOpenAddDialog}
-              className="flex items-center px-4 py-2 bg-gray-700 text-white rounded-xl hover:bg-gray-600 hover:text-white border border-white transition-colors duration-200 whitespace-nowrap shadow-sm"
+              className="flex items-center justify-center px-4 py-2 bg-gray-700 text-white rounded-xl hover:bg-gray-600 hover:text-white border border-white transition-colors duration-200 whitespace-nowrap shadow-sm w-full sm:w-auto"
             >
               <Plus className="h-4 w-4 mr-2" />
               <span className="font-medium">Add User</span>
             </button>
           </div>
         </div>
+
 
         {isLoading ? (
           <div className="flex items-center justify-center py-20">
@@ -218,7 +221,7 @@ const UserListing = () => {
                         {user.userName.charAt(0).toUpperCase()}
                       </div>
                       <div>
-                        <h3 className="font-semibold text-gray-900 text-lg">{ capitalizeFirstLetter(user.userName)}</h3>
+                        <h3 className="font-semibold text-gray-900 text-lg">{capitalizeFirstLetter(user.userName)}</h3>
                         <p className="text-sm text-gray-600">{user.email}</p>
                       </div>
                     </div>

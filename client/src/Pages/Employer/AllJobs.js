@@ -13,35 +13,35 @@ import {
 export const AllJobs = () => {
     // State for search and filters
     // const companyUserName = useParams();
-    const [ search, setSearch ] = useState( "" );
-    const [ debouncedSearch, setDebouncedSearch ] = useState( "" );
-    const [ jobType, setJobType ] = useState( "" );
-    const [ locationType, setLocationType ] = useState( "" );
-    const [ scheduleType, setScheduleType ] = useState( "" );
-    const [ currentPage, setCurrentPage ] = useState( 1 );
-    const [ jobsPerPage ] = useState( 9 );
-    const [ isFilterOpen, setIsFilterOpen ] = useState( false );
-    const [ isDeleting, setIsDeleting ] = useState( false );
-    const [ deleteError, setDeleteError ] = useState( null );
+    const [search, setSearch] = useState("");
+    const [debouncedSearch, setDebouncedSearch] = useState("");
+    const [jobType, setJobType] = useState("");
+    const [locationType, setLocationType] = useState("");
+    const [scheduleType, setScheduleType] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const [jobsPerPage] = useState(9);
+    const [isFilterOpen, setIsFilterOpen] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [deleteError, setDeleteError] = useState(null);
 
-    const companyId = JSON.parse( localStorage.getItem( "user" ) ).company_id;
-    const companyUserName = localStorage.getItem( "companyUserName" );
+    const companyId = JSON.parse(localStorage.getItem("user")).company_id;
+    const companyUserName = localStorage.getItem("companyUserName");
 
-    const capitalizeFirstLetter = ( string ) => {
-        return string.charAt( 0 ).toUpperCase() + string.slice( 1 );
+    const capitalizeFirstLetter = (string) => {
+        return string.charAt(0).toUpperCase() + string.slice(1);
     };
 
     // Debounce search input
-    useEffect( () => {
-        const handler = setTimeout( () => {
-            setDebouncedSearch( search );
-        }, 500 );
-        return () => clearTimeout( handler );
-    }, [ search ] );
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedSearch(search);
+        }, 500);
+        return () => clearTimeout(handler);
+    }, [search]);
 
-    useEffect( () => {
-        window.scrollTo( 0, 0 );
-    }, [] );
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     // Dropdown options
     const jobTypeOptions = [
@@ -65,14 +65,14 @@ export const AllJobs = () => {
 
     // Build filter object for API call
     const filterParams = {};
-    if ( debouncedSearch ) filterParams.title = debouncedSearch;
-    if ( jobType ) filterParams.type = jobType.value;
-    if ( locationType ) filterParams.locationType = locationType.value;
-    if ( scheduleType ) filterParams.scheduleType = scheduleType.value;
+    if (debouncedSearch) filterParams.title = debouncedSearch;
+    if (jobType) filterParams.type = jobType.value;
+    if (locationType) filterParams.locationType = locationType.value;
+    if (scheduleType) filterParams.scheduleType = scheduleType.value;
 
 
     // Fetch jobs with filters
-    const { data: allJobs = [], isLoading, refetch } = useJobs( filterParams, currentPage, jobsPerPage, companyId );
+    const { data: allJobs = [], isLoading, refetch } = useJobs(filterParams, currentPage, jobsPerPage, companyId);
     const navigate = useNavigate();
 
     // Calculate pagination
@@ -80,41 +80,41 @@ export const AllJobs = () => {
 
     // Reset filters handler
     const handleResetFilters = () => {
-        setSearch( "" );
-        setDebouncedSearch( "" );
-        setJobType( "" );
-        setLocationType( "" );
-        setScheduleType( "" );
-        setCurrentPage( 1 );
+        setSearch("");
+        setDebouncedSearch("");
+        setJobType("");
+        setLocationType("");
+        setScheduleType("");
+        setCurrentPage(1);
     };
 
     // Function to format number in Indian Rupee format (e.g., 1,00,000)
-    const formatIndianRupee = ( num ) => {
-        if ( !num ) return "0";
+    const formatIndianRupee = (num) => {
+        if (!num) return "0";
 
         // Convert to string and remove any non-digit characters
-        const numStr = num.toString().replace( /[^\d]/g, "" );
+        const numStr = num.toString().replace(/[^\d]/g, "");
 
         // Handle the case if it's just 0
-        if ( parseInt( numStr ) === 0 ) return "0";
+        if (parseInt(numStr) === 0) return "0";
 
-        let lastThree = numStr.substring( numStr.length - 3 );
-        let otherNumbers = numStr.substring( 0, numStr.length - 3 );
+        let lastThree = numStr.substring(numStr.length - 3);
+        let otherNumbers = numStr.substring(0, numStr.length - 3);
 
-        if ( otherNumbers !== '' ) {
+        if (otherNumbers !== '') {
             // Add commas after every two digits in the other numbers part
             lastThree = ',' + lastThree;
         }
 
         // Format remaining digits with commas after every 2 digits
-        const formattedOtherNumbers = otherNumbers.replace( /\B(?=(\d{2})+(?!\d))/g, "," );
+        const formattedOtherNumbers = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",");
 
         return formattedOtherNumbers + lastThree;
     };
 
     // Custom styles for react-select
     const customSelectStyles = {
-        control: ( provided ) => ( {
+        control: (provided) => ({
             ...provided,
             borderRadius: '0.5rem',
             borderColor: '#e2e8f0',
@@ -122,33 +122,33 @@ export const AllJobs = () => {
             '&:hover': {
                 borderColor: '#cbd5e1'
             }
-        } ),
-        option: ( provided, state ) => ( {
+        }),
+        option: (provided, state) => ({
             ...provided,
             backgroundColor: state.isSelected ? '#3b82f6' : state.isFocused ? '#eff6ff' : null,
             color: state.isSelected ? 'white' : '#1e293b',
-        } ),
+        }),
     };
 
     // Handle job deletion
-    const handleDeleteJob = async ( jobId ) => {
-        if ( !window.confirm( "Are you sure you want to delete this job?" ) ) {
+    const handleDeleteJob = async (jobId) => {
+        if (!window.confirm("Are you sure you want to delete this job?")) {
             return;
         }
 
         try {
-            setIsDeleting( true );
-            setDeleteError( null );
+            setIsDeleting(true);
+            setDeleteError(null);
 
-            const response = await fetch( `${ process.env.REACT_APP_BASE_URL }/jobs/delete-job/${ jobId }`, {
+            const response = await fetch(`${process.env.REACT_APP_BASE_URL}/jobs/delete-job/${jobId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                 }
-            } );
+            });
 
-            if ( !response.ok ) {
-                toast.error( 'Failed to delete job' );
+            if (!response.ok) {
+                toast.error('Failed to delete job');
                 return false;
             }
 
@@ -156,67 +156,79 @@ export const AllJobs = () => {
             refetch();
 
             // Show success message (could use a toast notification library here)
-            toast.success( 'Job deleted successfully' );
+            toast.success('Job deleted successfully');
 
-        } catch ( error ) {
-            console.error( 'Error deleting job:', error );
-            console.log( "jobId", jobId )
-            setDeleteError( error.message );
+        } catch (error) {
+            console.error('Error deleting job:', error);
+            console.log("jobId", jobId)
+            setDeleteError(error.message);
         } finally {
-            setIsDeleting( false );
+            setIsDeleting(false);
         }
     };
 
     return (
         <div className="px-8 py-4 w-full min-h-screen"
-            style={ { background: 'linear-gradient(90deg, rgba(189, 189, 189, 1) 0%, rgba(189, 189, 189, 1) 7%, rgba(255, 255, 255, 1) 100%)' } }
+            style={{ background: 'linear-gradient(90deg, rgba(189, 189, 189, 1) 0%, rgba(189, 189, 189, 1) 7%, rgba(255, 255, 255, 1) 100%)' }}
         >
             <div className="max-w-screen-2xl">
                 <div>
-                    {/* Header Section */ }
-                    <div className='mb-6 h-25vh flex items-center rounded-xl p-4 bg-gray-700'>
-                        <div className="flex justify-between items-center w-full">
+                    {/* Header Section */}
+
+                    <div className="mb-6 p-4 bg-gray-700 rounded-xl">
+                        <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+
+                            {/* Title */}
                             <div>
-                                <h2 className="text-3xl font-bold text-white flex items-center">
+                                <h2 className="text-2xl md:text-3xl font-bold text-white flex items-center">
                                     <Briefcase className="mr-2 h-6 w-6 text-gray-200" />
                                     Job Board
                                 </h2>
                             </div>
-                            <div className='flex gap-4'>
+
+                            {/* Actions: Filter Toggle + Post Job */}
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-3">
                                 <button
-                                    className="inline-flex border items-center px-4 py-1.5 bg-gray-300 text-black rounded-xl font-medium hover:bg-gray-700 hover:text-white hover:border-gray-200 transition-colors duration-200 shadow-sm"
-                                    onClick={ () => setIsFilterOpen( !isFilterOpen ) } // Toggle filter visibility
+                                    className="inline-flex items-center justify-center border px-4 py-2 bg-gray-300 text-black rounded-xl font-medium hover:bg-gray-700 hover:text-white hover:border-gray-200 transition-colors duration-200 shadow-sm"
+                                    onClick={() => setIsFilterOpen(!isFilterOpen)}
                                 >
-                                    { isFilterOpen ? "Hide Filters" : "Show Filters" }
+                                    {isFilterOpen ? "Hide Filters" : "Show Filters"}
                                 </button>
+
                                 <Link
-                                    to={ `/${ companyUserName }/post-job` }
-                                    className="inline-flex border items-center px-4 py-1.5 bg-gray-300 text-black rounded-xl font-medium hover:bg-gray-700 hover:text-white hover:border-gray-200 transition-colors duration-200 shadow-sm"
+                                    to={`/${companyUserName}/post-job`}
+                                    className="inline-flex items-center justify-center border px-4 py-2 bg-gray-300 text-black rounded-xl font-medium hover:bg-gray-700 hover:text-white hover:border-gray-200 transition-colors duration-200 shadow-sm"
                                 >
-                                    <Plus className="mr-2 h-5 w-5" />
+                                    <Plus className="mr-1 h-5 w-5" />
                                     Post New Job
                                 </Link>
                             </div>
                         </div>
                     </div>
 
-                    {/* Filter Toggle Button (Mobile) */ }
-                    <div className="md:hidden px-6 py-3 bg-gray-50 border-b border-gray-100">
+                    {/* Filter Toggle Button (Mobile) */}
+                    {/* <div className="md:hidden px-6 py-3 bg-gray-50 border-b border-gray-100">
                         <button
-                            onClick={ () => setIsFilterOpen( !isFilterOpen ) }
+                            onClick={() => setIsFilterOpen(!isFilterOpen)}
                             className="w-full flex items-center justify-between px-4 py-2 bg-white border border-gray-200 rounded-lg shadow-sm"
                         >
                             <span className="font-medium text-gray-700">Filters</span>
                             <Filter className="h-5 w-5 text-gray-500" />
                         </button>
-                    </div>
+                    </div> */}
 
-                    {/* Filters Section */ }
-                    <div className={ `flex items-center justify-evenly transition-all duration-300 ${ isFilterOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0 overflow-hidden md:max-h-screen md:opacity-100 backdrop-blur-full' }` }>
-                        <div className={ isFilterOpen ? 'block' : 'hidden' }>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-16 items-end">
-                                {/* Search Bar */ }
-                                <div className="lg:col-span-4 ">
+                    {/* Filters Section */}
+                    <div
+                        className={`transition-all duration-300 overflow-hidden ${isFilterOpen
+                            ? 'max-h-screen opacity-100'
+                            : 'max-h-0 opacity-0 md:max-h-screen md:opacity-100'
+                            }`}
+                    >
+                        <div className={isFilterOpen ? 'block' : 'hidden'}>
+                            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-12 gap-6 items-end">
+
+                                {/* Search Bar */}
+                                <div className="lg:col-span-4">
                                     <div className="relative rounded-full">
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                             <Search className="h-5 w-5 text-gray-400" />
@@ -224,69 +236,70 @@ export const AllJobs = () => {
                                         <input
                                             type="text"
                                             placeholder="Search job titles, skills, or keywords..."
-                                            value={ search }
-                                            onChange={ ( e ) => setSearch( e.target.value ) }
-                                            className="w-full pl-10 pr-4 py-3 border border-gray-300 shadow-sm transition-all duration-200 h-[6.3vh] focus:outline-none focus:ring-none rounded-xl"
+                                            value={search}
+                                            onChange={(e) => setSearch(e.target.value)}
+                                            className="w-full pl-10 pr-4 py-3 border border-gray-300 shadow-sm rounded-xl focus:outline-none transition-all duration-200"
                                         />
                                     </div>
                                 </div>
 
-                                {/* Job Type Dropdown */ }
+                                {/* Job Type */}
                                 <div className="lg:col-span-2">
                                     <div className="flex items-center mb-1.5 text-gray-500 text-sm">
                                         <Briefcase className="mr-1.5 h-4 w-4" />
                                         <span>Job Type</span>
                                     </div>
                                     <Select
-                                        options={ jobTypeOptions }
-                                        value={ jobType }
-                                        onChange={ setJobType }
+                                        options={jobTypeOptions}
+                                        value={jobType}
+                                        onChange={setJobType}
                                         placeholder="Any type"
                                         isClearable
-                                        styles={ customSelectStyles }
+                                        styles={customSelectStyles}
                                         className="text-sm"
                                     />
                                 </div>
 
-                                {/* Location Type Dropdown */ }
+                                {/* Location Type */}
                                 <div className="lg:col-span-2">
                                     <div className="flex items-center mb-1.5 text-gray-500 text-sm">
                                         <MapPin className="mr-1.5 h-4 w-4" />
                                         <span>Location</span>
                                     </div>
                                     <Select
-                                        options={ locationTypeOptions }
-                                        value={ locationType }
-                                        onChange={ setLocationType }
+                                        options={locationTypeOptions}
+                                        value={locationType}
+                                        onChange={setLocationType}
                                         placeholder="Any location"
                                         isClearable
-                                        styles={ customSelectStyles }
+                                        styles={customSelectStyles}
                                         className="text-sm"
                                     />
                                 </div>
 
-                                {/* Schedule Type Dropdown */ }
+                                {/* Schedule Type */}
                                 <div className="lg:col-span-2">
                                     <div className="flex items-center mb-1.5 text-gray-500 text-sm">
                                         <Clock className="mr-1.5 h-4 w-4" />
                                         <span>Schedule</span>
                                     </div>
                                     <Select
-                                        options={ scheduleTypeOptions }
-                                        value={ scheduleType }
-                                        onChange={ setScheduleType }
+                                        options={scheduleTypeOptions}
+                                        value={scheduleType}
+                                        onChange={setScheduleType}
                                         placeholder="Any schedule"
                                         isClearable
-                                        styles={ customSelectStyles }
+                                        styles={customSelectStyles}
                                         className="text-sm"
                                     />
                                 </div>
 
-                                <div className="lg:col-span-1 ">
+                                {/* Reset Button */}
+                                <div className="lg:col-span-1">
                                     <button
                                         type="button"
-                                        onClick={ handleResetFilters }
-                                        className="flex items-center px-4 py-3 bg-gray-700 text-gray-100 rounded-xl hover:bg-gray-400 transition-colors duration-200"
+                                        onClick={handleResetFilters}
+                                        className="flex items-center justify-center w-full px-4 py-3 bg-gray-700 text-white rounded-xl hover:bg-gray-400 transition-colors duration-200"
                                     >
                                         <RefreshCw className="h-4 w-4" />
                                     </button>
@@ -295,47 +308,48 @@ export const AllJobs = () => {
                         </div>
                     </div>
 
-                    {/* Results Count */ }
+
+                    {/* Results Count */}
                     <div className="px-6 py-3 border-gray-100 flex justify-between items-center">
                         <span className="text-sm text-gray-600">
-                            { allJobs?.jobs?.length > 0 ? (
-                                <>Showing <span className="font-medium">{ allJobs.jobs.length }</span> of <span className="font-medium">{ allJobs.totalCount || 0 }</span> jobs</>
+                            {allJobs?.jobs?.length > 0 ? (
+                                <>Showing <span className="font-medium">{allJobs.jobs.length}</span> of <span className="font-medium">{allJobs.totalCount || 0}</span> jobs</>
                             ) : (
                                 'No jobs found'
-                            ) }
+                            )}
                         </span>
                     </div>
 
-                    {/* Jobs Card Section */ }
+                    {/* Jobs Card Section */}
                     <div className="overflow-x-auto rounded-t-xl">
-                        { isLoading && (
+                        {isLoading && (
                             <div className="flex justify-center items-center min-h-screen bg-gray-50">
                                 <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-600"></div>
                             </div>
-                        ) }
+                        )}
 
-                        { allJobs?.jobs?.length > 0 ? (
+                        {allJobs?.jobs?.length > 0 ? (
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
-                                { allJobs?.jobs?.map( ( job ) => (
+                                {allJobs?.jobs?.map((job) => (
                                     <div
-                                        key={ job._id }
+                                        key={job._id}
                                         className="bg-gray-200 hover:bg-gray-700 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border border-gray-200 hover:border-gray-300 group"
                                     >
                                         <div className="p-6">
                                             <div className="flex justify-between items-start">
                                                 <div>
                                                     <h3 className="text-xl font-bold text-black group-hover:text-white mb-4 font-DM Sansong">
-                                                        { capitalizeFirstLetter( job.title ) }
+                                                        {capitalizeFirstLetter(job.title)}
                                                     </h3>
                                                     <div className="flex flex-wrap gap-2 mb-3">
                                                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                                            { job.type || "Full-Time" }
+                                                            {job.type || "Full-Time"}
                                                         </span>
                                                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                            { job.locationType || "On-Site" }
+                                                            {job.locationType || "On-Site"}
                                                         </span>
                                                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
-                                                            { job.scheduleType || "Full day" }
+                                                            {job.scheduleType || "Full day"}
                                                         </span>
                                                     </div>
                                                 </div>
@@ -343,43 +357,43 @@ export const AllJobs = () => {
 
                                             <div className="mt-4 flex items-center text-black group-hover:text-white">
                                                 <IndianRupee className="h-4 w-4 mr-2" />
-                                                <span className="text-sm">Compensation :  { formatIndianRupee( job.compensation ) }</span>
+                                                <span className="text-sm">Compensation :  {formatIndianRupee(job.compensation)}</span>
                                             </div>
 
                                             <div className="mt-2 flex items-center text-black group-hover:text-white">
                                                 <MapPin className="h-4 w-4 mr-2" />
-                                                <span className="text-sm">Address:     
-                                                    { job.city }, { job.state }, { job.country }
+                                                <span className="text-sm">Address:
+                                                    {job.city}, {job.state}, {job.country}
                                                 </span>
                                             </div>
 
                                             <div className="mt-4 flex items-center text-black group-hover:text-white">
                                                 <Calendar1 className="h-4 w-4 mr-2" />
                                                 <span className="text-sm">
-                                                    { new Date( job.createdAt ).toISOString().split( "T" )[ 0 ] }
+                                                    {new Date(job.createdAt).toISOString().split("T")[0]}
                                                 </span>
                                             </div>
 
                                             <div className="mt-6 pt-4 border-t border-gray-100 flex justify-between">
                                                 <button
-                                                    onClick={ () => navigate( `/${ companyUserName }/post-job`, { state: { job } } ) }
+                                                    onClick={() => navigate(`/${companyUserName}/post-job`, { state: { job } })}
                                                     className="flex items-center text-blue-600 group-hover:text-white font-medium transition-colors duration-200 text-sm"
                                                 >
                                                     <Edit className="h-4 w-4 mr-1" />
                                                     View & Edit
                                                 </button>
                                                 <button
-                                                    onClick={ () => handleDeleteJob( job._id ) }
-                                                    disabled={ isDeleting }
+                                                    onClick={() => handleDeleteJob(job._id)}
+                                                    disabled={isDeleting}
                                                     className="flex items-center text-red-600 group-hover:text-white font-medium transition-colors duration-200 text-sm"
                                                 >
                                                     <Trash2 className="h-4 w-4 mr-1" />
-                                                    { isDeleting ? 'Deleting...' : 'Delete' }
+                                                    {isDeleting ? 'Deleting...' : 'Delete'}
                                                 </button>
                                             </div>
                                         </div>
                                     </div>
-                                ) ) }
+                                ))}
                             </div>
                         ) : (
                             <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
@@ -391,65 +405,65 @@ export const AllJobs = () => {
                                     Try adjusting your search filters or post a new job to get started.
                                 </p>
                                 <Link
-                                    to={ `/${ companyUserName }/post-job` }
+                                    to={`/${companyUserName}/post-job`}
                                     className="inline-flex items-center px-4 py-2 bg-gray-700 text-white rounded-xl font-medium hover:bg-gray-500 transition-colors duration-200"
                                 >
                                     <Plus className="mr-2 h-4 w-4" />
                                     Post New Job
                                 </Link>
                             </div>
-                        ) }
+                        )}
                     </div>
 
-                    {/* Pagination */ }
-                    { totalPages > 0 && allJobs?.jobs?.length > 0 && (
+                    {/* Pagination */}
+                    {totalPages > 0 && allJobs?.jobs?.length > 0 && (
                         <div className="px-6 py-4 border-t border-gray-100">
                             <div className="flex items-center justify-between">
                                 <button
-                                    onClick={ () => setCurrentPage( ( p ) => Math.max( 1, p - 1 ) ) }
-                                    disabled={ currentPage === 1 }
-                                    className={ `flex items-center px-4 py-2 text-sm rounded-lg transition-colors duration-200 ${ currentPage === 1
+                                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                                    disabled={currentPage === 1}
+                                    className={`flex items-center px-4 py-2 text-sm rounded-lg transition-colors duration-200 ${currentPage === 1
                                         ? 'bg-gray-400 text-white cursor-not-allowed rounded-xl'
                                         : 'bg-gray-700 border border-gray-300 text-white hover:bg-gray-400 rounded-xl'
-                                        }` }
+                                        }`}
                                 >
                                     <ChevronLeft className="mr-1 h-4 w-4" />
                                     Previous
                                 </button>
 
                                 <div className="hidden sm:flex items-center space-x-1">
-                                    { [ ...Array( totalPages ) ].map( ( _, i ) => (
+                                    {[...Array(totalPages)].map((_, i) => (
                                         <button
-                                            key={ i }
-                                            onClick={ () => setCurrentPage( i + 1 ) }
-                                            className={ `px-3.5 py-2 text-sm rounded-md ${ currentPage === i + 1
+                                            key={i}
+                                            onClick={() => setCurrentPage(i + 1)}
+                                            className={`px-3.5 py-2 text-sm rounded-md ${currentPage === i + 1
                                                 ? 'bg-gray-700 text-white cursor-not-allowed rounded-xl'
                                                 : 'bg-gray-300 border border-gray-300 text-white hover:bg-gray-400 rounded-xl'
-                                                }` }
+                                                }`}
                                         >
-                                            { i + 1 }
+                                            {i + 1}
                                         </button>
-                                    ) ) }
+                                    ))}
                                 </div>
 
                                 <span className="sm:hidden text-sm text-gray-600">
-                                    Page { currentPage } of { totalPages }
+                                    Page {currentPage} of {totalPages}
                                 </span>
 
                                 <button
-                                    onClick={ () => setCurrentPage( ( p ) => Math.min( totalPages, p + 1 ) ) }
-                                    disabled={ currentPage === totalPages }
-                                    className={ `flex items-center px-4 py-2 text-sm rounded-lg transition-colors duration-200 ${ currentPage === totalPages
+                                    onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                                    disabled={currentPage === totalPages}
+                                    className={`flex items-center px-4 py-2 text-sm rounded-lg transition-colors duration-200 ${currentPage === totalPages
                                         ? 'bg-gray-400 text-white cursor-not-allowed rounded-xl'
                                         : 'bg-gray-700 text-white hover:bg-gray-400 rounded-xl'
-                                        }` }
+                                        }`}
                                 >
                                     Next
                                     <ChevronRight className="ml-1 h-4 w-4" />
                                 </button>
                             </div>
                         </div>
-                    ) }
+                    )}
                 </div>
             </div>
         </div>

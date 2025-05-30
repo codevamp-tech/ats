@@ -10,7 +10,7 @@ export const PostJob = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const jobToEdit = location.state?.job;
-    const companyUserName = localStorage.getItem( "companyUserName" );
+    const companyUserName = localStorage.getItem("companyUserName");
 
     // We store questions in state
     const [questions, setQuestions] = useState(
@@ -30,29 +30,29 @@ export const PostJob = () => {
     const [shiftEnd, setShiftEnd] = useState(jobToEdit?.shiftEnd || '17:00');
 
     // Fetch the recruiter role from localStorage
-    const user = JSON.parse( localStorage.getItem( 'user' ) ); // Parse user object from localStorage
+    const user = JSON.parse(localStorage.getItem('user')); // Parse user object from localStorage
     const recruiterRole = user?.head || '';
-    const companyId = JSON.parse( localStorage.getItem( "user" ) ).company_id;
-    const [ hiringManagersList, setHiringManagersList ] = useState( [] );
+    const companyId = JSON.parse(localStorage.getItem("user")).company_id;
+    const [hiringManagersList, setHiringManagersList] = useState([]);
     // const recruiterName = user?.userName || '';
 
     // Fetch hiring managers
-    useEffect( () => {
+    useEffect(() => {
         const fetchHiringManagers = async () => {
             try {
-                const response = await fetch( `${ process.env.REACT_APP_BASE_URL }/hiringmanager/all-hiring-manager`, {
+                const response = await fetch(`${process.env.REACT_APP_BASE_URL}/hiringmanager/all-hiring-manager`, {
                     headers: {
                         'company_id': companyId
                     }
-                } );
+                });
                 const data = await response.json();
-                setHiringManagersList( data );
-            } catch ( error ) {
-                console.error( 'Error fetching hiring managers:', error );
+                setHiringManagersList(data);
+            } catch (error) {
+                console.error('Error fetching hiring managers:', error);
             }
         };
         fetchHiringManagers();
-    }, [ companyId ] );
+    }, [companyId]);
 
     const {
         register,
@@ -82,7 +82,7 @@ export const PostJob = () => {
                 question: questions.map((q) => q.question),
                 answer: questions.map((q) => q.answer),
             },
-            company_id: companyId    
+            company_id: companyId
         },
     });
 
@@ -110,14 +110,14 @@ export const PostJob = () => {
     }, [jobToEdit, setValue]);
 
     // The form submit handler
-    const onSubmit = ( data ) => {
+    const onSubmit = (data) => {
         // Find the selected hiring manager
         const selectedHiringManager = hiringManagersList.find(
             manager => manager.email === data.hiringManagerEmail
         );
 
-        if ( !selectedHiringManager ) {
-            toast.error( 'Please select a valid hiring manager' );
+        if (!selectedHiringManager) {
+            toast.error('Please select a valid hiring manager');
             return;
         }
         // Format the data to include shiftStart, shiftEnd, and separate location fields
@@ -130,7 +130,7 @@ export const PostJob = () => {
             city: selectedCity,
             compensation: String(data.compensation),
             experienceRequired: String(data.experienceRequired),
-            company_id : companyId,
+            company_id: companyId,
             hiringManagerEmail: selectedHiringManager.email,
             hiringManagerName: selectedHiringManager.userName,
             applicationForm: {
@@ -150,11 +150,11 @@ export const PostJob = () => {
                 },
             });
         } else {
-            console.log( "formattedData", formattedData )
+            console.log("formattedData", formattedData)
             postJob(formattedData, {
                 onSuccess: () => {
                     toast.success('Job posted successfully');
-                    navigate( `/${ companyUserName }/all-jobs` );
+                    navigate(`/${companyUserName}/all-jobs`);
                 },
                 onError: () => {
                     toast.error('Failed to post job');
@@ -197,9 +197,9 @@ export const PostJob = () => {
             setSelectedState={setSelectedState}
             selectedCity={selectedCity}
             setSelectedCity={setSelectedCity}
-            recruiterRole={ recruiterRole }
-            companyId={ companyId }
-            // recruiterName={ recruiterName }
+            recruiterRole={recruiterRole}
+            companyId={companyId}
+        // recruiterName={ recruiterName }
         />
     );
 };

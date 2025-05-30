@@ -8,7 +8,7 @@ export const FeaturedJobs = () => {
 
   useEffect(() => {
     console.log("hello");
-    fetch(`${ process.env.REACT_APP_BASE_URL }/jobs/all-jobs`)
+    fetch(`${process.env.REACT_APP_BASE_URL}/jobs/all-jobs`)
       .then((res) => res.json())
       .then((data) => setJobs(data));
   }, []);
@@ -18,7 +18,7 @@ export const FeaturedJobs = () => {
       <h1 className="text-center text-xl md:text-2xl font-bold text-deepBlack mt-8 md:mt-6">
         Our Featured Jobs
       </h1>
-      <div className="w-full grid sm:grid-cols-2 md:grid-cols-3  gap-4">
+      <div className="w-full grid sm:grid-cols-2 md:grid-cols-3 gap-4">
         {jobs.map((job, key) => (
           <Card key={key} job={job} />
         ))}

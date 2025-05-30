@@ -1,9 +1,9 @@
 import React from "react";
 import { BarChart, Briefcase, Clock, FileText, Search, Users } from "lucide-react";
 
-const PowerfulFeatures = React.forwardRef( ( _props, ref ) => (
+const PowerfulFeatures = React.forwardRef((_props, ref) => (
     <div
-        ref={ ref }
+        ref={ref}
         className="py-24 bg-slate-900/50 backdrop-blur-sm translate-y-10 transition-all duration-700"
     >
         <div className="max-w-screen-xl mx-auto px-4">
@@ -17,7 +17,7 @@ const PowerfulFeatures = React.forwardRef( ( _props, ref ) => (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <div className="bg-white/5 backdrop-blur-sm p-8 rounded-xl hover:bg-white/10 transition-all duration-300">
                     <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-6">
-                        <Search className="text-indigo-400" size={ 24 } />
+                        <Search className="text-indigo-400" size={24} />
                     </div>
                     <h3 className="text-xl font-semibold text-white mb-3">Smart Candidate Search</h3>
                     <p className="text-slate-300">
@@ -27,7 +27,7 @@ const PowerfulFeatures = React.forwardRef( ( _props, ref ) => (
 
                 <div className="bg-white/5 backdrop-blur-sm p-8 rounded-xl hover:bg-white/10 transition-all duration-300">
                     <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-6">
-                        <Briefcase className="text-indigo-400" size={ 24 } />
+                        <Briefcase className="text-indigo-400" size={24} />
                     </div>
                     <h3 className="text-xl font-semibold text-white mb-3">Job Posting Management</h3>
                     <p className="text-slate-300">
@@ -37,7 +37,7 @@ const PowerfulFeatures = React.forwardRef( ( _props, ref ) => (
 
                 <div className="bg-white/5 backdrop-blur-sm p-8 rounded-xl hover:bg-white/10 transition-all duration-300">
                     <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-6">
-                        <Users className="text-indigo-400" size={ 24 } />
+                        <Users className="text-indigo-400" size={24} />
                     </div>
                     <h3 className="text-xl font-semibold text-white mb-3">Collaborative Hiring</h3>
                     <p className="text-slate-300">
@@ -47,7 +47,7 @@ const PowerfulFeatures = React.forwardRef( ( _props, ref ) => (
 
                 <div className="bg-white/5 backdrop-blur-sm p-8 rounded-xl hover:bg-white/10 transition-all duration-300">
                     <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-6">
-                        <FileText className="text-indigo-400" size={ 24 } />
+                        <FileText className="text-indigo-400" size={24} />
                     </div>
                     <h3 className="text-xl font-semibold text-white mb-3">Resume Parsing</h3>
                     <p className="text-slate-300">
@@ -57,7 +57,7 @@ const PowerfulFeatures = React.forwardRef( ( _props, ref ) => (
 
                 <div className="bg-white/5 backdrop-blur-sm p-8 rounded-xl hover:bg-white/10 transition-all duration-300">
                     <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-6">
-                        <BarChart className="text-indigo-400" size={ 24 } />
+                        <BarChart className="text-indigo-400" size={24} />
                     </div>
                     <h3 className="text-xl font-semibold text-white mb-3">Analytics & Reporting</h3>
                     <p className="text-slate-300">
@@ -67,7 +67,7 @@ const PowerfulFeatures = React.forwardRef( ( _props, ref ) => (
 
                 <div className="bg-white/5 backdrop-blur-sm p-8 rounded-xl hover:bg-white/10 transition-all duration-300">
                     <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-6">
-                        <Clock className="text-indigo-400" size={ 24 } />
+                        <Clock className="text-indigo-400" size={24} />
                     </div>
                     <h3 className="text-xl font-semibold text-white mb-3">Interview Scheduling</h3>
                     <p className="text-slate-300">
