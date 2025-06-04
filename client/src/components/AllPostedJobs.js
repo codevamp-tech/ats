@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
+
 import axios from "axios";
+import { Link } from "react-router-dom";
 import Select from "react-select";
+import { useQuery } from "@tanstack/react-query";
 import JobDescriptionModal from "./JobDescriptionModal";
 import { Briefcase, ChevronLeft, ChevronRight } from "lucide-react";
 

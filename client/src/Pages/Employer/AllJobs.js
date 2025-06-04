@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+
+import { Link, useNavigate } from 'react-router-dom';
 import { useJobs } from '../../hooks/useJob';
 import Select from "react-select";
 import { toast } from 'react-toastify';
@@ -194,6 +195,7 @@ export const AllJobs = () => {
                                 >
                                     {isFilterOpen ? "Hide Filters" : "Show Filters"}
                                 </button>
+
 
                                 <Link
                                     to={`/${companyUserName}/post-job`}

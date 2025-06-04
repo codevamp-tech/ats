@@ -395,6 +395,16 @@ const CandidateApplication = () => {
                                         <span className="text-blue-500 font-medium">Try adjusting your filters</span> or come back later.
                                     </p>
                                 </div>
+                                <div className="text-center animate-fade-in transition-all duration-500">
+                                    <h3 className="text-2xl font-bold text-gray-800 mb-3 tracking-tight leading-snug">
+                                        No Applications Found
+                                    </h3>
+                                    <p className="text-md text-gray-600 max-w-md mx-auto leading-relaxed">
+                                        It looks like there are no matching applications at the moment.
+                                        <br className="hidden sm:block" />
+                                        <span className="text-blue-500 font-medium">Try adjusting your filters</span> or come back later.
+                                    </p>
+                                </div>
                             </div>
                         )}
                     </div>
