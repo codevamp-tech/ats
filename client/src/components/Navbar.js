@@ -57,6 +57,7 @@ const adminNavItems = [
       { label: "Application Statuses", path: "/application-statuses", icon: <FileText className="w-4 h-5" /> },
       { label: "Interview Status", path: "/interview-rounds", icon: <Calendar className="w-4 h-5" /> },
       { label: "Job Status", path: "/job-statuses", icon: <Calendar className="w-4 h-5" /> },
+      { label: "Import Application", path: "/import-application", icon: <BriefcaseBusiness className="w-4 h-5" /> }
     ]
   },
 ];
@@ -66,6 +67,7 @@ const hiringManagerNavItems = [
   { label: "Application List", path: "/application-list", icon: <FileText className="hidden lg:block w-5 h-5" /> },
   { label: "Assigned Interviews", path: "/assigned-interviews", icon: <Calendar className="hidden lg:block w-5 h-5" /> },
   { label: "Interviews", path: "/all-interviews" },
+  { label: "Import Application", path: "/import-application", icon: <BriefcaseBusiness className="w-4 h-5" /> }
 ];
 
 const interviewerNavItems = [
@@ -78,6 +80,7 @@ const recruiterNavItems = [
   { label: "Jobs", path: "/all-jobs", icon: <Briefcase className="hidden lg:block w-5 h-5" /> },
   { label: "Applications", path: "/all-applications", icon: <FileText className="hidden lg:block w-5 h-5" /> },
   { label: "Interviews", path: "/all-interviews" },
+  { label: "Import Application", path: "/import-application", icon: <BriefcaseBusiness className="w-4 h-5" /> }
 ];
 
 const candidateNavItems = [
