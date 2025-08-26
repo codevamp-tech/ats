@@ -40,6 +40,7 @@ import CompanyNotFound from './components/CompanyNotFound';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import Banner from './components/Home/Banner/Banner'
 import Jobstatus from './Pages/Application/JobStatus';
+import ImportApplication from './Pages/Application/tabs/ImportApplication';
 
 
 // Layout component to ensure Navbar and Footer appear on all pages
@@ -151,6 +152,7 @@ function App() {
           <Route path="/:companyUserName/all-jobs" element={<AllJobs />} />
           <Route path="/:companyUserName/all-interviews" element={<AllInterviews />} />
           <Route path="/:companyUserName/current-job/:id" element={<JobDetails />} />
+          <Route path="/:companyUserName/import-application" element={<ImportApplication />} />
 
           {/* Dynamic route for companyName */}
           <Route path="/:companyUserName?/all-posted-jobs" element={<AllPostedJobs />} />
