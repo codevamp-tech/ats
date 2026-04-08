@@ -29,7 +29,10 @@ const ApplicationsListTab = ({
     totalApplications,
     statusCounts,
     statusFilter,
-    setStatusFilter
+    setStatusFilter,
+    aiSelectedFilter,
+    setAiSelectedFilter,
+    setActiveTab // NEW: Support jumping to AI Results tab
 }) => {
     const [allApps, setAllApps] = useState(applications);
     // const [statusFilter, setStatusFilter] = useState('');
@@ -255,7 +258,7 @@ const ApplicationsListTab = ({
                 <>
                     <div className="flex-1 space-y-6 w-80">
                         <div className="flex items-center justify-between">
-                            <h2 className="text-xl font-semibold">Applications List</h2>
+                            <h2 className="text-xl font-semibold">Applications Lis11t</h2>
                             <button
                                 onClick={() => setShowFilters(!showFilters)}
                                 className={`text-sm px-3 py-1 rounded-lg border transition ${theme === 'dark'
@@ -312,23 +315,52 @@ const ApplicationsListTab = ({
                         totalApplications={totalApplications}
                     />
 
-                    <div className="flex-1 space-y-6 w-[70vw]">
+                    <div className="flex-1 space-y-4 w-[70vw]">
                         <div className="flex items-center justify-between">
+
+                            {/* Heading */}
                             <h2 className="text-xl font-semibold">Applications List </h2>
 
-                            <button
-                                onClick={() => setShowFilters(!showFilters)}
-                                className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium
-               bg-[#9333ea] text-white shadow-md
-               hover:bg-purple-700 transition-all duration-300`}
-                            >
-                                <SlidersHorizontal size={16} />
-                                {showFilters ? "Hide Filters" : "Filter By Month"}
-                            </button>
+                            {/* ✅ CHANGE: Wrapped both buttons in a flex container */}
+                            <div className="flex items-center gap-2 ml-auto">
+
+                                {/* AI Selected Button */}
+                                <button
+                                    onClick={() => {
+                                        if (setActiveTab) {
+                                            setActiveTab('aiResults');
+                                        } else {
+                                            setAiSelectedFilter(!aiSelectedFilter);
+                                            setPage('1');
+                                        }
+                                    }}
+                                    className={`flex items-center gap-1 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 shadow-md ${aiSelectedFilter
+                                        ? 'bg-white text-purple-700 border-2 border-purple-600'
+                                        : 'bg-[#9333ea] text-white hover:bg-purple-700'
+                                        }`}
+                                >
+                                    <SlidersHorizontal size={16} />
+                                    AI selected Resumes
+                                </button>
+
+                                {/* Filter Button */}
+                                <button
+                                    onClick={() => setShowFilters(!showFilters)}
+                                    className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium
+                bg-[#9333ea] text-white shadow-md
+                hover:bg-purple-700 transition-all duration-300"
+                                >
+                                    <SlidersHorizontal size={16} />
+                                    {showFilters ? "Hide Filters" : "Filter By Month"}
+                                </button>
+
+                            </div>
                         </div>
 
+                        {/* Filter Section */}
                         {showFilters && <FilterSection />}
 
+                        {/* Applications Table */}
                         <ApplicationsTable
                             job={job}
                             filteredApps={filteredApps}

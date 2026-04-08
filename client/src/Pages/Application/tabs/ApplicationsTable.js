@@ -18,6 +18,7 @@ const ApplicationsTable = ({
     currentPage,
     totalApplications,
     totalPages,
+    isAiView = false // NEW: Support AI-only view
 }) => {
     const { theme } = useTheme();
     const [searchInput, setSearchInput] = useState(search);
@@ -215,24 +216,41 @@ const ApplicationsTable = ({
 
 
                                         <td className={`px-6 py-4 whitespace-nowrap text-sm ${theme === 'dark' ? 'text-gray-400 group-hover:text-gray-200' : 'text-gray-500 group-hover:text-white'}`}>
-                                            <select
-                                                className={`min-w-32 w-auto px-4 py-2 rounded-xl border shadow-sm focus:border-[#9333ea] focus:ring-2 focus:ring-purple-300 text-sm ${theme === 'dark'
-                                                    ? 'bg-[#9333ea] text-white border-purple-800 hover:bg-[#7e22ce]'
-                                                    : 'bg-[#9333ea] text-white border-purple-600 hover:bg-[#a855f7]'
-                                                    }`}
-                                                value={app.applicationStatusId}
-                                                onChange={e => handleSelect(app._id, e.target.value)}
-                                            >
-                                                {statuses?.map(status => (
-                                                    <option
-                                                        key={status._id}
-                                                        value={status._id}
-                                                        className="bg-gray-800 text-white"
+                                            <div className="flex flex-col gap-1">
+                                                {isAiView ? (
+                                                    <div className="flex items-center gap-2">
+                                                        {app.resume_status === 'selected' && (
+                                                            <span className="flex items-center px-4 py-2 rounded-xl text-sm font-semibold bg-green-100 text-green-700 border border-green-200 shadow-sm min-w-[128px] justify-center">
+                                                                AI Selected
+                                                            </span>
+                                                        )}
+                                                        {app.match_score > 0 && (
+                                                            <span className="text-xs text-gray-400 group-hover:text-gray-200 font-medium">
+                                                                {Math.round(app.match_score * 100)}% Match
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                ) : (
+                                                    <select
+                                                        className={`min-w-32 w-auto px-4 py-2 rounded-xl border shadow-sm focus:border-[#9333ea] focus:ring-2 focus:ring-purple-300 text-sm ${theme === 'dark'
+                                                            ? 'bg-[#9333ea] text-white border-purple-800 hover:bg-[#7e22ce]'
+                                                            : 'bg-[#9333ea] text-white border-purple-600 hover:bg-[#a855f7]'
+                                                            }`}
+                                                        value={app.applicationStatusId}
+                                                        onChange={e => handleSelect(app._id, e.target.value)}
                                                     >
-                                                        {status.applicationStatus}
-                                                    </option>
-                                                ))}
-                                            </select>
+                                                        {statuses?.map(status => (
+                                                            <option
+                                                                key={status._id}
+                                                                value={status._id}
+                                                                className="bg-gray-800 text-white"
+                                                            >
+                                                                {status.applicationStatus}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                )}
+                                            </div>
                                         </td>
 
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 group-hover:text-white dark:text-gray-200">

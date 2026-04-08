@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import OverviewTab from './tabs/OverviewTab';
 import ApplicationsListTab from './tabs/ApplicationsListTab';
 import JobDetailsTab from './tabs/JobDetailsTab';
+import AiSelectedListTab from './tabs/AiSelectedListTab'; // NEW: Dedicated AI view
 import { ChevronLeft } from 'lucide-react'
 import { useTheme } from '../../context/ThemeContext';
 
@@ -19,6 +20,7 @@ const ApplicationJobDetail = () => {
     const [yearFilter, setYearFilter] = useState();
     const [applications, setApplications] = useState({ applications: [], totalApplications: 0, statusCounts: {} });
     const [statusFilter, setStatusFilter] = useState('');
+    const [aiSelectedFilter, setAiSelectedFilter] = useState(false);
     const [loading, setLoading] = useState(true);
 
     const [error, setError] = useState('');
@@ -64,6 +66,10 @@ const ApplicationJobDetail = () => {
                     params.append('year', yearFilter);
                 }
 
+                if (aiSelectedFilter || activeTab === 'aiResults') {
+                    params.append('aiSelected', 'true');
+                }
+
                 const appsRes = await fetch(
                     `${process.env.REACT_APP_BASE_URL}/application/job/${id}?${params.toString()}`
                 );
@@ -82,7 +88,12 @@ const ApplicationJobDetail = () => {
         };
 
         fetchData();
-    }, [id, page, limit, search, monthFilter, yearFilter, toggleCount, statusFilter]);
+    }, [id, page, limit, search, monthFilter, yearFilter, toggleCount, statusFilter, aiSelectedFilter, activeTab]);
+
+    // NEW: Reset page when changing tabs
+    useEffect(() => {
+        setPage('1');
+    }, [activeTab]);
 
     // NEW: fetch job-statuses on mount
     useEffect(() => {
@@ -154,6 +165,7 @@ const ApplicationJobDetail = () => {
         setYearFilter(new Date().getFullYear());
         setSearch('');
         setStatusFilter('');
+        setAiSelectedFilter(false);
         setPage('1');
     };
 
@@ -267,6 +279,15 @@ const ApplicationJobDetail = () => {
                                     )
                                 },
                                 {
+                                    id: 'aiResults',
+                                    name: 'AI Selected Resumes',
+                                    icon: (
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                        </svg>
+                                    )
+                                },
+                                {
                                     id: 'details',
                                     name: 'Job Details',
                                     icon: (
@@ -324,7 +345,27 @@ const ApplicationJobDetail = () => {
                                 getMonthOptions={getMonthOptions}
                                 getYearOptions={getYearOptions}
                                 clearFilters={clearFilters}
+                                aiSelectedFilter={aiSelectedFilter}
+                                setAiSelectedFilter={setAiSelectedFilter}
+                                setActiveTab={setActiveTab} // Pass setActiveTab to allow jumping to AI tab
                             />}
+                        {activeTab === 'aiResults' &&
+                            <AiSelectedListTab
+                                job={job}
+                                applications={appsList}
+                                page={page}
+                                limit={limit}
+                                search={search}
+                                setPage={setPage}
+                                setLimit={setLimit}
+                                setSearch={setSearch}
+                                currentPage={applications.currentPage}
+                                totalApplications={totalApps}
+                                totalPages={applications.totalPages}
+                                onViewResume={(app) => console.log("View Resume", app)}
+                                setActiveTab={setActiveTab}
+                            />
+                        }
                         {activeTab === 'details' && <JobDetailsTab job={job} setJob={setJob} />}
                     </div>
                 </div>

@@ -16,7 +16,7 @@ const Support = () => {
                     </div>
                     <h2 className="text-2xl font-semibold mb-2">Need Help?</h2>
                     <p className="text-lg opacity-70 mb-6">We're here to assist you. Our support portal is currently being upgraded.</p>
-                    <a href="mailto:contact@niyukty.com" className="text-blue-500 hover:text-blue-600 underline">Contact Support Team</a>
+                    <a href="mailto:contact@Niyukty.com" className="text-blue-500 hover:text-blue-600 underline">Contact Support Team</a>
                 </div>
             </div>
         </div>
